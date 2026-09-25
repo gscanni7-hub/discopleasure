@@ -284,12 +284,12 @@ function initBalls() {
   };
   const balls = [];
   $$("span.o").forEach((span) => { const svg = document.createElementNS(NS, "svg"); svg.setAttribute("class", "o"); svg.setAttribute("aria-hidden", "true"); span.replaceWith(svg); balls.push(build(svg, "o")); });
-  $$("svg[data-ball]").forEach((svg) => balls.push(build(svg, svg.dataset.ball)));
+  $$("svg[data-ball]").forEach((svg) => balls.push(Object.assign(build(svg, svg.dataset.ball), { speed: +svg.dataset.speed || 1 })));
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   let t = 0;
   const frame = () => {
     if (!reduce) t += 0.006;
-    balls.forEach((b) => b.els.forEach((e, k) => e.setAttribute("rx", Math.max(0.5, Math.abs(R * Math.cos((k * Math.PI) / b.n + t))).toFixed(1))));
+    balls.forEach((b) => b.els.forEach((e, k) => e.setAttribute("rx", Math.max(0.5, Math.abs(R * Math.cos((k * Math.PI) / b.n + t * (b.speed || 1)))).toFixed(1))));
     requestAnimationFrame(frame);
   };
   frame();
