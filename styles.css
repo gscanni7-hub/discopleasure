@@ -110,8 +110,8 @@ main { position: relative; }
   transition: background .15s cubic-bezier(.4, 0, .2, 1);
 }
 .pill-btn:hover { background: rgba(0, 0, 0, .2); }
-.pill.is-dark .pill-btn, .pill.open .pill-btn { background: rgba(255, 255, 255, .24); color: #fff; }
-.pill.is-dark .pill-btn:hover, .pill.open .pill-btn:hover { background: rgba(255, 255, 255, .34); }
+.pill.is-dark .pill-btn, .pill.open .pill-btn { background: rgba(255, 255, 255, .16); color: #fff; }
+.pill.is-dark .pill-btn:hover, .pill.open .pill-btn:hover { background: rgba(255, 255, 255, .24); }
 
 .pill-menu {
   flex: none; height: calc(100dvh - 32px - 56px); max-height: calc(900px - 56px);
@@ -127,11 +127,13 @@ main { position: relative; }
 .menu-links a:hover { color: #fff; }
 .pill:not(.open) .menu-links a:hover { color: #737373; }
 .menu-rail {
-  position: relative; display: flex; gap: 8px; overflow-x: auto; padding: 16px 0 32px; flex: none; scrollbar-width: none;
+  position: relative; flex: none; height: calc(233px + 48px); margin-top: 16px; overflow: hidden;
+  touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none;
 }
-.menu-rail::-webkit-scrollbar { display: none; }
+.menu-rail:active { cursor: grabbing; }
+.menu-rail > .mini { position: absolute; top: 0; left: 0; margin-left: 8px; will-change: transform; }
 .mini {
-  position: relative; flex: 0 0 155px; aspect-ratio: 2 / 3; border-radius: 36px; overflow: hidden;
+  position: relative; flex: 0 0 155px; aspect-ratio: 2 / 3; -webkit-user-drag: none; border-radius: 36px; overflow: hidden;
   display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding: 8px;
 }
 .mini .art { position: absolute; inset: 0; transition: transform 1s var(--ease); }
@@ -729,3 +731,27 @@ svg.seal { display: block; }
 .num-d { position: relative; max-width: 150px; font-size: 12px; color: var(--muted); }
 .num-rail { gap: 16px; }
 .room-text p + p { margin-top: 12px; }
+
+/* ================= MOBILE ================= */
+html { -webkit-tap-highlight-color: transparent; }
+/* tacca e barra in basso degli iPhone */
+.topbar { padding-top: max(16px, env(safe-area-inset-top)); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+.finder.docked { bottom: max(16px, env(safe-area-inset-bottom)); }
+.pill.open { height: calc(100dvh - 32px - env(safe-area-inset-top)); }
+.footer { padding-bottom: max(40px, env(safe-area-inset-bottom)); }
+/* niente zoom automatico di iOS sui campi */
+@media (max-width: 800px) {
+  .nl-form input[type=text], .nl-form input[type=email], .nl-form input[type=tel], .footer-form input, .search input, .prefix select { font-size: 16px; }
+  .hero-sticky { height: 70svh; }
+  .page-hero { min-height: 85svh; }
+  /* bersagli touch più comodi */
+  .dots { gap: 14px; }
+  .dots button { width: 10px; height: 10px; }
+  .filters button { padding: 0 16px; }
+}
+@media (hover: none) {
+  .btn:hover { background: var(--blue); }
+  .btn-white:hover { background: #fff; }
+  .btn-black:hover { background: var(--heading); }
+  .btn-gray:hover { background: var(--gray-btn); }
+}

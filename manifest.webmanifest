@@ -1,0 +1,14 @@
+{
+  "name": "Disco Pleasure",
+  "short_name": "Disco Pleasure",
+  "description": "Après-ski all'aperto allo Chalet Valentino, a valle delle Gravare · Roccaraso",
+  "start_url": "index.html",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#050507",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}

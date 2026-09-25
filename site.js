@@ -11,10 +11,20 @@ const art = (img, extra = "") => `<div class="art"${img ? ` data-img="${esc(img)
 const WM = '<span class="wm"><span class="row">DISC<span class="o"></span></span><span class="row">&nbsp;PLEASURE</span></span>';
 const qs = (k) => new URLSearchParams(location.search).get(k);
 
+/* Foto: su schermi fino a 800px usa le versioni leggere in img/m/,
+   e ogni foto si scarica solo quando sta per entrare nello schermo. */
+const SMALL = matchMedia("(max-width: 800px)").matches;
+const srcFor = (src) => (SMALL && /^img\/[^/]+\.jpg$/.test(src) ? src.replace("img/", "img/m/") : src);
 function paintArt(el) {
-  if (el.dataset.img) { el.classList.add("photo"); el.style.setProperty("--img", `url("${el.dataset.img}")`); }
+  if (!el.dataset.img || el.dataset.painted) return;
+  el.dataset.painted = "1";
+  el.classList.add("photo");
+  el.style.setProperty("--img", `url("${srcFor(el.dataset.img)}")`);
 }
-const paintAll = (root = document) => $$(".art[data-img]", root).forEach(paintArt);
+const lazyIO = "IntersectionObserver" in window
+  ? new IntersectionObserver((ens) => ens.forEach((en) => { if (en.isIntersecting) { paintArt(en.target); lazyIO.unobserve(en.target); } }), { rootMargin: "900px 600px" })
+  : null;
+const paintAll = (root = document) => $$(".art[data-img]:not([data-painted])", root).forEach((el) => (lazyIO ? lazyIO.observe(el) : paintArt(el)));
 
 /* ============ HEADER + MENU ============ */
 const MENU_LINKS = [
@@ -70,7 +80,7 @@ function initMenu() {
     if (open) pill.classList.remove("is-dark");
     btn.setAttribute("aria-expanded", open);
     btn.textContent = open ? "Chiudi" : "Menu";
-    if (open) { const rail = $(".menu-rail", pill), c = rail.children[1]; if (c) rail.scrollLeft = c.offsetLeft - (rail.clientWidth - c.offsetWidth) / 2; }
+    if (open) menuRail?.reset();
     clearTimeout(t);
     t = setTimeout(() => pill.classList.remove("animating"), 1000);
   };
@@ -80,7 +90,53 @@ function initMenu() {
   btn.addEventListener("click", () => set(!pill.classList.contains("open")));
   $$("#pillMenu a").forEach((a) => a.addEventListener("click", () => set(false)));
   document.addEventListener("keydown", (e) => e.key === "Escape" && set(false));
-  document.addEventListener("click", (e) => { if (!pill.contains(e.target)) set(false); });
+  // chiude con un clic fuori, ma solo se anche la pressione è iniziata fuori (non dopo un trascinamento)
+  let downInside = false;
+  document.addEventListener("pointerdown", (e) => { downInside = pill.contains(e.target); }, true);
+  document.addEventListener("click", (e) => { if (!pill.contains(e.target) && !downInside) set(false); });
+}
+
+/* Fila di card del menu: carosello centrato, infinito, da trascinare, che scatta di una card */
+let menuRail = null;
+function initMenuRail() {
+  const rail = $(".menu-rail"); if (!rail) return;
+  const slides = [...rail.children]; const n = slides.length; if (!n) return;
+  let active = 0, drag = null, w = 0;
+  const wrap = (k) => ((k % n) + n) % n;
+  const place = (dx = 0, animate = true) => {
+    w = rail.clientWidth;
+    const sw = 0.4 * (w + 8);                 // larghezza di una card + spazio (come Hï)
+    const cx = (w - sw) / 2;                   // card attiva centrata
+    slides.forEach((el, k) => {
+      let off = wrap(k - active); if (off > n / 2) off -= n; // giro infinito: metà a destra, metà a sinistra
+      const x = cx + off * sw + dx;
+      const jump = el._off !== undefined && Math.abs(el._off - off) > 1; // passa dall'altra parte: niente animazione
+      el.style.transition = animate && !jump && !drag ? "transform .45s cubic-bezier(.22, 1, .36, 1)" : "none";
+      el.style.width = `${sw - 8}px`;
+      el.style.transform = `translateX(${x}px)`;
+      el._off = off;
+    });
+  };
+  const go = (k) => { active = wrap(k); place(); };
+  rail.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, dx: 0, moved: false, id: e.pointerId }; });
+  addEventListener("pointermove", (e) => {
+    if (!drag || e.pointerId !== drag.id) return;
+    drag.dx = e.clientX - drag.x; if (Math.abs(drag.dx) > 6) drag.moved = true;
+    if (drag.moved) place(drag.dx, false);
+  });
+  const end = () => {
+    if (!drag) return;
+    const steps = Math.abs(drag.dx) > 40 ? -Math.sign(drag.dx) : 0; // una card per gesto, come Hï
+    const moved = drag.moved; drag = null;
+    go(active + steps);
+    if (moved) rail.dataset.justDragged = "1", setTimeout(() => delete rail.dataset.justDragged, 50);
+  };
+  addEventListener("pointerup", end); addEventListener("pointercancel", end);
+  rail.addEventListener("click", (e) => { if (rail.dataset.justDragged) { e.preventDefault(); e.stopPropagation(); } }, true);
+  slides.forEach((el) => { el.setAttribute("draggable", "false"); });
+  addEventListener("resize", () => place(0, false));
+  menuRail = { reset: () => { active = 0; slides.forEach((el) => delete el._off); place(0, false); } };
+  place(0, false);
 }
 
 /* Header (e barra date in home) scuri sopra le card scure */
@@ -268,6 +324,7 @@ function bootSite() {
   paintAll();
   initBalls();
   initMenu();
+  initMenuRail();
   initScroll();
   initGiants();
   initCarousels();
