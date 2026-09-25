@@ -14,7 +14,7 @@ const qs = (k) => new URLSearchParams(location.search).get(k);
 /* Foto: su schermi fino a 800px usa le versioni leggere in img/m/,
    e ogni foto si scarica solo quando sta per entrare nello schermo. */
 const SMALL = matchMedia("(max-width: 800px)").matches;
-const srcFor = (src) => (SMALL && /^img\/[^/]+\.jpg$/.test(src) ? src.replace("img/", "img/m/") : src);
+const srcFor = (src) => (SMALL && /^\/img\/[^/]+\.jpg$/.test(src) ? src.replace("/img/", "/img/m/") : src);
 function paintArt(el) {
   if (!el.dataset.img || el.dataset.painted) return;
   el.dataset.painted = "1";
@@ -28,15 +28,13 @@ const paintAll = (root = document) => $$(".art[data-img]:not([data-painted])", r
 
 /* ============ HEADER + MENU ============ */
 const MENU_LINKS = [
-  ["calendario.html", "Eventi"],
-  ["artisti.html", "Artisti"],
-  ["evento.html?d=2026-12-05", "Opening 5.12"],
-  ["aggiornamenti.html", "News"],
-  ["index.html#meteo", "Meteo"],
-  ["tavoli.html", "Tavoli"],
-  ["articolo.html?id=come-arrivare", "Come arrivare"],
-  ["chi-siamo.html", "Chi siamo"],
-  ["whatsapp", "WhatsApp"],
+  ["/apres-ski", "Après-ski"],
+  ["/tavoli", "Tavoli"],
+  ["/artisti", "Artisti"],
+  ["/#meteo", "Meteo"],
+  ["/news/come-arrivare", "Come arrivare"],
+  ["/news", "News"],
+  ["/chi-siamo", "Chi siamo"],
 ];
 function mountHeader() {
   const slot = $("#siteHeader"); if (!slot) return;
@@ -46,14 +44,12 @@ function mountHeader() {
 <header class="topbar">
   <div class="pill" id="pill">
     <div class="pill-bar">
-      <a href="index.html" class="logo" aria-label="Disco Pleasure home">${WM}</a>
+      <a href="/" class="logo" aria-label="Disco Pleasure home">${WM}</a>
       <button class="pill-btn" id="menuBtn" aria-expanded="false" aria-controls="pillMenu">Menu</button>
     </div>
     <nav class="pill-menu" id="pillMenu" aria-label="Menu principale">
       <div class="menu-body">
-      <ul class="menu-links">${MENU_LINKS.map(([h, t]) => h === "whatsapp"
-        ? `<li><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">${t}</a></li>`
-        : `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
+      <ul class="menu-links">${MENU_LINKS.map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
       <div class="menu-top">
       <div class="menu-rail">${MENU_RAIL.map((m) => `
         <a class="mini" href="${m.href}">${art(m.img)}<span class="mini-top"><span class="mini-tape">${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;</span></span><span class="mini-day">${esc(m.day)}</span></a>`).join("")}
@@ -68,7 +64,7 @@ function mountHeader() {
       </div>
       <div class="menu-bottom">
         <div class="menu-meta"><span class="menu-lang">IT</span><a href="${waLink("Ciao! Ho una domanda su Disco Pleasure.")}" target="_blank" rel="noopener">FAQ &amp; Contatti</a></div>
-        <p class="menu-copy">© 2023 – 2027 Disco Pleasure · Chalet Valentino, Roccaraso</p>
+        <p class="menu-copy">© 2023 - 2027 Disco Pleasure · Chalet Valentino, Roccaraso</p>
       </div>
     </nav>
   </div>
@@ -80,11 +76,11 @@ function mountFooter() {
   slot.outerHTML = `
 <footer class="footer" id="footer">
   <div class="footer-inner">
-    <a href="index.html" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
+    <a href="/" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
     <nav class="footer-nav" aria-label="Link">
-      <a href="#">Instagram</a><a href="#">TikTok</a><a href="tavoli.html">Tavoli</a><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a><a href="#">Privacy</a>
+      <a href="#">Instagram</a><a href="#">TikTok</a><a href="/tavoli">Tavoli</a><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a><a href="#">Privacy</a>
     </nav>
-    <p class="footer-meta">Chalet Valentino · a valle delle Gravare · Roccaraso · © 2023 – 2027 Disco Pleasure</p>
+    <p class="footer-meta">Chalet Valentino · a valle delle Gravare · Roccaraso · © 2023 - 2027 Disco Pleasure</p>
   </div>
 </footer>`;
 }
@@ -305,9 +301,9 @@ const b2b = (name) => esc(name).split(/\s+b2b\s+/i).join(' <span class="badge ba
 function eventCard(e, { tickets = true } = {}) {
   return `
   <article class="ev-card">
-    <a class="ev-head" href="evento.html?d=${e.id}">
+    <a class="ev-head" href="${e.url}">
       <span class="ev-name">${esc(e.title === "Disco Pleasure" ? "Disco Pleasure · Après-ski" : e.title)}</span>
-      <span class="ev-time">${esc(e.hours.replace("–", "–"))}</span>
+      <span class="ev-time">${esc(e.hours)}</span>
       <span class="ev-badges"><span class="badge badge-blue">Chalet Valentino</span><span class="badge badge-outline">${esc(e.phase)}</span></span>
     </a>
     <div class="ev-box">
@@ -465,7 +461,7 @@ function mountMeteoDay(el, id) {
   if (!el) return;
   getMeteo().then((d) => {
     const i = d.daily.time.indexOf(id);
-    if (i < 0) { el.innerHTML = `<p class="w-status">Le previsioni per questa data compaiono 16 giorni prima. Intanto guarda il <a href="index.html#meteo">meteo di oggi</a>.</p>`; return; }
+    if (i < 0) { el.innerHTML = `<p class="w-status">Le previsioni per questa data compaiono 16 giorni prima. Intanto guarda il <a href="/#meteo">meteo di oggi</a>.</p>`; return; }
     const dl = d.daily, [txt, ico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
     el.innerHTML = `<div class="w-inline">${wIcon(ico)}<div><strong>${txt} · ${Math.round(dl.temperature_2m_max[i])}° / ${Math.round(dl.temperature_2m_min[i])}°</strong>
       <span>${snow > 0 ? `Neve prevista ${num(snow)} cm · ` : ""}Precipitazioni ${dl.precipitation_probability_max[i]}% · Alba ${hhmm(dl.sunrise[i])} · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;

@@ -1,5 +1,5 @@
 /* =========================================================
-   PAGINE INTERNE — una funzione per ogni <body data-page="...">
+   PAGINE INTERNE: una funzione per ogni <body data-page="...">
    ========================================================= */
 
 const PAGES = {
@@ -10,7 +10,7 @@ const PAGES = {
     if (dal || al) {
       events = EVENTS.filter((e) => (!dal || e.id >= dal) && (!al || e.id <= al));
       const f = (v) => { const [y, m, d] = v.split("-"); return `${+d} ${MESI[m - 1]}`; };
-      $("#rangeNote").innerHTML = `${events.length ? `${events.length} date` : "Nessuna data"}${dal ? ` dal ${f(dal)}` : ""}${al ? ` al ${f(al)}` : ""} · <a href="calendario.html">Mostra tutte</a>`;
+      $("#rangeNote").innerHTML = `${events.length ? `${events.length} date` : "Nessuna data"}${dal ? ` dal ${f(dal)}` : ""}${al ? ` al ${f(al)}` : ""} · <a href="/apres-ski">Mostra tutte</a>`;
       $("#rangeNote").hidden = false;
     }
     mountEventGrid($("#evFilters"), $("#evGrid"), { events: events.length ? events : EVENTS });
@@ -18,7 +18,7 @@ const PAGES = {
 
   /* ---------- PAGINA EVENTO ---------- */
   evento() {
-    const e = eventById(qs("d"));
+    const e = eventByPath(location.pathname) || eventById(qs("d"));
     document.title = `${e.title} · ${e.short} | Disco Pleasure`;
     $("#evPhase").textContent = e.phase;
     $("#evTitle").textContent = e.title;
@@ -52,7 +52,7 @@ const PAGES = {
       <h3>Domande frequenti</h3>
       <details><summary>Come prenoto un tavolo?</summary><p>Scrivici su <a href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">WhatsApp</a> indicando la data e quante persone siete: ti confermiamo la disponibilità.</p></details>
       <details><summary>A che ora conviene arrivare?</summary><p>Si apre alle 12. Il momento più bello è il tramonto, verso le 16:40: arriva prima per trovare posto sulla piattaforma.</p></details>
-      <details><summary>E se nevica?</summary><p>Ogni venerdì pubblichiamo il meteo del weekend negli <a href="aggiornamenti.html">Aggiornamenti</a>. Eventuali cambi di programma li trovi lì e sui nostri social.</p></details>`;
+      <details><summary>E se nevica?</summary><p>Ogni venerdì pubblichiamo il meteo del weekend negli <a href="/news">News</a>. Eventuali cambi di programma li trovi lì e sui nostri social.</p></details>`;
     mountEventGrid($("#evFilters"), $("#evGrid"), { events: EVENTS.filter((x) => x.phase === e.phase) });
     mountMeteoDay($("#evMeteo"), e.id);
   },
@@ -64,7 +64,7 @@ const PAGES = {
     const draw = () => {
       const list = filter === "all" ? NEWS : NEWS.filter((n) => n.tag === filter);
       grid.innerHTML = list.slice(0, shown).map((n) => `
-        <a class="news-card dark" href="articolo.html?id=${n.id}">
+        <a class="news-card dark" href="/news/${n.id}">
           <div class="news-img">${art(n.img)}</div>
           <div class="news-body">
             <span class="badge">${esc(n.tag)}</span>
@@ -81,7 +81,7 @@ const PAGES = {
 
   /* ---------- ARTICOLO (stile Chi siamo) ---------- */
   articolo() {
-    const n = newsById(qs("id"));
+    const n = newsById(location.pathname.startsWith("/news/") ? decodeURI(location.pathname.slice(6)).replace(/\/$/, "") : qs("id"));
     document.title = `${n.title} | Disco Pleasure`;
     $("#arTag").textContent = n.tag;
     $("#arTitle").textContent = n.title;
@@ -99,7 +99,7 @@ const PAGES = {
         </div>
       </section>`).join("");
     $("#moreRail").innerHTML = NEWS.filter((x) => x.id !== n.id).map((x) => `
-      <a class="poster dark" href="articolo.html?id=${x.id}">
+      <a class="poster dark" href="/news/${x.id}">
         ${art(x.img)}
         <div class="poster-body">
           <span class="badge">${esc(x.tag)}</span>
@@ -134,7 +134,7 @@ const PAGES = {
 
   /* ---------- TAVOLI ---------- */
   tavoli() {
-    $("#tableRow").innerHTML = MENU_RAIL.concat({ day: "Weekend", title: "Fino al 14.03", img: "img/epifania.jpg", href: "calendario.html?m=1" })
+    $("#tableRow").innerHTML = MENU_RAIL.concat({ day: "Weekend", title: "Fino al 14.03", img: "/img/epifania.jpg", href: "/apres-ski?m=1" })
       .map((m) => `<a class="mini mini-lg" href="${m.href}">${art(m.img)}<span class="mini-top"><span class="mini-tape">${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;</span></span><span class="mini-day">${esc(m.day)}</span></a>`).join("");
     paintAll($("#tableRow"));
     mountEventGrid($("#evFilters"), $("#evGrid"), { tickets: false });

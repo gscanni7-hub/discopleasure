@@ -1,0 +1,36 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/eventi/:anno/:giorno",
+      "destination": "/evento"
+    },
+    {
+      "source": "/news/:articolo",
+      "destination": "/articolo"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/calendario",
+      "destination": "/apres-ski",
+      "permanent": true
+    },
+    {
+      "source": "/aggiornamenti",
+      "destination": "/news",
+      "permanent": true
+    },
+    {
+      "source": "/chalet",
+      "destination": "/chi-siamo",
+      "permanent": true
+    },
+    {
+      "source": "/index",
+      "destination": "/",
+      "permanent": true
+    }
+  ]
+}

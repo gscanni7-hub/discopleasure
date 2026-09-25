@@ -24,7 +24,7 @@ function renderHome() {
     </div>`).join("");
 
   $("#residentsRail").innerHTML = HOME.residents.map((a) => `
-    <a class="tile dark" href="artisti.html">
+    <a class="tile dark" href="/artisti">
       <div class="tile-img">${art(a.img)}</div>
       <div class="tile-body">
         <span class="badge">${esc(a.day)}</span>
@@ -33,7 +33,7 @@ function renderHome() {
     </a>`).join("");
 
   $("#newsRail").innerHTML = NEWS.slice(0, 5).map((n) => `
-    <a class="poster dark" href="articolo.html?id=${n.id}">
+    <a class="poster dark" href="/news/${n.id}">
       ${art(n.img)}
       <div class="poster-body">
         <span class="badge">${esc(n.tag)}</span>
@@ -66,7 +66,7 @@ function initFinder() {
     const p = new URLSearchParams();
     if (from.value) p.set("dal", from.value);
     if (to.value) p.set("al", to.value);
-    location.href = "calendario.html" + (p.toString() ? "?" + p : "");
+    location.href = "/apres-ski" + (p.toString() ? "?" + p : "");
   });
   // si aggancia in basso dopo l'hero, sparisce sul footer, diventa scura sopra le card
   scrollHooks.push(() => {
