@@ -76,6 +76,10 @@ const EVENTS = SEASON_DATES.map(([y, m, d], i) => {
 });
 // Link Eventbrite per singola data: "2026-12-05": "https://www.eventbrite.it/e/...",
 const TICKETS = {
+  "2026-12-05": "https://www.eventbrite.com/e/2002311265897?aff=oddtdtcreator",
+  "2026-12-06": "https://www.eventbrite.com/e/2002311501602?aff=oddtdtcreator",
+  "2026-12-07": "https://www.eventbrite.com/e/2002311677127?aff=oddtdtcreator",
+  "2026-12-08": "https://www.eventbrite.com/e/2002311718250?aff=oddtdtcreator",
 };
 EVENTS.forEach((e) => { e.tickets = TICKETS[e.id] || CONTATTI.eventbrite; });
 const eventById = (id) => EVENTS.find((e) => e.id === id) || EVENTS[0];
