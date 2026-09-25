@@ -50,11 +50,25 @@ function mountHeader() {
       <button class="pill-btn" id="menuBtn" aria-expanded="false" aria-controls="pillMenu">Menu</button>
     </div>
     <nav class="pill-menu" id="pillMenu" aria-label="Menu principale">
+      <div class="menu-body">
       <ul class="menu-links">${MENU_LINKS.map(([h, t]) => h === "whatsapp"
         ? `<li><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">${t}</a></li>`
         : `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
+      <div class="menu-top">
       <div class="menu-rail">${MENU_RAIL.map((m) => `
         <a class="mini" href="${m.href}">${art(m.img)}<span class="mini-top"><span class="mini-tape">${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;</span></span><span class="mini-day">${esc(m.day)}</span></a>`).join("")}
+      </div>
+      <div class="menu-dots">${MENU_RAIL.map((_, i) => `<button aria-label="Vai alla data ${i + 1}"></button>`).join("")}</div>
+      <div class="menu-more">
+        <span class="menu-more-title">Seguici</span>
+        <a href="${CONTATTI.instagram}" target="_blank" rel="noopener">Instagram</a>
+        <a href="${CONTATTI.tiktok}" target="_blank" rel="noopener">TikTok</a>
+      </div>
+      </div>
+      </div>
+      <div class="menu-bottom">
+        <div class="menu-meta"><span class="menu-lang">IT</span><a href="${waLink("Ciao! Ho una domanda su Disco Pleasure.")}" target="_blank" rel="noopener">FAQ &amp; Contatti</a></div>
+        <p class="menu-copy">© 2026 Disco Pleasure · Chalet Valentino, Roccaraso</p>
       </div>
     </nav>
   </div>
@@ -122,7 +136,10 @@ function initMenuRail() {
       el._off = off;
     });
   };
-  const go = (k) => { active = wrap(k); place(); };
+  const dots = $$(".menu-dots button");
+  const syncDots = () => dots.forEach((d, i) => d.classList.toggle("on", i === active));
+  const go = (k) => { active = wrap(k); place(); syncDots(); };
+  dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
   rail.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, dx: 0, moved: false, id: e.pointerId }; });
   addEventListener("pointermove", (e) => {
     if (!drag || e.pointerId !== drag.id) return;
@@ -140,8 +157,8 @@ function initMenuRail() {
   rail.addEventListener("click", (e) => { if (rail.dataset.justDragged) { e.preventDefault(); e.stopPropagation(); } }, true);
   slides.forEach((el) => { el.setAttribute("draggable", "false"); });
   addEventListener("resize", () => place(0, false));
-  menuRail = { reset: () => { active = 0; slides.forEach((el) => delete el._off); place(0, false); } };
-  place(0, false);
+  menuRail = { reset: () => { active = 0; slides.forEach((el) => delete el._off); place(0, false); syncDots(); } };
+  place(0, false); syncDots();
 }
 
 /* Header (e barra date in home) scuri sopra le card scure */

@@ -115,7 +115,7 @@ main { position: relative; }
 
 .pill-menu {
   flex: none; height: calc(100dvh - 32px - 56px); max-height: calc(900px - 56px);
-  display: flex; flex-direction: column; justify-content: flex-start;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 48px; padding-bottom: 32px;
   overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
   visibility: hidden;
 }
@@ -757,3 +757,19 @@ html { -webkit-tap-highlight-color: transparent; }
   .btn-black:hover { background: var(--heading); }
   .btn-gray:hover { background: var(--gray-btn); }
 }
+
+/* menu: pallini, blocco "Seguici", fondo (come Hï) */
+.menu-body { flex: none; }
+.menu-dots { display: flex; justify-content: center; gap: 12px; margin-top: 16px; }
+.menu-dots button { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .25); cursor: pointer; transition: background-color .15s cubic-bezier(.4, 0, .2, 1); }
+.menu-dots button.on { background: #fff; }
+.menu-more { display: flex; flex-direction: column; align-items: center; gap: 16px; margin-top: 64px; text-align: center; }
+.menu-more-title { font-family: var(--display); font-size: 28px; line-height: 1; font-weight: 700; text-transform: uppercase; color: #737373; }
+.menu-more a { font-family: var(--display); font-size: 18px; line-height: 1; font-weight: 700; text-transform: uppercase; color: #737373; transition: color .15s; }
+.menu-more a:hover { color: #fff; }
+.menu-bottom { flex: none; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 0 16px; text-align: center; }
+.menu-meta { display: flex; align-items: center; gap: 24px; font-size: 16px; font-weight: 500; }
+.menu-lang { color: #fff; }
+.menu-meta a { color: #737373; transition: color .15s; }
+.menu-meta a:hover { color: #fff; }
+.menu-copy { margin: 0; font-size: 11px; color: #e5e5e5; }

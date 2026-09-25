@@ -10,6 +10,9 @@ const CONTATTI = {
   // Link Eventbrite generale (se una data non ha il suo link, si usa questo)
   eventbrite: "https://www.eventbrite.it/",
   email: "tavoli@discopleasure.it",
+  // Profili social (sostituisci con i link veri)
+  instagram: "#",
+  tiktok: "#",
 };
 const waLink = (testo) => `https://wa.me/${CONTATTI.whatsapp}?text=${encodeURIComponent(testo)}`;
 
