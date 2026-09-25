@@ -68,7 +68,7 @@ function mountHeader() {
       </div>
       <div class="menu-bottom">
         <div class="menu-meta"><span class="menu-lang">IT</span><a href="${waLink("Ciao! Ho una domanda su Disco Pleasure.")}" target="_blank" rel="noopener">FAQ &amp; Contatti</a></div>
-        <p class="menu-copy">© 2026 Disco Pleasure · Chalet Valentino, Roccaraso</p>
+        <p class="menu-copy">© 2023 – 2027 Disco Pleasure · Chalet Valentino, Roccaraso</p>
       </div>
     </nav>
   </div>
@@ -84,7 +84,7 @@ function mountFooter() {
     <nav class="footer-nav" aria-label="Link">
       <a href="#">Instagram</a><a href="#">TikTok</a><a href="tavoli.html">Tavoli</a><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a><a href="#">Privacy</a>
     </nav>
-    <p class="footer-meta">Chalet Valentino · a valle delle Gravare · Roccaraso · © 2026 Disco Pleasure</p>
+    <p class="footer-meta">Chalet Valentino · a valle delle Gravare · Roccaraso · © 2023 – 2027 Disco Pleasure</p>
   </div>
 </footer>`;
 }
