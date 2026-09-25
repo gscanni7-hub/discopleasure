@@ -4,112 +4,79 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Disco Pleasure | Sito in costruzione</title>
-<meta name="description" content="Disco Pleasure, après-ski all'aperto allo Chalet Valentino, Roccaraso. Sito in costruzione. Apriamo il 5 dicembre.">
+<meta name="description" content="Il nuovo sito di Disco Pleasure arriva a breve. Après-ski all'aperto allo Chalet Valentino, a valle delle Gravare, Roccaraso. Apriamo sabato 5 dicembre.">
+<meta name="theme-color" content="#ffffff">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/styles.css?v=202609252320">
 <style>
-  body { background: #050507; color: #eeece5; }
-  .poster-soon { min-height: 100svh; display: grid; grid-template-rows: auto 1fr auto; gap: 24px; padding: calc(32px + env(safe-area-inset-top)) clamp(20px, 5vw, 64px) calc(28px + env(safe-area-inset-bottom)); }
-  .top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-  .top .wm { font-size: clamp(22px, 3vw, 34px); color: #eeece5; }
-  .tag { font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #eeece5; white-space: nowrap; }
-  .date { align-self: center; margin: 0; font-family: var(--display); font-weight: 700; letter-spacing: -.05em; line-height: .8; color: #eeece5; font-size: min(230px, calc((100vw - 2 * clamp(20px, 5vw, 64px)) / 7.1)); text-transform: uppercase; display: flex; flex-direction: column; letter-spacing: -.04em; line-height: .88; }
-  .date > span:last-child { color: #3FC6F5; }
-  .row2 { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap; border-top: 1px solid #39393d; padding-top: 20px; }
-  .what { display: flex; flex-direction: column; gap: 6px; }
-  .what b { font-family: var(--display); font-size: clamp(22px, 2.6vw, 34px); line-height: 1; font-weight: 700; text-transform: uppercase; }
-  .what span { font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #b8b4ae; }
-  .countdown { display: flex; gap: 6px; }
-  .cd { width: 76px; padding: 12px 6px 10px; border-radius: 20px; background: #111114; display: flex; flex-direction: column; gap: 4px; align-items: center; }
-  .cd b { font-family: var(--display); font-size: 30px; line-height: 1; font-weight: 700; font-variant-numeric: tabular-nums; }
-  .cd span { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #b8b4ae; }
-  .btn-heat { background: #3FC6F5; color: #050507; }
-  .btn-heat:hover { background: #ff7442; }
-  @media (max-width: 520px) { .top { flex-direction: column; align-items: flex-start; gap: 10px; } }
-  @media (max-width: 700px) { .row2 { flex-direction: column; align-items: flex-start; } .cd { width: 68px; } }
-
-  /* ---------- animazioni ---------- */
-  .poster-soon { position: relative; overflow: hidden; isolation: isolate; }
-  .poster-soon > * { position: relative; z-index: 2; }
-  /* la palla del logo, grande, dietro al testo */
-  .bigball { position: absolute !important; z-index: 0 !important; right: -12vmin; top: 50%; width: 88vmin; height: 88vmin; transform: translateY(-50%); color: rgba(238, 236, 229, .16); pointer-events: none; opacity: 0; animation: fadein 2.4s .4s ease forwards; }
-  @media (max-width: 700px) { .bigball { width: 120vmin; height: 120vmin; right: -40vmin; top: 42%; } }
-  .bigball ellipse { stroke-width: 1.2; }
-  .bigball circle { stroke-width: 3; }
-  /* riflessi della palla */
-  .sparks { position: absolute !important; inset: 0; z-index: 1 !important; pointer-events: none; }
-  .sparks i { position: absolute; width: var(--s); height: var(--s); border-radius: 50%; background: radial-gradient(circle, #eafaff 0%, rgba(63, 198, 245, .9) 35%, transparent 70%); opacity: 0; animation: spark var(--d) ease-in-out var(--delay) infinite; }
-  @keyframes spark { 0%, 100% { opacity: 0; transform: scale(.4) translate(0, 0); } 45% { opacity: .9; transform: scale(1) translate(var(--dx), var(--dy)); } 60% { opacity: 0; } }
-  /* entrata lettera per lettera */
-  .date .ln { display: block; overflow: hidden; padding-bottom: .06em; }
-  .date .ch { display: inline-block; transform: translateY(105%); animation: rise 1s cubic-bezier(.22, 1, .36, 1) forwards; animation-delay: calc(.25s + var(--i) * 45ms); }
+  .soon { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 48px 20px calc(48px + env(safe-area-inset-bottom)); text-align: center; position: relative; z-index: 2; }
+  .soon .wm { font-size: clamp(40px, 9vw, 96px); color: var(--heading); }
+  .soon-title { margin: 0; font-family: var(--display); font-size: clamp(34px, 6.3vw, 90px); line-height: 1; font-weight: 700; letter-spacing: -.02em; text-transform: uppercase; color: var(--heading); }
+  .soon-text { margin: 0; max-width: 34rem; font-size: 16px; line-height: 1.5; font-weight: 500; color: var(--text); }
+  .countdown { display: flex; gap: 8px; }
+  .cd { width: 84px; padding: 16px 8px 14px; border-radius: 24px; background: #fff; display: flex; flex-direction: column; gap: 4px; }
+  .cd b { font-family: var(--display); font-size: 36px; line-height: 1; font-weight: 700; color: var(--heading); font-variant-numeric: tabular-nums; }
+  .cd span { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .soon-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .soon-foot { font-size: 12px; color: var(--muted); }
+  @media (max-width: 420px) { .cd { width: 72px; } .cd b { font-size: 30px; } }
+  .soon-title .ln { display: block; overflow: hidden; padding-bottom: .06em; }
+  .soon-title .ch { display: inline-block; transform: translateY(105%); animation: rise 1s cubic-bezier(.22, 1, .36, 1) forwards; animation-delay: calc(.2s + var(--i) * 45ms); }
   @keyframes rise { to { transform: none; } }
-  /* riflesso che attraversa COSTRUZIONE */
-  .date .shine { position: relative; }
-  .date .shine::after {
-    content: attr(data-text); position: absolute; left: 0; top: 0; pointer-events: none; white-space: nowrap;
-    background: linear-gradient(100deg, transparent 42%, rgba(234, 250, 255, .95) 50%, transparent 58%);
-    background-size: 300% 100%; background-position: 130% 0; -webkit-background-clip: text; background-clip: text; color: transparent;
-    animation: shine 5s ease-in-out 2.2s infinite;
-  }
+  .soon-title .ice { color: #3FC6F5; position: relative; }
+  .soon-title .ice::after { content: attr(data-text); position: absolute; left: 0; top: 0; white-space: nowrap; pointer-events: none;
+    background: linear-gradient(100deg, transparent 42%, rgba(255,255,255,.9) 50%, transparent 58%); background-size: 300% 100%; background-position: 130% 0;
+    -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 5s ease-in-out 2s infinite; }
   @keyframes shine { 0% { background-position: 130% 0; } 40%, 100% { background-position: -30% 0; } }
-  /* resto della pagina che compare */
-  .top, .row2 { opacity: 0; transform: translateY(12px); animation: up .9s cubic-bezier(.22, 1, .36, 1) forwards; }
-  .top { animation-delay: .1s; } .row2 { animation-delay: 1.1s; }
+  .soon-text { font-size: 16px; line-height: 1.5; }
+  .soon-text strong { color: var(--heading); font-weight: 700; text-transform: uppercase; letter-spacing: .02em; }
+  .wm, .badge, .soon-text, .countdown, .soon-foot { opacity: 0; transform: translateY(10px); animation: up .9s cubic-bezier(.22, 1, .36, 1) forwards; }
+  .wm { animation-delay: .05s; } .badge { animation-delay: .15s; } .soon-text { animation-delay: .9s; } .countdown { animation-delay: 1.05s; } .soon-foot { animation-delay: 1.2s; }
   @keyframes up { to { opacity: 1; transform: none; } }
-  @keyframes fadein { to { opacity: 1; } }
-  /* numeri che scattano */
-  .cd b { display: block; overflow: hidden; }
+  .cd b { display: block; }
   .cd b.tick { animation: tick .45s cubic-bezier(.22, 1, .36, 1); }
-  @keyframes tick { from { transform: translateY(-60%); opacity: 0; } to { transform: none; opacity: 1; } }
-  .cd { transition: background-color .3s; }
-  .cd:last-child { background: #0d2a36; }
-  @media (prefers-reduced-motion: reduce) {
-    .bigball, .top, .row2, .date .ch { animation: none; opacity: 1; transform: none; }
-    .date .shine::after { animation: none; display: none; } .sparks { display: none; } .cd b.tick { animation: none; }
-  }
+  @keyframes tick { from { transform: translateY(-50%); opacity: 0; } to { transform: none; opacity: 1; } }
+  .cd:last-child { background: #e3f6fd; }
+  @media (prefers-reduced-motion: reduce) { .soon-title .ch, .wm, .badge, .soon-text, .countdown, .soon-foot { animation: none; opacity: 1; transform: none; } .soon-title .ice::after { display: none; } }
 </style>
 </head>
 <body>
-<main class="poster-soon">
-  <svg class="seal bigball" data-ball="seal" data-speed="0.35" aria-hidden="true"></svg>
-  <div class="sparks" id="sparks" aria-hidden="true"></div>
-  <div class="top">
-    <span class="wm" aria-label="Disco Pleasure"><span class="row">DISC<span class="o"></span></span><span class="row">&nbsp;PLEASURE</span></span>
-    <span class="tag">Stagione 2026/27</span>
+<div class="page-bg" id="pageBg" aria-hidden="true"></div>
+
+<main class="soon">
+  <span class="wm" aria-label="Disco Pleasure"><span class="row">DISC<span class="o"></span></span><span class="row">&nbsp;PLEASURE</span></span>
+  <span class="badge badge-gray">Stagione 2026/27</span>
+  <h1 class="soon-title" aria-label="Sito in costruzione"><span class="ln" data-split>Sito in</span><span class="ln ice" data-split data-text="costruzione">costruzione</span></h1>
+  <p class="soon-text"><strong>Apriamo il 5 dicembre</strong><br>Chalet Valentino · Roccaraso</p>
+  <div class="countdown" id="countdown" aria-label="Conto alla rovescia all'apertura">
+    <div class="cd"><b data-u="d">0</b><span>Giorni</span></div>
+    <div class="cd"><b data-u="h">0</b><span>Ore</span></div>
+    <div class="cd"><b data-u="m">0</b><span>Minuti</span></div>
+    <div class="cd"><b data-u="s">0</b><span>Secondi</span></div>
   </div>
-  <h1 class="date" aria-label="Sito in costruzione"><span class="ln" data-split>Sito in</span><span class="ln shine" data-split data-text="costruzione">costruzione</span></h1>
-  <div class="row2">
-    <div class="what"><b>Apriamo il 5 dicembre</b><span>Chalet Valentino · Roccaraso</span></div>
-    <div class="countdown" aria-label="Conto alla rovescia all'apertura">
-      <div class="cd"><b data-u="d">0</b><span>Giorni</span></div>
-      <div class="cd"><b data-u="h">00</b><span>Ore</span></div>
-      <div class="cd"><b data-u="m">00</b><span>Minuti</span></div>
-      <div class="cd"><b data-u="s">00</b><span>Secondi</span></div>
-    </div>
-  </div>
+  <p class="soon-foot">© 2023 - 2027 Disco Pleasure · Chalet Valentino, Roccaraso</p>
 </main>
+
 <script src="/data.js?v=202609252320"></script>
 <script src="/site.js?v=202609252320"></script>
 <script>
-  // lettere una alla volta
   let k = 0;
-  document.querySelectorAll("[data-split]").forEach((el) => {
-    el.innerHTML = [...el.textContent].map((c) => c === " " ? " " : `<span class="ch" style="--i:${k++}">${c}</span>`).join("");
-  });
+  document.querySelectorAll("[data-split]").forEach((el) => { el.innerHTML = [...el.textContent].map((c) => c === " " ? " " : `<span class="ch" style="--i:${k++}">${c}</span>`).join(""); });
+  initSpotlights();
   initBalls();
-  // riflessi della palla sparsi sulla pagina
-  const sp = document.getElementById("sparks"), R = Math.random;
-  sp.innerHTML = Array.from({ length: 22 }, () => `<i style="left:${(R() * 100).toFixed(1)}%;top:${(R() * 100).toFixed(1)}%;--s:${(4 + R() * 9).toFixed(0)}px;--d:${(3 + R() * 4).toFixed(1)}s;--delay:${(-R() * 6).toFixed(1)}s;--dx:${(R() * 40 - 20).toFixed(0)}px;--dy:${(R() * 30 - 15).toFixed(0)}px"></i>`).join("");
+  requestAnimationFrame(() => document.getElementById("pageBg").classList.add("on"));
+  // conto alla rovescia: sabato 5 dicembre 2026, ore 12 (ora italiana)
   const target = new Date("2026-12-05T12:00:00+01:00").getTime();
   const els = Object.fromEntries([...document.querySelectorAll("[data-u]")].map((e) => [e.dataset.u, e]));
   const tick = () => {
     let s = Math.max(0, Math.floor((target - Date.now()) / 1000));
-    const d = Math.floor(s / 86400); s -= d * 86400; const h = Math.floor(s / 3600); s -= h * 3600; const m = Math.floor(s / 60); s -= m * 60;
+    const d = Math.floor(s / 86400); s -= d * 86400;
+    const h = Math.floor(s / 3600); s -= h * 3600;
+    const m = Math.floor(s / 60); s -= m * 60;
     const set = (el, v) => { if (el.textContent !== v) { el.textContent = v; el.classList.remove("tick"); void el.offsetWidth; el.classList.add("tick"); } };
     set(els.d, String(d)); set(els.h, String(h).padStart(2, "0")); set(els.m, String(m).padStart(2, "0")); set(els.s, String(s).padStart(2, "0"));
   };
