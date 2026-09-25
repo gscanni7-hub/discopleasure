@@ -54,6 +54,19 @@
           "value": "noindex"
         }
       ]
+    },
+    {
+      "source": "/entra-lplf2xg945",
+      "headers": [
+        {
+          "key": "Set-Cookie",
+          "value": "dp_anteprima=1; Path=/; Max-Age=7776000; SameSite=Lax; Secure"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ]
 }
