@@ -6,7 +6,7 @@
 /* ---------- Biglietti e tavoli ---------- */
 const CONTATTI = {
   // Numero WhatsApp per i tavoli: prefisso internazionale senza "+" e senza spazi (es. 393331234567)
-  whatsapp: "390000000000",
+  whatsapp: "393403692824",
   // Link Eventbrite generale (se una data non ha il suo link, si usa questo)
   eventbrite: "https://www.eventbrite.it/",
   email: "tavoli@discopleasure.it",
