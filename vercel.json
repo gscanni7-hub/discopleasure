@@ -13,6 +13,18 @@
   ],
   "redirects": [
     {
+      "source": "/((?!in-costruzione|entra-lplf2xg945|img/|styles\\.css|site\\.js|data\\.js|favicon\\.svg|icon-|manifest\\.webmanifest).*)",
+      "missing": [
+        {
+          "type": "cookie",
+          "key": "dp_anteprima",
+          "value": "1"
+        }
+      ],
+      "destination": "/in-costruzione",
+      "permanent": false
+    },
+    {
       "source": "/calendario",
       "destination": "/apres-ski",
       "permanent": true
@@ -31,6 +43,17 @@
       "source": "/index",
       "destination": "/",
       "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
     }
   ]
 }

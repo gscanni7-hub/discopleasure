@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Anteprima | Disco Pleasure</title>
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; background: #050507; color: #eeece5; text-align: center; }
+  main { padding: 24px; display: flex; flex-direction: column; gap: 16px; align-items: center; }
+  a, button { font: inherit; font-size: 15px; border: 0; border-radius: 999px; padding: 12px 22px; cursor: pointer; text-decoration: none; }
+  .go { background: #eeece5; color: #050507; } .out { background: transparent; color: #b8b4ae; }
+</style>
+</head>
+<body>
+<main>
+  <p id="msg">Attivo l'anteprima del sito…</p>
+  <a class="go" href="/">Entra nel sito</a>
+  <button class="out" id="out">Esci dall'anteprima (torna a "in costruzione")</button>
+</main>
+<script>
+  // Accesso riservato al team: su questo browser si vede il sito completo per 90 giorni
+  const set = (on) => { document.cookie = "dp_anteprima=" + (on ? "1" : "") + "; path=/; SameSite=Lax; Secure; max-age=" + (on ? 60 * 60 * 24 * 90 : 0); };
+  if (!location.hash.includes("esci")) { set(true); document.getElementById("msg").textContent = "Anteprima attiva su questo browser per 90 giorni."; setTimeout(() => (location.href = "/"), 900); }
+  document.getElementById("out").onclick = () => { set(false); location.href = "/"; };
+</script>
+</body>
+</html>

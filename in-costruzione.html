@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Disco Pleasure | Sito in costruzione</title>
+<meta name="description" content="Il nuovo sito di Disco Pleasure arriva a breve. Après-ski all'aperto allo Chalet Valentino, a valle delle Gravare, Roccaraso. Apriamo sabato 5 dicembre.">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=202609252256">
+<style>
+  .soon { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 48px 20px calc(48px + env(safe-area-inset-bottom)); text-align: center; position: relative; z-index: 2; }
+  .soon .wm { font-size: clamp(40px, 9vw, 96px); color: var(--heading); }
+  .soon-title { margin: 0; font-family: var(--display); font-size: clamp(34px, 6.3vw, 90px); line-height: 1; font-weight: 700; letter-spacing: -.02em; text-transform: uppercase; color: var(--heading); }
+  .soon-text { margin: 0; max-width: 34rem; font-size: 16px; line-height: 1.5; font-weight: 500; color: var(--text); }
+  .countdown { display: flex; gap: 8px; }
+  .cd { width: 84px; padding: 16px 8px 14px; border-radius: 24px; background: #fff; display: flex; flex-direction: column; gap: 4px; }
+  .cd b { font-family: var(--display); font-size: 36px; line-height: 1; font-weight: 700; color: var(--heading); font-variant-numeric: tabular-nums; }
+  .cd span { font-size: 10px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+  .soon-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; }
+  .soon-foot { font-size: 12px; color: var(--muted); }
+  @media (max-width: 420px) { .cd { width: 72px; } .cd b { font-size: 30px; } }
+</style>
+</head>
+<body>
+<div class="page-bg" id="pageBg" aria-hidden="true"></div>
+
+<main class="soon">
+  <span class="wm" aria-label="Disco Pleasure"><span class="row">DISC<span class="o"></span></span><span class="row">&nbsp;PLEASURE</span></span>
+  <span class="badge badge-gray">Sito in costruzione</span>
+  <h1 class="soon-title">Stiamo arrivando</h1>
+  <p class="soon-text">Il nuovo sito di Disco Pleasure è quasi pronto. Intanto segna la data: apriamo sabato 5 dicembre, dalle 12 alle 19, sulla piattaforma dello Chalet Valentino, a valle delle Gravare, Roccaraso.</p>
+  <div class="countdown" id="countdown" aria-label="Conto alla rovescia all'apertura">
+    <div class="cd"><b data-u="d">0</b><span>Giorni</span></div>
+    <div class="cd"><b data-u="h">0</b><span>Ore</span></div>
+    <div class="cd"><b data-u="m">0</b><span>Minuti</span></div>
+    <div class="cd"><b data-u="s">0</b><span>Secondi</span></div>
+  </div>
+  <div class="soon-actions">
+    <a class="btn btn-black" id="soonTickets" href="#" target="_blank" rel="noopener">Biglietti 5 dicembre</a>
+    <a class="btn" id="soonWa" href="#" target="_blank" rel="noopener">Tavoli su WhatsApp</a>
+  </div>
+  <p class="soon-foot">© 2023 - 2027 Disco Pleasure · Chalet Valentino, Roccaraso</p>
+</main>
+
+<script src="/data.js?v=202609252256"></script>
+<script src="/site.js?v=202609252256"></script>
+<script>
+  initSpotlights();
+  initBalls();
+  requestAnimationFrame(() => document.getElementById("pageBg").classList.add("on"));
+  document.getElementById("soonTickets").href = TICKETS["2026-12-05"] || CONTATTI.eventbrite;
+  document.getElementById("soonWa").href = waLink("Ciao! Vorrei prenotare un tavolo a Disco Pleasure.");
+  // conto alla rovescia: sabato 5 dicembre 2026, ore 12 (ora italiana)
+  const target = new Date("2026-12-05T12:00:00+01:00").getTime();
+  const els = Object.fromEntries([...document.querySelectorAll("[data-u]")].map((e) => [e.dataset.u, e]));
+  const tick = () => {
+    let s = Math.max(0, Math.floor((target - Date.now()) / 1000));
+    const d = Math.floor(s / 86400); s -= d * 86400;
+    const h = Math.floor(s / 3600); s -= h * 3600;
+    const m = Math.floor(s / 60); s -= m * 60;
+    els.d.textContent = d; els.h.textContent = String(h).padStart(2, "0");
+    els.m.textContent = String(m).padStart(2, "0"); els.s.textContent = String(s).padStart(2, "0");
+  };
+  tick(); setInterval(tick, 1000);
+</script>
+</body>
+</html>
