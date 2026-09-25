@@ -23,8 +23,8 @@ const PAGES = {
     $("#evPhase").textContent = e.phase;
     $("#evTitle").textContent = e.title;
     $("#evDate").textContent = `${e.long} · ${e.hours}`;
-    $("#evTickets").href = "#biglietti";
-    $("#evTables").href = `tavoli.html#t-${e.id}`;
+    Object.assign($("#evTickets"), { href: e.tickets, target: "_blank", rel: "noopener" });
+    Object.assign($("#evTables"), { href: waLink(tableMsg(e)), target: "_blank", rel: "noopener" });
     const img = $("#evImg"); img.dataset.img = e.img; paintArt(img);
     const intro = {
       "Il ponte": "Il ponte dell'Immacolata apre la stagione: quattro date di fila sulla piattaforma davanti allo Chalet Valentino, con il nuovo arco di luce e le montagne dietro.",
@@ -44,11 +44,13 @@ const PAGES = {
         <li><strong>Dove:</strong> Chalet Valentino, a valle delle Gravare · Roccaraso · piattaforma esterna</li>
         <li><strong>Quando:</strong> ${esc(e.long)}</li>
         <li><strong>Orari:</strong> ${esc(e.hours)}</li>
+        <li><strong>Biglietti:</strong> <a href="${esc(e.tickets)}" target="_blank" rel="noopener">su Eventbrite</a></li>
+        <li><strong>Tavoli:</strong> <a href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">prenota su WhatsApp</a></li>
         <li><strong>Ingresso:</strong> ${e.entry.map(esc).join(" · ")}</li>
         <li><strong>Abbigliamento:</strong> da neve: si balla all'aperto</li>
       </ul>
       <h3>Domande frequenti</h3>
-      <details><summary>Come prenoto un tavolo?</summary><p>Dalla pagina <a href="tavoli.html">Tavoli</a>: scrivici o chiamaci e ti confermiamo la disponibilità per la data che scegli.</p></details>
+      <details><summary>Come prenoto un tavolo?</summary><p>Scrivici su <a href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">WhatsApp</a> indicando la data e quante persone siete: ti confermiamo la disponibilità.</p></details>
       <details><summary>A che ora conviene arrivare?</summary><p>Si apre alle 12. Il momento più bello è il tramonto, verso le 16:40: arriva prima per trovare posto sulla piattaforma.</p></details>
       <details><summary>E se nevica?</summary><p>Ogni venerdì pubblichiamo il meteo del weekend negli <a href="aggiornamenti.html">Aggiornamenti</a>. Eventuali cambi di programma li trovi lì e sui nostri social.</p></details>`;
     mountEventGrid($("#evFilters"), $("#evGrid"), { events: EVENTS.filter((x) => x.phase === e.phase) });
@@ -77,7 +79,7 @@ const PAGES = {
     initFilters($("#newsFilters"), (v) => { filter = v; shown = 9; draw(); });
   },
 
-  /* ---------- ARTICOLO ---------- */
+  /* ---------- ARTICOLO (stile Chi siamo) ---------- */
   articolo() {
     const n = newsById(qs("id"));
     document.title = `${n.title} | Disco Pleasure`;
@@ -85,7 +87,17 @@ const PAGES = {
     $("#arTitle").textContent = n.title;
     $("#arDate").textContent = n.date;
     const img = $("#arImg"); img.dataset.img = n.img; paintArt(img);
-    $("#arBody").innerHTML = n.body.map((p) => `<p>${esc(p)}</p>`).join("");
+    $("#arBody").innerHTML = `<p><strong>${esc(n.lead)}</strong></p>` + n.intro.map((t) => `<p>${esc(t)}</p>`).join("");
+    $("#arSections").innerHTML = n.sections.map((s) => `
+      <section class="chapter">
+        <h2 class="giant">${esc(s.h)}</h2>
+        <div class="sentinel" aria-hidden="true"></div>
+        <div class="chapter-body">
+          <div class="media-card dark">${art(s.img)}</div>
+          <div class="room-text"><span class="room-label">${esc(s.label)}</span>${s.text.map((t) => `<p>${esc(t)}</p>`).join("")}</div>
+          <div class="pair"><div class="g-item dark">${art(s.pair[0])}</div><div class="g-item dark">${art(s.pair[1])}</div></div>
+        </div>
+      </section>`).join("");
     $("#moreRail").innerHTML = NEWS.filter((x) => x.id !== n.id).map((x) => `
       <a class="poster dark" href="articolo.html?id=${x.id}">
         ${art(x.img)}
@@ -95,7 +107,6 @@ const PAGES = {
           <span class="btn btn-white btn-sm">Leggi</span>
         </div>
       </a>`).join("");
-    paintAll($("#moreRail"));
   },
 
   /* ---------- ARTISTI ---------- */
@@ -127,15 +138,15 @@ const PAGES = {
       .map((m) => `<a class="mini mini-lg" href="${m.href}">${art(m.img)}<span class="mini-top"><span class="mini-tape">${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;</span></span><span class="mini-day">${esc(m.day)}</span></a>`).join("");
     paintAll($("#tableRow"));
     mountEventGrid($("#evFilters"), $("#evGrid"), { tickets: false });
-    // "Tavoli" su questa pagina apre la prenotazione
-    const hook = () => $$("#evGrid .ev-actions a").forEach((a) => { a.textContent = "Prenota tavolo"; a.href = "mailto:tavoli@discopleasure.it?subject=" + encodeURIComponent("Tavolo · " + a.closest(".ev-card").querySelector(".ev-date").textContent); });
-    new MutationObserver(hook).observe($("#evGrid"), { childList: true }); hook();
+    $("#fabWa").href = waLink("Ciao! Vorrei prenotare un tavolo a Disco Pleasure.");
+    $("#fabMail").href = `mailto:${CONTATTI.email}`;
+    $("#fabTel").href = `tel:+${CONTATTI.whatsapp}`;
     const target = location.hash.startsWith("#t-") && location.hash.slice(3);
     if (target) { const m = +target.split("-")[1]; $(`#evFilters [data-f="${m}"]`)?.click(); }
   },
 
   /* ---------- LO CHALET ---------- */
-  chalet() {},
+  chisiamo() {},
 };
 
 /* ============ AVVIO ============ */

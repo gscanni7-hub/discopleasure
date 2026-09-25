@@ -23,7 +23,7 @@ const MENU_LINKS = [
   ["evento.html?d=2026-12-05", "Apriamo il 5"],
   ["aggiornamenti.html", "Aggiornamenti"],
   ["tavoli.html", "Tavoli"],
-  ["chalet.html", "Lo chalet"],
+  ["chi-siamo.html", "Chi siamo"],
 ];
 function mountHeader() {
   const slot = $("#siteHeader"); if (!slot) return;
@@ -53,7 +53,7 @@ function mountFooter() {
   <div class="footer-inner">
     <a href="index.html" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
     <nav class="footer-nav" aria-label="Link">
-      <a href="#">Instagram</a><a href="#">TikTok</a><a href="tavoli.html">Tavoli</a><a href="#">Contatti</a><a href="#">Privacy</a>
+      <a href="#">Instagram</a><a href="#">TikTok</a><a href="tavoli.html">Tavoli</a><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a><a href="#">Privacy</a>
     </nav>
     <p class="footer-meta">Chalet Valentino · a valle delle Gravare · Roccaraso · © 2026 Disco Pleasure</p>
   </div>
@@ -241,8 +241,8 @@ function eventCard(e, { tickets = true } = {}) {
       </div>`).join("")}
       <div class="ev-entry">${e.entry.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
       <div class="ev-actions${tickets ? "" : " one"}">
-        ${tickets ? `<a class="btn btn-black" href="evento.html?d=${e.id}#biglietti">Biglietti</a>` : ""}
-        <a class="btn btn-black" href="tavoli.html#t-${e.id}">Tavoli</a>
+        ${tickets ? `<a class="btn btn-black" href="${esc(e.tickets)}" target="_blank" rel="noopener">Biglietti</a>` : ""}
+        <a class="btn btn-black" href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">${tickets ? "Tavoli" : "Prenota tavolo"}</a>
       </div>
     </div>
   </article>`;
@@ -280,50 +280,70 @@ const WMO = (c) =>
   c === 0 ? ["Sereno", "sun"] : c === 1 ? ["Poco nuvoloso", "sunc"] : c === 2 ? ["Parz. nuvoloso", "sunc"] : c === 3 ? ["Coperto", "cloud"] :
   c <= 48 ? ["Nebbia", "fog"] : c <= 57 ? ["Pioviggine", "rain"] : c <= 67 ? ["Pioggia", "rain"] : c <= 77 ? ["Neve", "snow"] :
   c <= 82 ? ["Rovesci", "rain"] : c <= 86 ? ["Rovesci di neve", "snow"] : ["Temporale", "storm"];
+const CLOUD = (y) => `<path class="w-cloud" d="M7 ${y}h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 ${y}Z"/>`;
 const ICONS = {
-  sun: '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
-  sunc: '<circle cx="8" cy="8" r="3.2"/><path d="M8 1.8v1.4M1.8 8h1.4M3.6 3.6l1 1M12.4 3.6l-1 1"/><path d="M9 20h8.5a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.6 1.4A2.8 2.8 0 0 0 9 20Z"/>',
-  cloud: '<path d="M7 19h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 19Z"/>',
-  fog: '<path d="M4 9h16M2 13h20M5 17h14"/>',
-  rain: '<path d="M7 15h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 15Z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>',
-  snow: '<path d="M7 14h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 14Z"/><path d="M8 17.5v.01M12 19v.01M16 17.5v.01M10 21.5v.01M14 21.5v.01"/>',
-  storm: '<path d="M7 14h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 14Z"/><path d="M12.5 15l-2 3.5h3l-2 3.5"/>',
+  sun: '<g class="w-rays"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g><circle cx="12" cy="12" r="4.5"/>',
+  moon: '<path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/>',
+  sunc: '<g class="w-rays" style="transform-origin:8px 8px"><path d="M8 1.8v1.4M1.8 8h1.4M3.6 3.6l1 1M12.4 3.6l-1 1"/></g><circle cx="8" cy="8" r="3.2"/><path class="w-cloud" d="M9 20h8.5a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.6 1.4A2.8 2.8 0 0 0 9 20Z"/>',
+  cloud: CLOUD(19),
+  fog: '<path class="w-fog" d="M4 9h16M2 13h20M5 17h14"/>',
+  rain: CLOUD(15) + '<path class="w-drop" d="M8 18l-1 3"/><path class="w-drop d2" d="M12 18l-1 3"/><path class="w-drop d3" d="M16 18l-1 3"/>',
+  snow: CLOUD(14) + '<path class="w-flake" d="M8 17.5v.01"/><path class="w-flake d2" d="M12 19v.01"/><path class="w-flake d3" d="M16 17.5v.01"/><path class="w-flake d2" d="M10 21v.01"/><path class="w-flake d3" d="M14 21v.01"/>',
+  storm: CLOUD(14) + '<path class="w-bolt" d="M12.5 15l-2 3.5h3l-2 3.5"/>',
 };
-const wIcon = (k) => `<svg class="w-ico" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
+const wIcon = (k) => `<svg class="w-ico w-${k}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
 const hhmm = (iso) => iso.slice(11, 16);
+const num = (v, d = 1) => v.toFixed(d).replace(".", ",");
 let meteoCache = null;
 function getMeteo() {
   if (meteoCache) return meteoCache;
   const u = `https://api.open-meteo.com/v1/forecast?latitude=${METEO.lat}&longitude=${METEO.lon}` +
-    "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,snow_depth" +
-    "&daily=weather_code,temperature_2m_max,temperature_2m_min,snowfall_sum,precipitation_probability_max,sunset" +
+    "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,wind_gusts_10m,snow_depth,relative_humidity_2m,freezing_level_height,is_day" +
+    "&hourly=temperature_2m,weather_code,precipitation_probability,wind_speed_10m,snowfall,is_day" +
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,snowfall_sum,precipitation_probability_max,sunrise,sunset,uv_index_max,wind_gusts_10m_max" +
     "&timezone=Europe%2FRome&forecast_days=16";
   meteoCache = fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
   return meteoCache;
 }
 
-// Card grande (home)
+// Card grande (home): adesso + schede "Ora per ora" / "7 giorni" / "Dettagli"
 function mountMeteoCard(el) {
   if (!el) return;
   el.innerHTML = `<p class="w-status">Carico il meteo di Roccaraso…</p>`;
   getMeteo().then((d) => {
-    const c = d.current, dl = d.daily;
+    const c = d.current, dl = d.daily, h = d.hourly;
     const [txt, ico] = WMO(c.weather_code);
+    const nowIco = !c.is_day && ico === "sun" ? "moon" : ico;
+    // prossime 24 ore
+    const start = Math.max(0, h.time.findIndex((t) => t >= c.time.slice(0, 13)));
+    const hours = h.time.slice(start, start + 24).map((t, k) => {
+      const i = start + k, [htxt, hico] = WMO(h.weather_code[i]);
+      const hi = !h.is_day[i] && hico === "sun" ? "moon" : hico;
+      return `<li class="w-hour" style="--i:${k}">
+        <span class="w-hh">${k === 0 ? "Ora" : t.slice(11, 13)}</span>${wIcon(hi)}<span class="sr-only">${htxt}</span>
+        <b>${Math.round(h.temperature_2m[i])}°</b>
+        <span class="w-pp">${h.snowfall[i] > 0 ? num(h.snowfall[i]) + " cm" : h.precipitation_probability[i] + "%"}</span>
+        <span class="w-wind">${Math.round(h.wind_speed_10m[i])} km/h</span>
+      </li>`;
+    }).join("");
     const days = dl.time.slice(0, 7).map((t, i) => {
-      const dt = new Date(t + "T12:00");
-      const [dtxt, dico] = WMO(dl.weather_code[i]);
-      const snow = dl.snowfall_sum[i];
-      return `<li class="w-day">
+      const dt = new Date(t + "T12:00"), [dtxt, dico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
+      return `<li class="w-day" style="--i:${i}">
         <span class="w-dname">${i === 0 ? "Oggi" : GIORNI_BREVI[dt.getDay()] + " " + dt.getDate()}</span>
         ${wIcon(dico)}<span class="sr-only">${dtxt}</span>
         <span class="w-mm"><b>${Math.round(dl.temperature_2m_max[i])}°</b> ${Math.round(dl.temperature_2m_min[i])}°</span>
-        <span class="w-snow">${snow > 0 ? `${snow.toFixed(1).replace(".", ",")} cm neve` : "&nbsp;"}</span>
+        <span class="w-snow">${snow > 0 ? `${num(snow)} cm neve` : `${dl.precipitation_probability_max[i]}%`}</span>
       </li>`;
     }).join("");
+    const facts = [
+      ["Alba", hhmm(dl.sunrise[0])], ["Tramonto", hhmm(dl.sunset[0])], ["Indice UV", num(dl.uv_index_max[0])],
+      ["Raffiche", `${Math.round(dl.wind_gusts_10m_max[0])} km/h`], ["Umidità", `${c.relative_humidity_2m}%`], ["Zero termico", `${Math.round(c.freezing_level_height)} m`],
+    ].map(([k, v], i) => `<div class="w-tile" style="--i:${i}"><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+
     el.innerHTML = `
       <div class="w-now">
         <span class="badge badge-gray">${esc(METEO.place)} · ${Math.round(d.elevation)} m</span>
-        <div class="w-temp">${wIcon(ico)}<span>${Math.round(c.temperature_2m)}°</span></div>
+        <div class="w-temp">${wIcon(nowIco)}<span class="w-count" data-to="${Math.round(c.temperature_2m)}">0</span><span>°</span></div>
         <p class="w-cond">${txt}</p>
         <dl class="w-facts">
           <div><dt>Percepita</dt><dd>${Math.round(c.apparent_temperature)}°</dd></div>
@@ -332,8 +352,32 @@ function mountMeteoCard(el) {
           <div><dt>Tramonto</dt><dd>${hhmm(dl.sunset[0])}</dd></div>
         </dl>
       </div>
-      <ul class="w-days">${days}</ul>
-      <p class="w-src">Previsioni Open-Meteo · aggiornate ${hhmm(c.time)}</p>`;
+      <div class="w-side">
+        <div class="filters w-tabs" role="tablist">
+          <button data-f="ore" role="tab">Ora per ora</button><button data-f="giorni" role="tab">7 giorni</button><button data-f="dettagli" role="tab">Dettagli</button>
+        </div>
+        <ul class="w-panel w-hours" data-p="ore">${hours}</ul>
+        <ul class="w-panel w-days" data-p="giorni">${days}</ul>
+        <dl class="w-panel w-tiles" data-p="dettagli">${facts}</dl>
+      </div>
+      <p class="w-src">Previsioni Open-Meteo · aggiornate alle ${hhmm(c.time)}</p>`;
+
+    const panels = $$(".w-panel", el);
+    initFilters($(".w-tabs", el), (v) => panels.forEach((p) => {
+      const on = p.dataset.p === v;
+      p.hidden = !on;
+      if (on) { p.classList.remove("w-in"); void p.offsetWidth; p.classList.add("w-in"); }
+    }), "ore");
+    // la temperatura conta fino al valore quando la card entra nello schermo
+    const cnt = $(".w-count", el), to = +cnt.dataset.to;
+    new IntersectionObserver(([en], obs) => {
+      if (!en.isIntersecting) return; obs.disconnect();
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) { cnt.textContent = to; return; }
+      const t0 = performance.now(), dur = 900;
+      const step = (t) => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3); cnt.textContent = Math.round(to * e); if (k < 1) requestAnimationFrame(step); };
+      requestAnimationFrame(step);
+      el.classList.add("w-live");
+    }, { threshold: 0.3 }).observe(el);
   }).catch(() => { el.innerHTML = `<p class="w-status">Meteo non disponibile in questo momento.</p>`; });
 }
 
@@ -345,6 +389,6 @@ function mountMeteoDay(el, id) {
     if (i < 0) { el.innerHTML = `<p class="w-status">Le previsioni per questa data compaiono 16 giorni prima. Intanto guarda il <a href="index.html#meteo">meteo di oggi</a>.</p>`; return; }
     const dl = d.daily, [txt, ico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
     el.innerHTML = `<div class="w-inline">${wIcon(ico)}<div><strong>${txt} · ${Math.round(dl.temperature_2m_max[i])}° / ${Math.round(dl.temperature_2m_min[i])}°</strong>
-      <span>${snow > 0 ? `Neve prevista ${snow.toFixed(1).replace(".", ",")} cm · ` : ""}Pioggia/neve ${dl.precipitation_probability_max[i]}% · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;
+      <span>${snow > 0 ? `Neve prevista ${num(snow)} cm · ` : ""}Precipitazioni ${dl.precipitation_probability_max[i]}% · Alba ${hhmm(dl.sunrise[i])} · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;
   }).catch(() => { el.innerHTML = `<p class="w-status">Meteo non disponibile in questo momento.</p>`; });
 }
