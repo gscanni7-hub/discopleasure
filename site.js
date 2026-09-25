@@ -28,12 +28,15 @@ const paintAll = (root = document) => $$(".art[data-img]:not([data-painted])", r
 
 /* ============ HEADER + MENU ============ */
 const MENU_LINKS = [
-  ["calendario.html", "Calendario"],
+  ["calendario.html", "Eventi"],
   ["artisti.html", "Artisti"],
-  ["evento.html?d=2026-12-05", "Apriamo il 5"],
-  ["aggiornamenti.html", "Aggiornamenti"],
+  ["evento.html?d=2026-12-05", "Opening 5.12"],
+  ["aggiornamenti.html", "News"],
+  ["index.html#meteo", "Meteo"],
   ["tavoli.html", "Tavoli"],
+  ["chi-siamo.html#arco", "Lo stage"],
   ["chi-siamo.html", "Chi siamo"],
+  ["whatsapp", "WhatsApp"],
 ];
 function mountHeader() {
   const slot = $("#siteHeader"); if (!slot) return;
@@ -47,7 +50,9 @@ function mountHeader() {
       <button class="pill-btn" id="menuBtn" aria-expanded="false" aria-controls="pillMenu">Menu</button>
     </div>
     <nav class="pill-menu" id="pillMenu" aria-label="Menu principale">
-      <ul class="menu-links">${MENU_LINKS.map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
+      <ul class="menu-links">${MENU_LINKS.map(([h, t]) => h === "whatsapp"
+        ? `<li><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">${t}</a></li>`
+        : `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
       <div class="menu-rail">${MENU_RAIL.map((m) => `
         <a class="mini" href="${m.href}">${art(m.img)}<span class="mini-top"><span class="mini-tape">${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;</span></span><span class="mini-day">${esc(m.day)}</span></a>`).join("")}
       </div>

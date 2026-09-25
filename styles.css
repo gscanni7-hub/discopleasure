@@ -115,11 +115,13 @@ main { position: relative; }
 
 .pill-menu {
   flex: none; height: calc(100dvh - 32px - 56px); max-height: calc(900px - 56px);
-  display: flex; flex-direction: column; justify-content: space-between;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
   visibility: hidden;
 }
 .pill.open .pill-menu, .pill.animating .pill-menu { visibility: visible; }
-.menu-links { list-style: none; margin: 0; padding: 64px 16px 0; text-align: center; overflow-y: auto; }
+.menu-links { list-style: none; margin: 0; padding: 64px 16px 0; text-align: center; flex: none; }
+.pill-menu::-webkit-scrollbar { display: none; }
 .menu-links a {
   display: inline-block; font-size: 44px; line-height: 1; font-weight: 700; letter-spacing: -.015em;
   text-transform: uppercase; color: #737373; padding: 1px 0; transition: color .15s;
@@ -127,7 +129,7 @@ main { position: relative; }
 .menu-links a:hover { color: #fff; }
 .pill:not(.open) .menu-links a:hover { color: #737373; }
 .menu-rail {
-  position: relative; flex: none; height: calc(233px + 48px); margin-top: 16px; overflow: hidden;
+  position: relative; flex: none; height: calc(233px + 32px); margin-top: 62px; overflow: hidden;
   touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none;
 }
 .menu-rail:active { cursor: grabbing; }
