@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disco Pleasure — La notte sale in quota</title>
+<meta name="description" content="Disco Pleasure · Après-ski all'aperto allo Chalet Valentino, a valle delle Gravare, Roccaraso. 5–8 dicembre, tutti i giorni dal 26 dicembre al 10 gennaio, poi ogni weekend fino al 14 marzo. Dalle 12 alle 19.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="siteHeader"></div>
+
+<main>
+
+<!-- HERO: una parola alla volta -->
+<section class="hero" id="hero">
+  <div class="hero-sticky">
+    <h1 class="sr-only">La notte sale in quota</h1>
+    <div class="hero-words" id="heroWords" aria-hidden="true" data-words="La|Notte|Sale|In quota">La</div>
+  </div>
+
+  <div class="finder-slot" id="finderSlot">
+    <div class="finder" id="finder">
+      <p class="finder-label">Trova le date per te</p>
+      <div class="finder-row">
+        <label class="finder-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <span data-ph="Dal">Dal</span>
+          <input type="date" id="fromDate" aria-label="Dal">
+        </label>
+        <label class="finder-btn">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+          <span data-ph="Al">Al</span>
+          <input type="date" id="toDate" aria-label="Al">
+        </label>
+        <button class="finder-go" id="finderGo" aria-label="Cerca eventi">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <a class="feature dark" id="calendar" href="calendario.html">
+    <div class="art" data-img="img/calendario.jpg"></div>
+    <span class="feature-label">
+      <span class="feature-title">Calendario eventi</span>
+      <span class="btn">Scopri di più</span>
+    </span>
+  </a>
+</section>
+
+<!-- EVENTI SPECIALI: un poster alla volta, centrato -->
+<section class="chapter" id="special">
+  <h2 class="giant">Eventi speciali</h2>
+  <div class="sentinel" aria-hidden="true"></div>
+  <div class="chapter-body">
+    <div class="slider" data-slider>
+      <div class="slider-track" id="specialRail"></div>
+    </div>
+    <div class="dots" id="specialDots"></div>
+    <a href="calendario.html" class="btn btn-gray btn-sm show-all">Mostra tutti</a>
+  </div>
+</section>
+
+<!-- RESIDENCY: mazzo di card da trascinare -->
+<section class="chapter" id="residencies">
+  <h2 class="giant">Il ponte</h2>
+  <div class="sentinel" aria-hidden="true"></div>
+  <div class="chapter-body">
+    <div class="deck-wrap">
+      <div class="deck" id="residencyDeck"></div>
+    </div>
+  </div>
+</section>
+
+<!-- LINE-UP -->
+<section class="chapter" id="lineup">
+  <h2 class="giant">Line-up</h2>
+  <div class="sentinel" aria-hidden="true"></div>
+  <div class="chapter-body">
+    <div class="carousel" data-carousel>
+      <div class="rail" id="residentsRail"></div>
+      <div class="dots"></div>
+    </div>
+  </div>
+</section>
+
+<!-- CHI SIAMO -->
+<section class="about" id="about">
+  <h2 class="about-title">Disco Pleasure</h2>
+  <div class="about-text">
+    <p><strong>Chalet Valentino, a valle delle Gravare · Roccaraso. Après-ski all'aperto.</strong></p>
+    <p>Tutto succede fuori: sulla piattaforma davanti allo chalet, con le montagne dietro. Sotto un arco di luce di sei metri, il DJ in mezzo, la gente davanti.</p>
+    <p>Di giorno la neve, le piste, il sole. Alle 16:40 il sole passa dietro la cresta e il piazzale cambia faccia: da lì in poi è Disco Pleasure.</p>
+    <p>5, 6, 7, 8 dicembre, poi tutti i giorni dal 26 dicembre al 10 gennaio e ogni weekend fino al 14 marzo. Dalle 12 alle 19. Il posto è quello giusto e la gente torna.</p>
+  </div>
+  <a href="chalet.html" class="btn">Scopri lo chalet</a>
+</section>
+
+<!-- ISCRIVITI -->
+<section class="chapter" id="subscribe">
+  <h2 class="giant">Iscriviti</h2>
+  <div class="sentinel" aria-hidden="true"></div>
+  <div class="chapter-body">
+    <div class="nl-card dark">
+      <div class="nl-media">
+        <div class="art" data-img="img/recap-flash.jpg"></div>
+        <p class="nl-offer">Tavoli<br><span>in anteprima</span></p>
+      </div>
+      <form class="nl-form" data-nl>
+        <p class="nl-intro">Iscriviti per sapere prima di tutti date, meteo del weekend e disponibilità dei tavoli. Nel weekend finiscono presto.</p>
+        <div class="grid-2">
+          <input type="text" placeholder="Nome" required aria-label="Nome">
+          <input type="text" placeholder="Cognome" required aria-label="Cognome">
+        </div>
+        <input type="email" placeholder="Email" required aria-label="Email">
+        <div class="phone-row">
+          <label class="prefix"><span>Prefisso</span>
+            <select aria-label="Prefisso">
+              <option>+39</option><option>+34</option><option>+44</option><option>+33</option><option>+49</option><option>+1</option>
+            </select>
+          </label>
+          <input type="tel" placeholder="Telefono" aria-label="Telefono">
+        </div>
+        <label class="check"><input type="checkbox"> <span>Voglio ricevere aggiornamenti su date, tavoli ed eventi di Disco Pleasure.</span></label>
+        <label class="check"><input type="checkbox" required> <span>Ho letto e accetto la Privacy Policy.</span></label>
+        <p class="legal">Disco Pleasure tratterà i tuoi dati per gestire l'iscrizione e, se lo hai accettato, per inviarti comunicazioni tramite email e app di messaggistica. Puoi disiscriverti in qualsiasi momento.</p>
+        <button class="btn btn-block" type="submit">Iscriviti</button>
+        <p class="nl-msg" role="status"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- AGGIORNAMENTI -->
+<section class="chapter" id="news">
+  <h2 class="giant">Aggiornamenti</h2>
+  <div class="sentinel" aria-hidden="true"></div>
+  <div class="chapter-body">
+    <div class="carousel" data-carousel>
+      <div class="rail" id="newsRail"></div>
+      <div class="dots"></div>
+    </div>
+    <a href="aggiornamenti.html" class="btn btn-gray btn-sm show-all">Mostra tutti</a>
+  </div>
+</section>
+
+</main>
+
+<div id="siteFooter"></div>
+
+<script src="data.js"></script>
+<script src="site.js"></script>
+<script src="home.js"></script>
+</body>
+</html>

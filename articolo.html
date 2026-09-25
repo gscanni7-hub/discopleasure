@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articolo | Disco Pleasure</title>
+<meta name="description" content="Aggiornamenti di Disco Pleasure.">
+<meta name="theme-color" content="#ffffff">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="articolo">
+
+<div id="siteHeader"></div>
+
+<main class="page">
+<div class="page-top">
+<section class="page-hero">
+  <span class="badge badge-gray" id="arTag"></span>
+  <h1 class="page-title" id="arTitle"></h1>
+  <p class="page-sub" id="arDate"></p>
+</section>
+<div class="media-card dark"><div class="art" id="arImg"></div></div>
+</div>
+<article class="prose" id="arBody"></article>
+<section class="chapter">
+  <h2 class="giant">Altri aggiornamenti</h2>
+  <div class="sentinel" aria-hidden="true"></div>
+  <div class="chapter-body">
+    <div class="carousel" data-carousel>
+      <div class="rail" id="moreRail"></div>
+      <div class="dots"></div>
+    </div>
+    <a href="aggiornamenti.html" class="btn btn-gray btn-sm show-all">Mostra tutti</a>
+  </div>
+</section>
+</main>
+
+<div id="siteFooter"></div>
+
+<script src="data.js"></script>
+<script src="site.js"></script>
+<script src="pages.js"></script>
+</body>
+</html>
