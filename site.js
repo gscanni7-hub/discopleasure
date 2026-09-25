@@ -34,7 +34,7 @@ const MENU_LINKS = [
   ["aggiornamenti.html", "News"],
   ["index.html#meteo", "Meteo"],
   ["tavoli.html", "Tavoli"],
-  ["chi-siamo.html#arco", "Lo stage"],
+  ["articolo.html?id=come-arrivare", "Come arrivare"],
   ["chi-siamo.html", "Chi siamo"],
   ["whatsapp", "WhatsApp"],
 ];
