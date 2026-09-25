@@ -162,3 +162,7 @@ const MENU_RAIL = [
   { day: "Gio 31.12", title: "San Silvestro", img: "img/recap-brindisi.jpg", href: "evento.html?d=2026-12-31" },
   { day: "Ven 1.1", title: "Capodanno", img: "img/recap-orablu.jpg", href: "evento.html?d=2027-01-01" },
 ];
+
+/* ---------- Meteo (Open-Meteo, gratuito, senza chiave) ---------- */
+// Punto delle previsioni: Roccaraso, zona Gravare. Sposta lat/lon sul punto esatto dello chalet se serve.
+const METEO = { lat: 41.835, lon: 14.055, place: "Roccaraso · Gravare" };

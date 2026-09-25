@@ -184,3 +184,4 @@ initFinder();
 initSlider();
 initDeck();
 initTypewriter();
+mountMeteoCard($("#meteoCard"));

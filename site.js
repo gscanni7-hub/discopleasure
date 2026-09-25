@@ -274,3 +274,77 @@ function bootSite() {
   initNewsletter();
   requestAnimationFrame(() => $("#pageBg")?.classList.add("on"));
 }
+
+/* ============ METEO ROCCARASO ============ */
+const WMO = (c) =>
+  c === 0 ? ["Sereno", "sun"] : c === 1 ? ["Poco nuvoloso", "sunc"] : c === 2 ? ["Parz. nuvoloso", "sunc"] : c === 3 ? ["Coperto", "cloud"] :
+  c <= 48 ? ["Nebbia", "fog"] : c <= 57 ? ["Pioviggine", "rain"] : c <= 67 ? ["Pioggia", "rain"] : c <= 77 ? ["Neve", "snow"] :
+  c <= 82 ? ["Rovesci", "rain"] : c <= 86 ? ["Rovesci di neve", "snow"] : ["Temporale", "storm"];
+const ICONS = {
+  sun: '<circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/>',
+  sunc: '<circle cx="8" cy="8" r="3.2"/><path d="M8 1.8v1.4M1.8 8h1.4M3.6 3.6l1 1M12.4 3.6l-1 1"/><path d="M9 20h8.5a3.5 3.5 0 0 0 0-7 5 5 0 0 0-9.6 1.4A2.8 2.8 0 0 0 9 20Z"/>',
+  cloud: '<path d="M7 19h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 19Z"/>',
+  fog: '<path d="M4 9h16M2 13h20M5 17h14"/>',
+  rain: '<path d="M7 15h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 15Z"/><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>',
+  snow: '<path d="M7 14h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 14Z"/><path d="M8 17.5v.01M12 19v.01M16 17.5v.01M10 21.5v.01M14 21.5v.01"/>',
+  storm: '<path d="M7 14h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 14Z"/><path d="M12.5 15l-2 3.5h3l-2 3.5"/>',
+};
+const wIcon = (k) => `<svg class="w-ico" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
+const hhmm = (iso) => iso.slice(11, 16);
+let meteoCache = null;
+function getMeteo() {
+  if (meteoCache) return meteoCache;
+  const u = `https://api.open-meteo.com/v1/forecast?latitude=${METEO.lat}&longitude=${METEO.lon}` +
+    "&current=temperature_2m,apparent_temperature,weather_code,wind_speed_10m,snow_depth" +
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,snowfall_sum,precipitation_probability_max,sunset" +
+    "&timezone=Europe%2FRome&forecast_days=16";
+  meteoCache = fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
+  return meteoCache;
+}
+
+// Card grande (home)
+function mountMeteoCard(el) {
+  if (!el) return;
+  el.innerHTML = `<p class="w-status">Carico il meteo di Roccaraso…</p>`;
+  getMeteo().then((d) => {
+    const c = d.current, dl = d.daily;
+    const [txt, ico] = WMO(c.weather_code);
+    const days = dl.time.slice(0, 7).map((t, i) => {
+      const dt = new Date(t + "T12:00");
+      const [dtxt, dico] = WMO(dl.weather_code[i]);
+      const snow = dl.snowfall_sum[i];
+      return `<li class="w-day">
+        <span class="w-dname">${i === 0 ? "Oggi" : GIORNI_BREVI[dt.getDay()] + " " + dt.getDate()}</span>
+        ${wIcon(dico)}<span class="sr-only">${dtxt}</span>
+        <span class="w-mm"><b>${Math.round(dl.temperature_2m_max[i])}°</b> ${Math.round(dl.temperature_2m_min[i])}°</span>
+        <span class="w-snow">${snow > 0 ? `${snow.toFixed(1).replace(".", ",")} cm neve` : "&nbsp;"}</span>
+      </li>`;
+    }).join("");
+    el.innerHTML = `
+      <div class="w-now">
+        <span class="badge badge-gray">${esc(METEO.place)} · ${Math.round(d.elevation)} m</span>
+        <div class="w-temp">${wIcon(ico)}<span>${Math.round(c.temperature_2m)}°</span></div>
+        <p class="w-cond">${txt}</p>
+        <dl class="w-facts">
+          <div><dt>Percepita</dt><dd>${Math.round(c.apparent_temperature)}°</dd></div>
+          <div><dt>Vento</dt><dd>${Math.round(c.wind_speed_10m)} km/h</dd></div>
+          <div><dt>Neve al suolo</dt><dd>${Math.round((c.snow_depth || 0) * 100)} cm</dd></div>
+          <div><dt>Tramonto</dt><dd>${hhmm(dl.sunset[0])}</dd></div>
+        </dl>
+      </div>
+      <ul class="w-days">${days}</ul>
+      <p class="w-src">Previsioni Open-Meteo · aggiornate ${hhmm(c.time)}</p>`;
+  }).catch(() => { el.innerHTML = `<p class="w-status">Meteo non disponibile in questo momento.</p>`; });
+}
+
+// Previsione di una data (pagina evento)
+function mountMeteoDay(el, id) {
+  if (!el) return;
+  getMeteo().then((d) => {
+    const i = d.daily.time.indexOf(id);
+    if (i < 0) { el.innerHTML = `<p class="w-status">Le previsioni per questa data compaiono 16 giorni prima. Intanto guarda il <a href="index.html#meteo">meteo di oggi</a>.</p>`; return; }
+    const dl = d.daily, [txt, ico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
+    el.innerHTML = `<div class="w-inline">${wIcon(ico)}<div><strong>${txt} · ${Math.round(dl.temperature_2m_max[i])}° / ${Math.round(dl.temperature_2m_min[i])}°</strong>
+      <span>${snow > 0 ? `Neve prevista ${snow.toFixed(1).replace(".", ",")} cm · ` : ""}Pioggia/neve ${dl.precipitation_probability_max[i]}% · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;
+  }).catch(() => { el.innerHTML = `<p class="w-status">Meteo non disponibile in questo momento.</p>`; });
+}

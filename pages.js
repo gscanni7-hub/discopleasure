@@ -37,6 +37,8 @@ const PAGES = {
       <p>Alle 16:40 il sole passa dietro la cresta e il piazzale cambia faccia: da lì in poi è Disco Pleasure.</p>
       <h3>Line-up</h3>
       <ul>${e.lineup.map((l) => `<li><strong>${esc(l.area)}:</strong> ${l.names.map(esc).join(", ").replace(/ b2b /gi, " b2b ")}</li>`).join("")}</ul>
+      <h3>Meteo a Roccaraso</h3>
+      <div class="w-day-box" id="evMeteo"><p class="w-status">Carico le previsioni…</p></div>
       <h3 id="biglietti">Informazioni</h3>
       <ul>
         <li><strong>Dove:</strong> Chalet Valentino, a valle delle Gravare · Roccaraso · piattaforma esterna</li>
@@ -50,6 +52,7 @@ const PAGES = {
       <details><summary>A che ora conviene arrivare?</summary><p>Si apre alle 12. Il momento più bello è il tramonto, verso le 16:40: arriva prima per trovare posto sulla piattaforma.</p></details>
       <details><summary>E se nevica?</summary><p>Ogni venerdì pubblichiamo il meteo del weekend negli <a href="aggiornamenti.html">Aggiornamenti</a>. Eventuali cambi di programma li trovi lì e sui nostri social.</p></details>`;
     mountEventGrid($("#evFilters"), $("#evGrid"), { events: EVENTS.filter((x) => x.phase === e.phase) });
+    mountMeteoDay($("#evMeteo"), e.id);
   },
 
   /* ---------- AGGIORNAMENTI ---------- */
