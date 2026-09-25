@@ -86,6 +86,22 @@ const TICKETS = {
   "2026-12-06": "https://www.eventbrite.com/e/2002311501602?aff=oddtdtcreator",
   "2026-12-07": "https://www.eventbrite.com/e/2002311677127?aff=oddtdtcreator",
   "2026-12-08": "https://www.eventbrite.com/e/2002311718250?aff=oddtdtcreator",
+  "2026-12-26": "https://www.eventbrite.com/e/2002311834598?aff=oddtdtcreator",
+  "2026-12-27": "https://www.eventbrite.com/e/2002312021156?aff=oddtdtcreator",
+  "2026-12-28": "https://www.eventbrite.com/e/2002312466488?aff=oddtdtcreator",
+  "2026-12-29": "https://www.eventbrite.com/e/2002312601893?aff=oddtdtcreator",
+  "2026-12-30": "https://www.eventbrite.com/e/2002312963976?aff=oddtdtcreator",
+  "2026-12-31": "https://www.eventbrite.com/e/2002313322047?aff=oddtdtcreator",
+  "2027-01-01": "https://www.eventbrite.com/e/2002313419338?aff=oddtdtcreator",
+  "2027-01-02": "https://www.eventbrite.com/e/2002314429359?aff=oddtdtcreator",
+  "2027-01-03": "https://www.eventbrite.com/e/2002314570782?aff=oddtdtcreator",
+  "2027-01-04": "https://www.eventbrite.com/e/2002314708193?aff=oddtdtcreator",
+  "2027-01-05": "https://www.eventbrite.com/e/2002314802475?aff=oddtdtcreator",
+  "2027-01-06": "https://www.eventbrite.com/e/2002315039183?aff=oddtdtcreator",
+  "2027-01-07": "https://www.eventbrite.com/e/2002315247807?aff=oddtdtcreator",
+  "2027-01-08": "https://www.eventbrite.com/e/2002315182612?aff=oddtdtcreator",
+  "2027-01-09": "https://www.eventbrite.com/e/2002315406281?aff=oddtdtcreator",
+  "2027-01-10": "https://www.eventbrite.it/e/disco-pleasure-apres-ski-1001-chalet-valentino-tickets-2002316123426?aff=oddtdtcreator",
 };
 EVENTS.forEach((e) => { e.tickets = TICKETS[e.id] || CONTATTI.eventbrite; });
 const eventById = (id) => EVENTS.find((e) => e.id === id) || EVENTS[0];
