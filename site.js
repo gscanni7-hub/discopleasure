@@ -28,7 +28,8 @@ const MENU_LINKS = [
 function mountHeader() {
   const slot = $("#siteHeader"); if (!slot) return;
   slot.outerHTML = `
-<div class="page-bg" id="pageBg" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="page-bg" id="pageBg" aria-hidden="true"></div>
+<div class="load-bar" id="loadBar" aria-hidden="true"></div>
 <header class="topbar">
   <div class="pill" id="pill">
     <div class="pill-bar">
@@ -102,13 +103,51 @@ function initScroll() {
   frame();
 }
 
-/* ============ TITOLI GIGANTI: legati al segnaposto ============ */
+/* ============ TITOLI GIGANTI: opacità che segue lo scroll ============ */
+// In base a dove si trova il segnaposto nello schermo:
+// entra dal 70% (0) al 45% (1), resta pieno fino al 33%, sparisce al 13%.
 function initGiants() {
-  $$(".chapter").forEach((ch) => {
-    const h = $(".giant", ch), dot = $(".sentinel", ch); if (!h || !dot) return;
-    new IntersectionObserver(([en]) => h.classList.toggle("in", en.isIntersecting),
-      { rootMargin: "-14% 0px -26% 0px" }).observe(dot);
+  const pairs = $$(".chapter").map((ch) => [$(".giant", ch), $(".sentinel", ch)]).filter(([h, d]) => h && d);
+  if (!pairs.length) return;
+  const lerp = (v, a, b) => Math.min(1, Math.max(0, (v - a) / (b - a)));
+  const update = () => {
+    const vh = innerHeight;
+    pairs.forEach(([h, dot]) => {
+      const y = dot.getBoundingClientRect().top / vh;
+      const o = y > 0.45 ? 1 - lerp(y, 0.45, 0.70) : y > 0.33 ? 1 : lerp(y, 0.13, 0.33);
+      h.style.opacity = o.toFixed(3);
+    });
+  };
+  scrollHooks.push(update);
+  update();
+}
+
+/* ============ SFONDO: luci che fluttuano ============ */
+function initSpotlights() {
+  const bg = $("#pageBg"); if (!bg) return;
+  const colors = ["#b9e2ff", "#ffd0dc", "#dcd2ff", "#cff5d4", "#c6ecff", "#ffe0c9", "#e4d6ff", "#d3f7da"];
+  const r = Math.random;
+  bg.innerHTML = colors.map((c) => `<i style="--c:${c};--s:${(40 + r() * 26).toFixed(1)}vmax;--x:${(r() * 100).toFixed(1)}%;--y:${(r() * 100).toFixed(1)}%;--o:${(0.45 + r() * 0.15).toFixed(2)};--d:${(30 + r() * 13).toFixed(1)}s;--delay:${(-r() * 40).toFixed(1)}s"></i>`).join("");
+}
+
+/* ============ BARRA DI CARICAMENTO AL CAMBIO PAGINA ============ */
+function initLoadBar() {
+  const bar = $("#loadBar"); if (!bar) return;
+  const set = (x) => { bar.style.transform = `scaleX(${x})`; };
+  // arrivo sulla pagina: la barra si completa e sparisce
+  bar.classList.add("on"); set(0.7);
+  addEventListener("load", () => { set(1); setTimeout(() => bar.classList.remove("on"), 250); });
+  // clic su un link interno: la barra parte prima di cambiare pagina
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest("a[href]");
+    if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || a.target === "_blank") return;
+    const href = a.getAttribute("href");
+    if (!href || href.startsWith("#") || /^(mailto:|tel:|https?:)/.test(href)) return;
+    e.preventDefault();
+    bar.classList.add("on"); set(0.15);
+    requestAnimationFrame(() => { set(0.6); setTimeout(() => (location.href = a.href), 180); });
   });
+  addEventListener("pageshow", (e) => { if (e.persisted) { set(0); bar.classList.remove("on"); } });
 }
 
 /* ============ CAROSELLI CON PALLINI ============ */
@@ -224,6 +263,8 @@ function mountEventGrid(filtersEl, gridEl, { tickets = true, events = EVENTS } =
 function bootSite() {
   mountHeader();
   mountFooter();
+  initSpotlights();
+  initLoadBar();
   paintAll();
   initBalls();
   initMenu();

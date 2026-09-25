@@ -59,12 +59,12 @@ const PAGES = {
     const draw = () => {
       const list = filter === "all" ? NEWS : NEWS.filter((n) => n.tag === filter);
       grid.innerHTML = list.slice(0, shown).map((n) => `
-        <a class="poster dark" href="articolo.html?id=${n.id}">
-          ${art(n.img)}
-          <div class="poster-body">
+        <a class="news-card dark" href="articolo.html?id=${n.id}">
+          <div class="news-img">${art(n.img)}</div>
+          <div class="news-body">
             <span class="badge">${esc(n.tag)}</span>
-            <h3 class="poster-title">${esc(n.title)}</h3>
-            <span class="btn btn-sm">Leggi</span>
+            <h3 class="news-title">${esc(n.title)}</h3>
+            <span class="btn">Leggi</span>
           </div>
         </a>`).join("");
       more.hidden = list.length <= shown;
