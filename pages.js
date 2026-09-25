@@ -19,6 +19,7 @@ const PAGES = {
   /* ---------- PAGINA EVENTO ---------- */
   evento() {
     const e = eventByPath(location.pathname) || eventById(qs("d"));
+    if (location.pathname !== e.url) history.replaceState(null, "", e.url + location.hash); // vecchi link → indirizzo pulito
     document.title = `${e.title} · ${e.short} | Disco Pleasure`;
     $("#evPhase").textContent = e.phase;
     $("#evTitle").textContent = e.title;
@@ -82,6 +83,7 @@ const PAGES = {
   /* ---------- ARTICOLO (stile Chi siamo) ---------- */
   articolo() {
     const n = newsById(location.pathname.startsWith("/news/") ? decodeURI(location.pathname.slice(6)).replace(/\/$/, "") : qs("id"));
+    if (location.pathname !== `/news/${n.id}`) history.replaceState(null, "", `/news/${n.id}` + location.hash);
     document.title = `${n.title} | Disco Pleasure`;
     $("#arTag").textContent = n.tag;
     $("#arTitle").textContent = n.title;
