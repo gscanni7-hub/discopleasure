@@ -257,13 +257,13 @@ const HOME = {
     { day: "Martedì 8.12", title: "L'ora blu, alle 19", img: "/img/lun-8.jpg", href: evUrl("2026-12-08") },
   ],
   residents: [
-    // Sostituisci "Resident" con il nome del DJ di ogni giornata
-    { day: "Sabato 5.12", name: "Resident", img: "/img/recap-piazzale.jpg" },
-    { day: "Domenica 6.12", name: "Resident", img: "/img/recap-flash.jpg" },
-    { day: "Lunedì 7.12", name: "Resident", img: "/img/recap-orablu.jpg" },
-    { day: "Martedì 8.12", name: "Resident", img: "/img/recap-alto.jpg" },
-    { day: "Sabato 26.12", name: "Resident", img: "/img/recap-terrazza.jpg" },
-    { day: "Giovedì 31.12", name: "Resident", img: "/img/recap-brindisi.jpg" },
+    // "Coming soon" finché non escono i nomi: sostituisci name e img con DJ e foto
+    { day: "Sabato 5.12", name: "Coming soon", img: "/img/coming-soon/cs-1.jpg" },
+    { day: "Domenica 6.12", name: "Coming soon", img: "/img/coming-soon/cs-2.jpg" },
+    { day: "Lunedì 7.12", name: "Coming soon", img: "/img/coming-soon/cs-3.jpg" },
+    { day: "Martedì 8.12", name: "Coming soon", img: "/img/coming-soon/cs-4.jpg" },
+    { day: "Sabato 26.12", name: "Coming soon", img: "/img/coming-soon/cs-5.jpg" },
+    { day: "Giovedì 31.12", name: "Coming soon", img: "/img/coming-soon/cs-6.jpg" },
   ],
 };
 
