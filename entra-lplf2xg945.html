@@ -19,11 +19,11 @@
   <button class="out" id="out">Esci dall'anteprima (torna a "in costruzione")</button>
 </main>
 <script>
-  // Accesso riservato al team: su questo browser si vede il sito completo per 90 giorni
+  // Accesso riservato al team: su questo browser si vede il sito completo per un anno
   // "Secure" solo su https: Safari lo rifiuta sugli indirizzi locali in http
   const sec = location.protocol === "https:" ? "; Secure" : "";
-  const set = (on) => { document.cookie = "dp_anteprima=" + (on ? "1" : "") + "; path=/; SameSite=Lax" + sec + "; max-age=" + (on ? 60 * 60 * 24 * 90 : 0); };
-  if (!location.hash.includes("esci")) { set(true); document.getElementById("msg").textContent = "Anteprima attiva su questo browser per 90 giorni."; setTimeout(() => (location.href = "/"), 900); }
+  const set = (on) => { document.cookie = "dp_anteprima=" + (on ? "1" : "") + "; path=/; SameSite=Lax" + sec + "; max-age=" + (on ? 60 * 60 * 24 * 365 : 0); };
+  if (!location.hash.includes("esci")) { set(true); document.getElementById("msg").textContent = "Anteprima attiva su questo browser per un anno."; setTimeout(() => (location.href = "/"), 900); }
   document.getElementById("out").onclick = () => { set(false); location.href = "/"; };
 </script>
 </body>

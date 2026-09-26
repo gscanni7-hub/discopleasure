@@ -33,21 +33,21 @@ const PAGES = {
       img.outerHTML = `<a class="ev-poster" href="${e.poster}" target="_blank" rel="noopener" title="Apri la locandina"><img src="${src}" alt="Locandina Disco Pleasure · ${esc(e.long)}" width="1280" height="1600"></a>`;
     } else { img.dataset.img = e.img; paintArt(img); }
     const intro = {
-      "Il ponte": "Il ponte dell'Immacolata apre la stagione: quattro date di fila sulla piattaforma davanti allo Chalet Valentino, con il nuovo arco di luce e le montagne dietro.",
-      "Le feste": "Durante le feste Disco Pleasure è aperto tutti i giorni. Neve di giorno, pista al tramonto: dalle 12 alle 19, all'aperto.",
-      "Weekend": "Ogni sabato e domenica fino al 14 marzo. Si scende dalle piste, si sale sulla piattaforma e si resta finché fa buio.",
+      "Il ponte": "Il ponte dell'Immacolata apre la stagione: quattro pomeriggi di fila sulla piattaforma dello Chalet Valentino, con il nuovo arco e le Gravare alle spalle.",
+      "Le feste": "Durante le feste siamo aperti tutti i giorni. Si scia la mattina, si balla dal primo pomeriggio fino a quando fa buio.",
+      "Weekend": "Sabato e domenica, fino a metà marzo. Dall'ultima discesa si arriva dritti in pista.",
     }[e.phase];
     $("#evBody").innerHTML = `
       <p><strong>${esc(e.title)} · ${esc(e.long)}</strong></p>
       <p>${esc(intro)}</p>
-      <p>Alle 16:40 il sole passa dietro la cresta e il piazzale cambia faccia: da lì in poi è Disco Pleasure.</p>
+      <p>Verso le 16:40 il sole passa dietro la cresta, si accendono le luci dell'arco e comincia la parte migliore della giornata.</p>
       <h3>Line-up</h3>
       <ul>${e.lineup.map((l) => `<li><strong>${esc(l.area)}:</strong> ${l.names.map(esc).join(", ").replace(/ b2b /gi, " b2b ")}</li>`).join("")}</ul>
       <h3>Meteo a Roccaraso</h3>
       <div class="w-day-box" id="evMeteo"><p class="w-status">Carico le previsioni…</p></div>
       <h3 id="biglietti">Informazioni</h3>
       <ul>
-        <li><strong>Dove:</strong> Chalet Valentino, a valle delle Gravare · Roccaraso · piattaforma esterna</li>
+        <li><strong>Dove:</strong> Chalet Valentino, Viale delle Gravare, Roccaraso · <a href="/come-arrivare">come arrivare</a></li>
         <li><strong>Quando:</strong> ${esc(e.long)}</li>
         <li><strong>Orari:</strong> ${esc(e.hours)}</li>
         ${e.poster ? `<li><strong>Locandina:</strong> <a href="${e.poster}" download>scarica</a></li>` : ""}
@@ -58,8 +58,9 @@ const PAGES = {
       </ul>
       <h3>Domande frequenti</h3>
       <details><summary>Come prenoto un tavolo?</summary><p>Scrivici su <a href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">WhatsApp</a> indicando la data e quante persone siete: ti confermiamo la disponibilità.</p></details>
-      <details><summary>A che ora conviene arrivare?</summary><p>Si apre alle 12. Il momento più bello è il tramonto, verso le 16:40: arriva prima per trovare posto sulla piattaforma.</p></details>
-      <details><summary>E se nevica?</summary><p>Ogni venerdì pubblichiamo il meteo del weekend negli <a href="/news">News</a>. Eventuali cambi di programma li trovi lì e sui nostri social.</p></details>`;
+      <details><summary>A che ora conviene arrivare?</summary><p>Si apre alle 12. Se vuoi un buon posto per il tramonto, sali entro le 15.</p></details>
+      <details><summary>Come ci arrivo?</summary><p>Con gli sci dalla pista Valle delle Gravare, oppure in auto fino all'Aremogna. Tutti i dettagli nella pagina <a href="/come-arrivare">Come arrivare</a>.</p></details>
+      <details><summary>E se nevica?</summary><p>Il meteo del giorno è qui sopra. Eventuali cambi di orario li scriviamo nelle <a href="/news">News</a> e sui social la mattina stessa.</p></details>`;
     mountEventGrid($("#evFilters"), $("#evGrid"), { events: EVENTS.filter((x) => x.phase === e.phase) });
     mountMeteoDay($("#evMeteo"), e.id);
   },
@@ -152,6 +153,11 @@ const PAGES = {
 
   /* ---------- LO CHALET ---------- */
   chisiamo() {},
+
+  /* ---------- COME ARRIVARE ---------- */
+  comearrivare() {
+    $$("[data-wa]").forEach((a) => (a.href = waLink("Ciao! Ho una domanda su come arrivare allo Chalet Valentino.")));
+  },
 };
 
 /* ============ AVVIO ============ */

@@ -33,7 +33,7 @@ const MENU_LINKS = [
   ["/tavoli", "Tavoli"],
   ["/artisti", "Artisti"],
   ["/#meteo", "Meteo"],
-  ["/news/come-arrivare", "Come arrivare"],
+  ["/come-arrivare", "Come arrivare"],
   ["/news", "News"],
   ["/chi-siamo", "Chi siamo"],
 ];
@@ -335,7 +335,27 @@ function mountEventGrid(filtersEl, gridEl, { tickets = true, events = EVENTS } =
 }
 
 /* ============ AVVIO COMUNE ============ */
+/* ============ ADMIN: anteprima del sito in costruzione ============ */
+// ?anteprima=CODICE su qualsiasi pagina attiva l'accesso (anche in locale); l'etichetta in basso mostra lo stato
+const ADMIN_CODE = "lplf2xg945";
+function initAdmin() {
+  const sec = location.protocol === "https:" ? "; Secure" : "";
+  const setCk = (on) => { document.cookie = "dp_anteprima=" + (on ? "1" : "") + "; path=/; SameSite=Lax" + sec + "; max-age=" + (on ? 31536000 : 0); };
+  if (qs("anteprima") === ADMIN_CODE) {
+    setCk(true);
+    const u = new URL(location.href); u.searchParams.delete("anteprima");
+    history.replaceState(null, "", u.pathname + (u.search || "") + u.hash);
+  }
+  if (!/(^|; )dp_anteprima=1/.test(document.cookie)) return;
+  const bar = document.createElement("div");
+  bar.className = "admin-pill";
+  bar.innerHTML = `<span class="admin-dot"></span>Admin · anteprima<button type="button">Esci</button>`;
+  bar.querySelector("button").onclick = () => { setCk(false); location.href = "/"; };
+  document.body.appendChild(bar);
+}
+
 function bootSite() {
+  initAdmin();
   mountHeader();
   mountFooter();
   initSpotlights();

@@ -790,3 +790,15 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
 .media-card:has(.ev-poster) { aspect-ratio: auto !important; height: auto; max-width: 34rem !important; background: transparent; }
 .ev-poster { display: block; }
 .ev-poster img { display: block; width: 100%; height: auto; }
+
+/* ============ COME ARRIVARE ============ */
+.ca-list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+.ca-list li { display: grid; grid-template-columns: 120px 1fr; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14px; }
+.ca-list strong { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); padding-top: 2px; }
+.ca-list a { color: var(--blue); }
+@media (max-width: 480px) { .ca-list li { grid-template-columns: 1fr; gap: 4px; } }
+
+/* ============ ADMIN ============ */
+.admin-pill { position: fixed; left: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 90; display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; border-radius: 999px; background: #050507; color: #eeece5; font-size: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.2); }
+.admin-dot { width: 8px; height: 8px; border-radius: 50%; background: #3FC6F5; }
+.admin-pill button { border: 0; border-radius: 999px; padding: 4px 10px; background: rgba(255,255,255,.14); color: #fff; font-size: 11px; font-weight: 600; cursor: pointer; }

@@ -13,12 +13,17 @@
   ],
   "redirects": [
     {
-      "source": "/((?!in-costruzione|entra-lplf2xg945|img/|styles\\.css|site\\.js|data\\.js|favicon\\.svg|icon-|manifest\\.webmanifest).*)",
+      "source": "/((?!in-costruzione|entra-lplf2xg945|img/|.*\\.(?:js|css|png|jpg|jpeg|svg|webmanifest|ico)$).*)",
       "missing": [
         {
           "type": "cookie",
           "key": "dp_anteprima",
           "value": "1"
+        },
+        {
+          "type": "query",
+          "key": "anteprima",
+          "value": "lplf2xg945"
         }
       ],
       "destination": "/in-costruzione",
@@ -43,6 +48,11 @@
       "source": "/index",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/news/come-arrivare",
+      "destination": "/come-arrivare",
+      "permanent": true
     }
   ],
   "headers": [
@@ -60,7 +70,27 @@
       "headers": [
         {
           "key": "Set-Cookie",
-          "value": "dp_anteprima=1; Path=/; Max-Age=7776000; SameSite=Lax; Secure"
+          "value": "dp_anteprima=1; Path=/; Max-Age=31536000; SameSite=Lax; Secure"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "query",
+          "key": "anteprima",
+          "value": "lplf2xg945"
+        }
+      ],
+      "headers": [
+        {
+          "key": "Set-Cookie",
+          "value": "dp_anteprima=1; Path=/; Max-Age=31536000; SameSite=Lax; Secure"
         },
         {
           "key": "Cache-Control",
