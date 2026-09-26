@@ -71,8 +71,7 @@ const EVENTS = SEASON_DATES.map(([y, m, d], i) => {
     img: EVENT_IMGS[i % EVENT_IMGS.length],
     // Line-up per area: sostituisci con i nomi. Per un b2b scrivi "Nome A b2b Nome B".
     lineup: [
-      { area: "Sotto l'arco", names: ["Resident", "Guest da annunciare"] },
-      { area: "Dal tramonto", names: ["Resident b2b Resident"] },
+      { area: "Line-up", names: ["Resident", "Guest da annunciare"] },
     ],
     // Link Eventbrite: si imposta nella lista TICKETS più sotto
     tickets: null,
@@ -145,9 +144,9 @@ const NEWS = [
         text: ["Sabato si apre, domenica e lunedì si tiene il ritmo, martedì 8 si chiude il ponte con la giornata dell'Immacolata. Quattro date, quattro line-up diverse.",
                "I nomi escono giorno per giorno nel calendario. Se hai già scelto la data, tieni d'occhio quella pagina: le novità arrivano lì prima che altrove."],
         pair: ["/img/opening.jpg", "/img/sab-6.jpg"] },
-      { h: "Il palco è cambiato", img: "/img/stage.jpg", label: "Sotto l'arco",
+      { h: "Il palco è cambiato", img: "/img/stage.jpg", label: "Il nuovo palco",
         text: ["Il gazebo è andato in pensione. Al suo posto c'è un arco di truss di sei metri, due torri audio e una corona di luci calde che si accende quando il sole scende dietro la cresta.",
-               "La consolle sta sotto l'arco, la pista davanti, le montagne alle spalle. Niente tavoli in mezzo: la piattaforma è fatta per ballare."],
+               "La consolle sta al centro dell'arco, la pista davanti, le montagne alle spalle. Niente tavoli in mezzo: la piattaforma è fatta per ballare."],
         pair: ["/img/stage-led.jpg", "/img/dom-7.jpg"] },
       { h: "Biglietti e timbro", img: "/img/timbro.jpg", label: "Come si entra",
         text: ["I biglietti sono su Eventbrite, un evento per ogni data: il link è nella pagina del giorno. Per il tavolo basta un messaggio su WhatsApp.",
@@ -251,8 +250,8 @@ const HOME = {
     { date: "Fino al 14.03", title: "Ogni weekend", img: "/img/epifania.jpg", href: "/apres-ski?m=1" },
   ],
   residencies: [
-    { day: "Sabato 5.12", title: "Apriamo sotto l'arco", img: "/img/ven-5.jpg", href: evUrl("2026-12-05") },
-    { day: "Domenica 6.12", title: "Heat, dal tramonto", img: "/img/sab-6.jpg", href: evUrl("2026-12-06") },
+    { day: "Sabato 5.12", title: "Si apre la stagione", img: "/img/ven-5.jpg", href: evUrl("2026-12-05") },
+    { day: "Domenica 6.12", title: "Il ponte entra nel vivo", img: "/img/sab-6.jpg", href: evUrl("2026-12-06") },
     { day: "Lunedì 7.12", title: "Neve di giorno, pista al tramonto", img: "/img/dom-7.jpg", href: evUrl("2026-12-07") },
     { day: "Martedì 8.12", title: "L'ora blu, alle 19", img: "/img/lun-8.jpg", href: evUrl("2026-12-08") },
   ],

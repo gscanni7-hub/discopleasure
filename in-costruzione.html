@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=202609262002">
+<link rel="stylesheet" href="/styles.css?v=202609262023">
 <style>
   .soon { min-height: 100svh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 48px 20px calc(48px + env(safe-area-inset-bottom)); text-align: center; position: relative; z-index: 2; }
   .soon .wm { font-size: clamp(40px, 9vw, 96px); color: var(--heading); }
@@ -61,8 +61,8 @@
   <p class="soon-foot">© 2023 - 2027 Disco Pleasure · Chalet Valentino, Roccaraso</p>
 </main>
 
-<script src="/data.js?v=202609262002"></script>
-<script src="/site.js?v=202609262002"></script>
+<script src="/data.js?v=202609262023"></script>
+<script src="/site.js?v=202609262023"></script>
 <script>
   let k = 0;
   document.querySelectorAll("[data-split]").forEach((el) => { el.innerHTML = [...el.textContent].map((c) => c === " " ? " " : `<span class="ch" style="--i:${k++}">${c}</span>`).join(""); });
