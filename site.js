@@ -10,6 +10,7 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const art = (img, extra = "") => `<div class="art"${img ? ` data-img="${esc(img)}"` : ""} ${extra}></div>`;
 const WM = '<span class="wm"><span class="row">DISC<span class="o"></span></span><span class="row">&nbsp;PLEASURE</span></span>';
 const qs = (k) => new URLSearchParams(location.search).get(k);
+if (qs("bn") === "1") document.documentElement.classList.add("bn");
 
 /* Foto: su schermi fino a 800px usa le versioni leggere in img/m/,
    e ogni foto si scarica solo quando sta per entrare nello schermo. */

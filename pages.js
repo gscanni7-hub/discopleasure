@@ -26,7 +26,12 @@ const PAGES = {
     $("#evDate").textContent = `${e.long} · ${e.hours}`;
     Object.assign($("#evTickets"), { href: e.tickets, target: "_blank", rel: "noopener" });
     Object.assign($("#evTables"), { href: waLink(tableMsg(e)), target: "_blank", rel: "noopener" });
-    const img = $("#evImg"); img.dataset.img = e.img; paintArt(img);
+    const img = $("#evImg");
+    if (e.poster) {
+      // Locandina intera, senza tagli, al posto della foto
+      const src = SMALL ? e.poster.replace("/img/", "/img/m/") : e.poster;
+      img.outerHTML = `<a class="ev-poster" href="${e.poster}" target="_blank" rel="noopener" title="Apri la locandina"><img src="${src}" alt="Locandina Disco Pleasure · ${esc(e.long)}" width="1280" height="1600"></a>`;
+    } else { img.dataset.img = e.img; paintArt(img); }
     const intro = {
       "Il ponte": "Il ponte dell'Immacolata apre la stagione: quattro date di fila sulla piattaforma davanti allo Chalet Valentino, con il nuovo arco di luce e le montagne dietro.",
       "Le feste": "Durante le feste Disco Pleasure è aperto tutti i giorni. Neve di giorno, pista al tramonto: dalle 12 alle 19, all'aperto.",
@@ -45,6 +50,7 @@ const PAGES = {
         <li><strong>Dove:</strong> Chalet Valentino, a valle delle Gravare · Roccaraso · piattaforma esterna</li>
         <li><strong>Quando:</strong> ${esc(e.long)}</li>
         <li><strong>Orari:</strong> ${esc(e.hours)}</li>
+        ${e.poster ? `<li><strong>Locandina:</strong> <a href="${e.poster}" download>scarica</a></li>` : ""}
         <li><strong>Biglietti:</strong> <a href="${esc(e.tickets)}" target="_blank" rel="noopener">su Eventbrite</a></li>
         <li><strong>Tavoli:</strong> <a href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">prenota su WhatsApp</a></li>
         <li><strong>Ingresso:</strong> ${e.entry.map(esc).join(" · ")}</li>
@@ -91,14 +97,11 @@ const PAGES = {
     const img = $("#arImg"); img.dataset.img = n.img; paintArt(img);
     $("#arBody").innerHTML = `<p><strong>${esc(n.lead)}</strong></p>` + n.intro.map((t) => `<p>${esc(t)}</p>`).join("");
     $("#arSections").innerHTML = n.sections.map((s) => `
-      <section class="chapter">
-        <h2 class="giant">${esc(s.h)}</h2>
-        <div class="sentinel" aria-hidden="true"></div>
-        <div class="chapter-body">
-          <div class="media-card dark">${art(s.img)}</div>
-          <div class="room-text"><span class="room-label">${esc(s.label)}</span>${s.text.map((t) => `<p>${esc(t)}</p>`).join("")}</div>
-          <div class="pair"><div class="g-item dark">${art(s.pair[0])}</div><div class="g-item dark">${art(s.pair[1])}</div></div>
-        </div>
+      <section class="ar-sec">
+        <span class="room-label">${esc(s.label)}</span>
+        <h2 class="ar-h">${esc(s.h)}</h2>
+        ${s.text.map((t) => `<p>${esc(t)}</p>`).join("")}
+        <figure class="ar-img dark">${art(s.img)}</figure>
       </section>`).join("");
     $("#moreRail").innerHTML = NEWS.filter((x) => x.id !== n.id).map((x) => `
       <a class="poster dark" href="/news/${x.id}">

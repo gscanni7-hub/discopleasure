@@ -104,6 +104,10 @@ const TICKETS = {
   "2027-01-10": "https://www.eventbrite.it/e/disco-pleasure-apres-ski-1001-chalet-valentino-tickets-2002316123426?aff=oddtdtcreator",
 };
 EVENTS.forEach((e) => { e.tickets = TICKETS[e.id] || CONTATTI.eventbrite; });
+// Locandine: una per data, in /img/locandine/AAAA-MM-GG.jpg (4:5, 1280x1600).
+// Per aggiungerne una basta mettere il file e la data in questa lista.
+const POSTERS = ["2026-12-05", "2026-12-06", "2026-12-07", "2026-12-08"];
+EVENTS.forEach((e) => { if (POSTERS.includes(e.id)) e.poster = `/img/locandine/${e.id}.jpg`; });
 const eventById = (id) => EVENTS.find((e) => e.id === id) || EVENTS[0];
 const eventByPath = (path) => EVENTS.find((e) => e.url === decodeURI(path).replace(/\/$/, ""));
 const tableMsg = (e) => `Ciao! Vorrei prenotare un tavolo a Disco Pleasure per ${e.long.toLowerCase()}.`;

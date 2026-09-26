@@ -773,3 +773,20 @@ html { -webkit-tap-highlight-color: transparent; }
 .menu-meta a { color: #737373; transition: color .15s; }
 .menu-meta a:hover { color: #fff; }
 .menu-copy { margin: 0; font-size: 11px; color: #e5e5e5; }
+
+/* ================= ARTICOLO COMPATTO ================= */
+.ar-body { position: relative; z-index: 2; max-width: 42rem; margin: 0 auto; padding: 0 var(--gutter); }
+.ar-sec { margin-top: 56px; font-size: 15px; line-height: 1.65; font-weight: 500; color: var(--heading); }
+.ar-sec p { margin: 0 0 12px; }
+.ar-h { margin: 6px 0 14px; font-family: var(--display); font-size: clamp(26px, 3vw, 34px); line-height: 1; font-weight: 700; letter-spacing: -.015em; text-transform: uppercase; }
+.ar-img { position: relative; margin: 20px 0 0; aspect-ratio: 16 / 10; border-radius: var(--r-card); overflow: hidden; background: #111; }
+.ar-img .art { position: absolute; inset: 0; }
+.ar-body + .chapter .sentinel { margin: 160px auto; }
+
+/* ============ FOTO IN BIANCO E NERO (?bn=1) ============ */
+html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
+
+/* ============ LOCANDINE ============ */
+.media-card:has(.ev-poster) { aspect-ratio: auto !important; height: auto; max-width: 34rem !important; background: transparent; }
+.ev-poster { display: block; }
+.ev-poster img { display: block; width: 100%; height: auto; }
