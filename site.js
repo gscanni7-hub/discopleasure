@@ -56,11 +56,10 @@ function mountHeader() {
         <a class="mini" href="${m.href}">${art(m.img)}<span class="mini-top"><span class="mini-tape">${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;</span></span><span class="mini-day">${esc(m.day)}</span></a>`).join("")}
       </div>
       <div class="menu-dots">${MENU_RAIL.map((_, i) => `<button aria-label="Vai alla data ${i + 1}"></button>`).join("")}</div>
-      <div class="menu-more">
+      ${CONTATTI.instagram !== "#" || CONTATTI.tiktok !== "#" ? `<div class="menu-more">
         <span class="menu-more-title">Seguici</span>
-        <a href="${CONTATTI.instagram}" target="_blank" rel="noopener">Instagram</a>
-        <a href="${CONTATTI.tiktok}" target="_blank" rel="noopener">TikTok</a>
-      </div>
+        ${[["instagram", "Instagram"], ["tiktok", "TikTok"]].filter(([k]) => CONTATTI[k] && CONTATTI[k] !== "#").map(([k, t]) => `<a href="${CONTATTI[k]}" target="_blank" rel="noopener">${t}</a>`).join("")}
+      </div>` : ""}
       </div>
       </div>
       <div class="menu-bottom">
@@ -79,7 +78,7 @@ function mountFooter() {
   <div class="footer-inner">
     <a href="/" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
     <nav class="footer-nav" aria-label="Link">
-      <a href="#">Instagram</a><a href="#">TikTok</a><a href="/tavoli">Tavoli</a><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a><a href="#">Privacy</a>
+      ${[["instagram", "Instagram"], ["tiktok", "TikTok"]].filter(([k]) => CONTATTI[k] && CONTATTI[k] !== "#").map(([k, t]) => `<a href="${CONTATTI[k]}" target="_blank" rel="noopener">${t}</a>`).join("")}<a href="/tavoli">Tavoli</a><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a><a href="/privacy">Privacy</a><a href="/cookie">Cookie</a>
     </nav>
     <p class="footer-meta">Chalet Valentino · a valle delle Gravare · Roccaraso · © 2023 - 2027 Disco Pleasure</p>
   </div>
