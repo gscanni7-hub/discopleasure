@@ -69,13 +69,29 @@ function initFinder() {
     location.href = "/apres-ski" + (p.toString() ? "?" + p : "");
   });
   // si aggancia in basso dopo l'hero, sparisce sul footer, diventa scura sopra le card
+  // Dopo l'apertura la barra resta nascosta scorrendo in giù e ricompare risalendo,
+  // mai sopra il modulo d'iscrizione o il footer
+  let lastY = scrollY, goingUp = false;
+  const subscribe = $("#subscribe"), footer = $("#footer"), hero = $("#heroWords"), cal = $("#calendar");
   scrollHooks.push(() => {
-    const vh = innerHeight;
+    const vh = innerHeight, y = scrollY;
+    if (y < lastY - 4) goingUp = true; else if (y > lastY + 4) goingUp = false;
+    lastY = y;
     const docked = slot.getBoundingClientRect().top < 80;
     if (docked !== finder.classList.contains("docked")) finder.classList.toggle("docked", docked);
-    finder.classList.toggle("away", docked && $("#footer").getBoundingClientRect().top < vh - 40);
+    const overForm = subscribe && (() => { const s = subscribe.querySelector(".nl-card") || subscribe; const r = s.getBoundingClientRect(); return r.top < vh && r.bottom > vh - 120; })();
+    const nearFooter = footer.getBoundingClientRect().top < vh - 40;
+    const show = docked && goingUp && !overForm && !nearFooter;
+    finder.classList.toggle("away", docked && !show);
+    document.body.classList.toggle("finder-on", docked && show);
     const r = finder.getBoundingClientRect();
     finder.classList.toggle("is-dark", darkAt(r.left + r.width / 2, r.bottom - 24, finder));
+    // il titolo dell'hero sparisce prima che la card del calendario lo raggiunga
+    if (hero && cal) {
+      const rg = document.createRange(); rg.selectNodeContents(hero);
+      const gap = cal.getBoundingClientRect().top - rg.getBoundingClientRect().bottom - 16;
+      hero.style.opacity = Math.min(1, Math.max(0, gap / (vh * 0.15))).toFixed(3);
+    }
   });
 }
 

@@ -182,15 +182,22 @@ function initScroll() {
 // In base a dove si trova il segnaposto nello schermo:
 // entra dal 70% (0) al 45% (1), resta pieno fino al 33%, sparisce al 13%.
 function initGiants() {
-  const pairs = $$(".chapter").map((ch) => [$(".giant", ch), $(".sentinel", ch)]).filter(([h, d]) => h && d);
-  if (!pairs.length) return;
+  const sets = $$(".chapter").map((ch) => [$(".giant", ch), $(".sentinel", ch), $(".chapter-body", ch)]).filter(([h, d]) => h && d);
+  if (!sets.length) return;
   const lerp = (v, a, b) => Math.min(1, Math.max(0, (v - a) / (b - a)));
   const update = () => {
     const vh = innerHeight;
-    pairs.forEach(([h, dot]) => {
+    sets.forEach(([h, dot, body]) => {
       const y = dot.getBoundingClientRect().top / vh;
-      const o = y > 0.45 ? 1 - lerp(y, 0.45, 0.70) : y > 0.33 ? 1 : lerp(y, 0.13, 0.33);
-      h.style.opacity = o.toFixed(3);
+      const fadeIn = y > 0.45 ? 1 - lerp(y, 0.45, 0.70) : 1;
+      // sparisce del tutto prima che i contenuti arrivino sotto il titolo
+      let out = y > 0.33 ? 1 : lerp(y, 0.13, 0.33);
+      if (body && body.firstElementChild) {
+        const rg = document.createRange(); rg.selectNodeContents(h);
+        const gap = body.firstElementChild.getBoundingClientRect().top - rg.getBoundingClientRect().bottom - 16;
+        out = Math.min(out, Math.max(0, Math.min(1, gap / (vh * 0.07))));
+      }
+      h.style.opacity = Math.min(fadeIn, out).toFixed(3);
     });
   };
   scrollHooks.push(update);

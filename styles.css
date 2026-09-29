@@ -781,7 +781,6 @@ html { -webkit-tap-highlight-color: transparent; }
 .ar-h { margin: 6px 0 14px; font-family: var(--display); font-size: clamp(26px, 3vw, 34px); line-height: 1; font-weight: 700; letter-spacing: -.015em; text-transform: uppercase; }
 .ar-img { position: relative; margin: 20px 0 0; aspect-ratio: 16 / 10; border-radius: var(--r-card); overflow: hidden; background: #111; }
 .ar-img .art { position: absolute; inset: 0; }
-.ar-body + .chapter .sentinel { margin: 160px auto; }
 
 /* ============ FOTO IN BIANCO E NERO (?bn=1) ============ */
 html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
@@ -802,3 +801,7 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
 .admin-pill { position: fixed; left: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 90; display: flex; align-items: center; gap: 8px; padding: 6px 6px 6px 12px; border-radius: 999px; background: #050507; color: #eeece5; font-size: 12px; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,.2); }
 .admin-dot { width: 8px; height: 8px; border-radius: 50%; background: #3FC6F5; }
 .admin-pill button { border: 0; border-radius: 999px; padding: 4px 10px; background: rgba(255,255,255,.14); color: #fff; font-size: 11px; font-weight: 600; cursor: pointer; }
+
+/* etichetta admin sopra la barra delle date, su telefono */
+@media (max-width: 700px) { body.finder-on .admin-pill { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 76px); } }
+.admin-pill { transition: bottom .3s var(--ease); }
