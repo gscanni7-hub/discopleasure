@@ -3,16 +3,6 @@
    ========================================================= */
 
 function renderHome() {
-  $("#specialRail").innerHTML = HOME.special.map((e) => `
-    <a class="poster dark" href="${e.href}">
-      ${art(e.img)}
-      <div class="poster-body">
-        <span class="poster-date">${esc(e.date)}</span>
-        <h3 class="poster-title">${esc(e.title)}</h3>
-        <span class="btn btn-white btn-sm">Scopri le date</span>
-      </div>
-    </a>`).join("");
-
   $("#residencyDeck").innerHTML = HOME.residencies.map((r) => `
     <div class="deck-card dark">
       ${art(r.img)}
@@ -63,36 +53,6 @@ function initHeroFade() {
     const top = hero.getBoundingClientRect().top;
     hero.style.opacity = Math.min(1, Math.max(0, (top - 60) / (innerHeight * 0.22))).toFixed(3);
   });
-}
-
-/* ============ EVENTI SPECIALI: un poster alla volta ============ */
-function initSlider() {
-  const slider = $("[data-slider]"), track = $(".slider-track", slider), dotsEl = $("#specialDots");
-  const n = track.children.length;
-  let i = 0;
-  dotsEl.innerHTML = Array.from({ length: n }, (_, k) => `<button aria-label="Vai alla slide ${k + 1}"></button>`).join("");
-  const dots = [...dotsEl.children];
-  const go = (k) => {
-    i = Math.max(0, Math.min(n - 1, k));
-    track.style.transform = `translateX(${-i * 100}%)`;
-    dots.forEach((d, j) => d.classList.toggle("on", j === i));
-  };
-  dots.forEach((d, k) => d.addEventListener("click", () => go(k)));
-  let x0 = null, dx = 0, moved = false;
-  slider.addEventListener("pointerdown", (e) => { x0 = e.clientX; dx = 0; moved = false; slider.classList.add("dragging"); });
-  addEventListener("pointermove", (e) => {
-    if (x0 === null) return;
-    dx = e.clientX - x0; if (Math.abs(dx) > 6) moved = true;
-    track.style.transform = `translateX(calc(${-i * 100}% + ${dx}px))`;
-  });
-  addEventListener("pointerup", () => {
-    if (x0 === null) return;
-    slider.classList.remove("dragging"); x0 = null;
-    go(dx < -60 ? i + 1 : dx > 60 ? i - 1 : i);
-  });
-  slider.addEventListener("click", (e) => { if (moved) e.preventDefault(); }, true);
-  $$("a", slider).forEach((el) => el.setAttribute("draggable", "false"));
-  go(0);
 }
 
 /* ============ IL PONTE: mazzo di card da trascinare ============ */
@@ -167,7 +127,6 @@ function initTypewriter() {
 renderHome();
 bootSite();
 initHeroFade();
-initSlider();
 initDeck();
 initTypewriter();
 mountMeteoCard($("#meteoCard"));
