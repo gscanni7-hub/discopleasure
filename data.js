@@ -263,6 +263,8 @@ const HOME = {
     { day: "Season 25/26", name: "Jean Pierre" },
     { day: "Season 25/26", name: "ItaloBros" },
     { day: "Season 25/26", name: "Marco Tropeano" },
+    { day: "Season 25/26", name: "Mario Bianco" },
+    { day: "Season 25/26", name: "Gabriele Del Prete" },
   ],
   // Biglietti: le date con un nome, ognuna col suo link Eventbrite (in home la card mostra il sigillo, non la foto)
   tickets: [
