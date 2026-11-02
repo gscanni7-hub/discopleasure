@@ -243,17 +243,12 @@ const newsById = (id) => NEWS.find((n) => n.id === id) || NEWS[0];
 
 /* ---------- Home ---------- */
 const HOME = {
-  special: [
-    { date: "Sab 5.12 · dalle 12", title: "Apriamo il 5", img: "/img/recap-alto.jpg", href: evUrl("2026-12-05") },
-    { date: "5 · 6 · 7 · 8 dicembre", title: "Il ponte dell'Immacolata", img: "/img/stage-led.jpg", href: evUrl("2026-12-06") },
-    { date: "Dal 26.12 al 10.01", title: "Tutti i giorni", img: "/img/palla-travi.jpg", href: "/apres-ski?m=12" },
-    { date: "Fino al 14.03", title: "Ogni weekend", img: "/img/montagne-tramonto.jpg", href: "/apres-ski?m=1" },
-  ],
   residencies: [
-    { day: "Sabato 5.12", title: "Si apre la stagione", img: "/img/opening.jpg", href: evUrl("2026-12-05") },
-    { day: "Domenica 6.12", title: "Il ponte entra nel vivo", img: "/img/ponte.jpg", href: evUrl("2026-12-06") },
-    { day: "Lunedì 7.12", title: "Neve di giorno, pista al tramonto", img: "/img/feste.jpg", href: evUrl("2026-12-07") },
-    { day: "Martedì 8.12", title: "L'ora blu, alle 19", img: "/img/lun-8.jpg", href: evUrl("2026-12-08") },
+    // Mazzo "Season 26-27": i quattro momenti della stagione
+    { day: "5 – 8 dicembre", title: "Opening", img: "/img/opening.jpg", href: evUrl("2026-12-05") },
+    { day: "26 dicembre – 10 gennaio", title: "Le feste", img: "/img/feste.jpg", href: "/apres-ski?m=12" },
+    { day: "31 dicembre · 1 gennaio", title: "Capodanno", img: "/img/recap-brindisi.jpg", href: evUrl("2026-12-31") },
+    { day: "Fino al 14 marzo", title: "Weekend", img: "/img/montagne-tramonto.jpg", href: "/apres-ski?m=1" },
   ],
   residents: [
     // "Been here": i DJ più noti passati da Disco Pleasure. img: "/img/nomefile.jpg" quando c'è la foto.

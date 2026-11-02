@@ -65,10 +65,13 @@ main { position: relative; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   height: 48px; padding: 0 24px; border: 0; border-radius: 999px;
-  background: var(--blue); color: #fff; font-weight: 500; font-size: 16px; white-space: nowrap;
+  background: var(--heading); color: #fff; font-weight: 500; font-size: 16px; white-space: nowrap;
   transition: color .15s cubic-bezier(.4, 0, .2, 1), background-color .15s cubic-bezier(.4, 0, .2, 1);
 }
-.btn:hover { background: var(--blue-hover); }
+.btn:hover { background: #404040; }
+/* Bianco e nero, come i bottoni di Hï: nero sullo sfondo chiaro, bianco dentro le card scure */
+.dark .btn:not(.btn-gray):not(.btn-black), .tile .btn, .nl-card .btn, .feature .btn { background: #fff; color: var(--heading); }
+.dark .btn:not(.btn-gray):not(.btn-black):hover, .tile .btn:hover, .nl-card .btn:hover, .feature .btn:hover { background: #e5e5e5; }
 .btn-sm { height: 40px; padding: 0 18px; font-size: 14px; }
 .btn-white { background: #fff; color: #000; }
 .btn-white:hover { background: #e5e5e5; }
@@ -169,39 +172,6 @@ main { position: relative; }
   font-weight: 700; text-transform: uppercase; color: var(--heading); letter-spacing: -.02em; white-space: nowrap;
 }
 
-/* Barra trova date */
-.finder-slot { position: relative; z-index: 3; height: 104px; margin-bottom: 36px; }
-.finder {
-  position: absolute; left: 50%; top: 0; transform: translateX(-50%);
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 4px; border-radius: var(--r-pill); width: max-content;
-  transition: background-color .3s;
-}
-.finder.docked { position: fixed; top: auto; bottom: 16px; z-index: 55; animation: dock .6s var(--ease); }
-@keyframes dock { from { transform: translate(-50%, 140%); } to { transform: translate(-50%, 0); } }
-.finder-label {
-  margin: 0; font-size: 18px; font-weight: 700; text-transform: uppercase; color: var(--heading);
-  padding: 0 12px; border-radius: 999px; line-height: 28px; letter-spacing: -.01em;
-}
-.finder-row { display: flex; gap: 4px; padding: 0; border-radius: 999px; }
-.finder-btn {
-  position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  width: 168px; height: 48px; border-radius: 999px; background: var(--gray-btn); color: var(--heading);
-  font-weight: 500; font-size: 16px; cursor: pointer; transition: background .15s;
-}
-.finder-btn:hover { background: rgba(0,0,0,.2); }
-.finder-btn svg, .finder-go svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
-.finder-btn input { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; border: 0; }
-.finder-btn input::-webkit-calendar-picker-indicator { position: absolute; inset: 0; width: 100%; height: 100%; cursor: pointer; }
-.finder-go { width: 48px; height: 48px; border-radius: 50%; border: 0; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none; transition: background .2s; }
-.finder-go:hover { background: var(--blue-hover); }
-/* versione scura quando passa sopra le card */
-.finder.is-dark .finder-row { background: #000; box-shadow: 0 0 0 4px #000; }
-.finder.is-dark .finder-label { background: #000; color: #fff; }
-.finder.is-dark .finder-btn { background: rgba(255,255,255,.2); color: #fff; }
-@media (max-width: 480px) {
-  .finder-btn { width: calc((100vw - 32px - 56px - 8px) / 2); max-width: 168px; }
-}
 
 /* ================= CARD GRANDE (calendario / art) ================= */
 .feature {
@@ -372,22 +342,7 @@ main { position: relative; }
 .nl-offer span { font-size: 26px; }
 .nl-form { display: flex; flex-direction: column; gap: 12px; padding: 24px; overflow-y: auto; }
 .nl-intro { margin: 0 0 8px; text-align: center; font-size: 14px; line-height: 1.4; }
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.nl-form input[type=text], .nl-form input[type=email], .nl-form input[type=tel], .prefix {
-  width: 100%; height: 40px; padding: 0 12px; border-radius: 8px; border: 0;
-  background: transparent; color: #fff; font-size: 13px; box-shadow: inset 0 0 0 1px rgba(255,255,255,.25); transition: box-shadow .2s;
-}
-.nl-form input::placeholder { color: #a3a3a3; }
-.nl-form input:focus { outline: none; box-shadow: inset 0 0 0 2px var(--blue); }
-.phone-row { display: grid; grid-template-columns: 90px 1fr; gap: 12px; }
-.prefix { position: relative; display: flex; flex-direction: column; justify-content: center; padding: 0 10px; }
-.prefix span { font-size: 9px; color: #a3a3a3; line-height: 1; }
-.prefix select { appearance: none; background: none; border: 0; color: #fff; font-size: 13px; padding: 0; }
-.prefix::after { content: "⌄"; position: absolute; right: 10px; top: 8px; font-size: 13px; color: #a3a3a3; }
-.check { display: flex; gap: 10px; align-items: flex-start; font-size: 10px; line-height: 1.4; cursor: pointer; }
-.check input { flex: none; width: 14px; height: 14px; margin: 0; accent-color: var(--blue); }
 .legal { margin: 0; font-size: 9px; line-height: 1.45; color: #a3a3a3; }
-.nl-msg { margin: 0; min-height: 1em; font-size: 13px; color: #fff; text-align: center; }
 
 /* ================= FOOTER ================= */
 .footer { position: relative; z-index: 2; margin-top: 160px; padding: 48px var(--gutter) 40px; color: var(--heading); }
@@ -424,13 +379,8 @@ svg.seal { display: block; }
 .seal-card svg { width: 46%; height: auto; }
 
 /* Titoli in Helvetica Neue, come da manuale del marchio */
-.hero-words, .giant, .feature-title, .poster-title, .tile-title, .res-title, .about-title, .menu-links a, .nl-offer, .finder-label { font-family: var(--display); }
+.hero-words, .giant, .feature-title, .poster-title, .tile-title, .res-title, .about-title, .menu-links a, .nl-offer { font-family: var(--display); }
 
-/* ================= EVENTI SPECIALI: slider centrato ================= */
-.slider { width: min(80vw, 416px); overflow: hidden; border-radius: var(--r-card); touch-action: pan-y; }
-.slider-track { display: flex; transition: transform .6s var(--ease); }
-.slider-track > .poster { flex: 0 0 100%; width: 100%; }
-.slider.dragging .slider-track { transition: none; }
 .dots:empty { display: none; }
 
 /* ================= RESIDENCY: mazzo ================= */
@@ -461,8 +411,6 @@ svg.seal { display: block; }
 .tile .badge { font-weight: 500; }
 .tile-title { flex: 0 0 auto; min-height: 36px; display: flex; align-items: center; justify-content: center; line-height: 30px; }
 
-.finder.docked { transition: transform .5s var(--ease), opacity .3s; }
-.finder.docked.away { transform: translate(-50%, 160%); opacity: 0; pointer-events: none; }
 
 /* =========================================================
    PAGINE INTERNE
@@ -747,7 +695,6 @@ svg.seal { display: block; }
 html { -webkit-tap-highlight-color: transparent; }
 /* tacca e barra in basso degli iPhone */
 .topbar { padding-top: max(16px, env(safe-area-inset-top)); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
-.finder.docked { bottom: max(16px, env(safe-area-inset-bottom)); }
 .pill.open { height: calc(100dvh - 32px - env(safe-area-inset-top)); }
 .footer { padding-bottom: max(40px, env(safe-area-inset-bottom)); }
 /* niente zoom automatico di iOS sui campi */
@@ -761,7 +708,8 @@ html { -webkit-tap-highlight-color: transparent; }
   .filters button { padding: 0 16px; }
 }
 @media (hover: none) {
-  .btn:hover { background: var(--blue); }
+  .btn:hover { background: var(--heading); }
+  .dark .btn:not(.btn-gray):not(.btn-black):hover, .tile .btn:hover, .nl-card .btn:hover, .feature .btn:hover { background: #fff; }
   .btn-white:hover { background: #fff; }
   .btn-black:hover { background: var(--heading); }
   .btn-gray:hover { background: var(--gray-btn); }
@@ -812,7 +760,6 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
 .admin-pill button { border: 0; border-radius: 999px; padding: 4px 10px; background: rgba(255,255,255,.14); color: #fff; font-size: 11px; font-weight: 600; cursor: pointer; }
 
 /* etichetta admin sopra la barra delle date, su telefono */
-@media (max-width: 700px) { body.finder-on .admin-pill { bottom: calc(max(16px, env(safe-area-inset-bottom)) + 76px); } }
 .admin-pill { transition: bottom .3s var(--ease); }
 
 /* ============ PAGINE LEGALI ============ */
@@ -824,7 +771,6 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
 .legal-table th, .legal-table td { text-align: left; vertical-align: top; padding: 10px 8px; border-bottom: 1px solid var(--line); }
 .legal-table th { font-size: 10px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
 .legal-date { margin-top: 32px !important; font-size: 12px; color: var(--muted); }
-.check a { color: inherit; text-decoration: underline; }
 @media (max-width: 560px) { .legal-table, .legal-table tbody, .legal-table tr, .legal-table td { display: block; } .legal-table thead { display: none; } .legal-table td { border: 0; padding: 2px 0; } .legal-table tr { border-bottom: 1px solid var(--line); padding: 10px 0; } }
 
 /* ================= LINE-UP: ritratti come i resident di Hï ================= */
@@ -853,3 +799,10 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
 /* Meteo: servizio giù */
 .w-down { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 40px 24px; text-align: center; }
 .w-down p { margin: 0; max-width: 34ch; font-size: 14px; line-height: 1.5; color: var(--heading); }
+
+/* Contattaci: la card del vecchio modulo con il bottone WhatsApp */
+.wa-box { justify-content: center; align-items: center; text-align: center; gap: 16px; padding: 40px 32px; }
+.wa-title { margin: 0; color: #fff; font-family: var(--display); font-size: clamp(30px, 3.1vw, 40px); line-height: 1; font-weight: 700; letter-spacing: -.015em; text-transform: uppercase; text-wrap: balance; }
+.wa-box .nl-intro { max-width: 36ch; color: rgba(255,255,255,.8); }
+.wa-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; max-width: 320px; }
+.wa-btn svg { width: 20px; height: 20px; fill: currentColor; flex: none; }

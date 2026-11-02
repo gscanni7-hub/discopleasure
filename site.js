@@ -12,10 +12,11 @@ const WM = '<span class="wm"><span class="row">DISC<span class="o"></span></span
 const qs = (k) => new URLSearchParams(location.search).get(k);
 if (qs("bn") === "1") document.documentElement.classList.add("bn");
 
-/* Foto: su schermi fino a 800px usa le versioni leggere in img/m/,
+/* Foto: su schermi fino a 800px usa le versioni leggere in img/m/, sempre in WebP,
    e ogni foto si scarica solo quando sta per entrare nello schermo. */
 const SMALL = matchMedia("(max-width: 800px)").matches;
-const srcFor = (src) => (SMALL && /^\/img\/[^/]+\.jpg$/.test(src) ? src.replace("/img/", "/img/m/") : src);
+const webp = (src) => (/^\/img\/.+\.jpg$/.test(src) ? src.replace(/\.jpg$/, ".webp") : src);
+const srcFor = (src) => webp(SMALL && /^\/img\/[^/]+\.jpg$/.test(src) ? src.replace("/img/", "/img/m/") : src);
 function paintArt(el) {
   if (!el.dataset.img || el.dataset.painted) return;
   el.dataset.painted = "1";
@@ -277,15 +278,6 @@ function initFilters(el, onChange, initial) {
   set(initial ?? btns[0].dataset.f);
 }
 
-/* ============ FORM ISCRIZIONE ============ */
-function initNewsletter() {
-  $$("[data-nl]").forEach((f) => f.addEventListener("submit", (e) => {
-    e.preventDefault();
-    $(".nl-msg", f).textContent = "Grazie! Ti scriveremo con date, meteo e tavoli.";
-    $$("input", f).forEach((i) => (i.type === "checkbox" ? (i.checked = false) : (i.value = "")));
-  }));
-}
-
 /* ============ MARCHIO: la palla dentro la O ============ */
 function initBalls() {
   const NS = "http://www.w3.org/2000/svg", R = 100;
@@ -387,7 +379,6 @@ function bootSite() {
   initScroll();
   initGiants();
   initCarousels();
-  initNewsletter();
   requestAnimationFrame(() => $("#pageBg")?.classList.add("on"));
 }
 

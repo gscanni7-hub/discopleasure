@@ -130,6 +130,7 @@ function initTypewriter() {
 renderHome();
 bootSite();
 initHeroFade();
+$("#waHome").href = waLink("Ciao! Vorrei informazioni su Disco Pleasure.");
 initDeck();
 initTypewriter();
 mountMeteoCard($("#meteoCard"));

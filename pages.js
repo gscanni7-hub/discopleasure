@@ -29,7 +29,7 @@ const PAGES = {
     const img = $("#evImg");
     if (e.poster) {
       // Locandina intera, senza tagli, al posto della foto
-      const src = SMALL ? e.poster.replace("/img/", "/img/m/") : e.poster;
+      const src = webp(SMALL ? e.poster.replace("/img/", "/img/m/") : e.poster);
       img.outerHTML = `<a class="ev-poster" href="${e.poster}" target="_blank" rel="noopener" title="Apri la locandina"><img src="${src}" alt="Locandina Disco Pleasure · ${esc(e.long)}" width="1280" height="1600"></a>`;
     } else { img.dataset.img = e.img; paintArt(img); }
     const intro = {
