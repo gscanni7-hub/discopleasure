@@ -418,7 +418,24 @@ function getMeteo() {
     "&hourly=temperature_2m,weather_code,precipitation_probability,wind_speed_10m,snowfall,is_day" +
     "&daily=weather_code,temperature_2m_max,temperature_2m_min,snowfall_sum,precipitation_probability_max,sunrise,sunset,uv_index_max,wind_gusts_10m_max" +
     "&timezone=Europe%2FRome&forecast_days=16";
-  meteoCache = fetch(u).then((r) => (r.ok ? r.json() : Promise.reject(r.status)));
+  // Open-Meteo a volte è sovraccarico (risponde 503): tempo massimo 10 s, un secondo tentativo,
+  // poi le ultime previsioni salvate in questo browser (al massimo di 2 giorni prima).
+  const KEY = "dp_meteo";
+  const once = () => {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 10000);
+    return fetch(u, { signal: ctl.signal }).then((r) => (r.ok ? r.json() : Promise.reject(r.status))).finally(() => clearTimeout(t));
+  };
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  meteoCache = once().catch(() => wait(3000).then(once))
+    .then((d) => { try { localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), d })); } catch (_) {} return d; })
+    .catch((err) => {
+      meteoCache = null; // la prossima richiesta riprova davvero
+      try {
+        const saved = JSON.parse(localStorage.getItem(KEY) || "null");
+        if (saved && Date.now() - saved.at < 2 * 864e5) return Object.assign(saved.d, { _stale: true });
+      } catch (_) {}
+      return Promise.reject(err);
+    });
   return meteoCache;
 }
 
@@ -476,7 +493,7 @@ function mountMeteoCard(el) {
         <ul class="w-panel w-days" data-p="giorni">${days}</ul>
         <dl class="w-panel w-tiles" data-p="dettagli">${facts}</dl>
       </div>
-      <p class="w-src">Previsioni Open-Meteo · aggiornate alle ${hhmm(c.time)}</p>`;
+      <p class="w-src">Previsioni Open-Meteo · ${d._stale ? `ultime disponibili, del ${+c.time.slice(8, 10)}/${+c.time.slice(5, 7)} alle ${hhmm(c.time)}` : `aggiornate alle ${hhmm(c.time)}`}</p>`;
 
     const panels = $$(".w-panel", el);
     initFilters($(".w-tabs", el), (v) => panels.forEach((p) => {
@@ -494,7 +511,17 @@ function mountMeteoCard(el) {
       requestAnimationFrame(step);
       el.classList.add("w-live");
     }, { threshold: 0.3 }).observe(el);
-  }).catch(() => { el.innerHTML = `<p class="w-status">Meteo non disponibile in questo momento.</p>`; });
+  }).catch(() => {
+    // Servizio meteo giù e nessuna previsione salvata: messaggio chiaro, bottone per riprovare
+    // e un nuovo tentativo automatico dopo un minuto
+    el.innerHTML = `<div class="w-down">
+      <p><strong>Il servizio meteo non risponde.</strong> Capita quando è sovraccarico: di solito torna in pochi minuti.</p>
+      <button class="btn btn-sm" type="button">Riprova</button>
+    </div>`;
+    const retry = () => { clearTimeout(auto); mountMeteoCard(el); };
+    const auto = setTimeout(retry, 60000);
+    $("button", el).addEventListener("click", retry);
+  });
 }
 
 // Previsione di una data (pagina evento)
@@ -506,5 +533,5 @@ function mountMeteoDay(el, id) {
     const dl = d.daily, [txt, ico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
     el.innerHTML = `<div class="w-inline">${wIcon(ico)}<div><strong>${txt} · ${Math.round(dl.temperature_2m_max[i])}° / ${Math.round(dl.temperature_2m_min[i])}°</strong>
       <span>${snow > 0 ? `Neve prevista ${num(snow)} cm · ` : ""}Precipitazioni ${dl.precipitation_probability_max[i]}% · Alba ${hhmm(dl.sunrise[i])} · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;
-  }).catch(() => { el.innerHTML = `<p class="w-status">Meteo non disponibile in questo momento.</p>`; });
+  }).catch(() => { el.innerHTML = `<p class="w-status">Il servizio meteo in questo momento non risponde. Riprova tra qualche minuto.</p>`; });
 }

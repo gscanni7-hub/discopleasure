@@ -849,3 +849,7 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
 /* Biglietti: sigillo nei colori del marchio al posto della foto */
 .tile-img .seal-card { background: var(--sb, #eeece5); color: var(--sf, #050507); transition: transform 1.2s var(--ease); }
 .tile-img .seal-card svg { width: 52%; }
+
+/* Meteo: servizio giù */
+.w-down { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 40px 24px; text-align: center; }
+.w-down p { margin: 0; max-width: 34ch; font-size: 14px; line-height: 1.5; color: var(--heading); }
