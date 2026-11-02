@@ -845,3 +845,7 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
   background-repeat: no-repeat; background-size: 78% auto, cover; background-position: 50% 100%, center;
 }
 .art.silhouette::after { opacity: .18; }
+
+/* Biglietti: sigillo nei colori del marchio al posto della foto */
+.tile-img .seal-card { background: var(--sb, #eeece5); color: var(--sf, #050507); transition: transform 1.2s var(--ease); }
+.tile-img .seal-card svg { width: 52%; }

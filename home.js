@@ -24,10 +24,13 @@ function renderHome() {
       </div>
     </div>`).join("");
 
-  // Biglietti come le card "Music" di Hï: scure, bottone blu a tutta larghezza
-  $("#ticketsRail").innerHTML = HOME.tickets.map((t) => `
+  // Biglietti come le card "Music" di Hï: scure, bottone blu a tutta larghezza.
+  // Al posto della foto il sigillo con la palla, nei colori del marchio a rotazione.
+  const INK = "#050507", HEAT = "#FF5A1F", SNOW = "#EEECE5", ICE = "#3FC6F5";
+  const COMBO = [[HEAT, INK], [INK, HEAT], [SNOW, INK], [ICE, INK], [INK, ICE], [HEAT, SNOW], [INK, SNOW]];
+  $("#ticketsRail").innerHTML = HOME.tickets.map((t, i) => ({ ...t, bg: COMBO[i % COMBO.length][0], fg: COMBO[i % COMBO.length][1], speed: (0.8 + (i % 3) * 0.2).toFixed(1) })).map((t) => `
     <div class="tile dark">
-      <a class="tile-img" href="${t.href}">${art(t.img)}</a>
+      <a class="tile-img" href="${t.href}" aria-label="${esc(t.title)}"><span class="seal-card" style="--sb:${t.bg};--sf:${t.fg}"><svg class="seal" data-ball="seal" data-speed="${t.speed}" aria-hidden="true"></svg></span></a>
       <div class="tile-body">
         <span class="badge">${esc(t.day)}</span>
         <h3 class="tile-title">${esc(t.title)}</h3>

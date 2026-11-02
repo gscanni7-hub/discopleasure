@@ -264,7 +264,7 @@ const HOME = {
     { day: "Season 25/26", name: "ItaloBros" },
     { day: "Season 25/26", name: "Marco Tropeano" },
   ],
-  // Biglietti: le date con un nome, ognuna col suo link Eventbrite
+  // Biglietti: le date con un nome, ognuna col suo link Eventbrite (in home la card mostra il sigillo, non la foto)
   tickets: [
     ["2026-12-05", "/img/recap-flash.jpg"],
     ["2026-12-08", "/img/lun-8.jpg"],
