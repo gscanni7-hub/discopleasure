@@ -23,15 +23,16 @@ function renderHome() {
       </div>
     </div>`).join("");
 
-  // Line-up come i resident di Hï: ritratto in bianco e nero, nome grande
+  // "Been here" come i resident di Hï: ritratto in bianco e nero, nome grande.
+  // Senza foto si vede una sagoma scura.
   $("#residentsRail").innerHTML = HOME.residents.map((a) => `
-    <a class="tile portrait dark" href="/artisti">
-      <div class="tile-img">${art(a.img)}</div>
+    <div class="tile portrait dark">
+      <div class="tile-img">${a.img ? art(a.img) : `<div class="art silhouette" role="img" aria-label="Foto di ${esc(a.name)} in arrivo"></div>`}</div>
       <div class="tile-body">
         <span class="badge">${esc(a.day)}</span>
         <h3 class="tile-title">${esc(a.name)}</h3>
       </div>
-    </a>`).join("");
+    </div>`).join("");
 
   // Biglietti come le card "Music" di Hï: scure, bottone blu a tutta larghezza
   $("#ticketsRail").innerHTML = HOME.tickets.map((t) => `

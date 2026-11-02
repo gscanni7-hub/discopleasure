@@ -256,13 +256,13 @@ const HOME = {
     { day: "Martedì 8.12", title: "L'ora blu, alle 19", img: "/img/lun-8.jpg", href: evUrl("2026-12-08") },
   ],
   residents: [
-    // Sostituisci "Resident" con il nome del DJ di ogni giornata
-    { day: "Sabato 5.12", name: "Resident", img: "/img/recap-piazzale.jpg" },
-    { day: "Domenica 6.12", name: "Resident", img: "/img/recap-flash.jpg" },
-    { day: "Lunedì 7.12", name: "Resident", img: "/img/recap-orablu.jpg" },
-    { day: "Martedì 8.12", name: "Resident", img: "/img/recap-alto.jpg" },
-    { day: "Sabato 26.12", name: "Resident", img: "/img/recap-terrazza.jpg" },
-    { day: "Giovedì 31.12", name: "Resident", img: "/img/recap-brindisi.jpg" },
+    // "Been here": i DJ più noti passati da Disco Pleasure. img: "/img/nomefile.jpg" quando c'è la foto.
+    { day: "Season 25/26", name: "Dzeko" },
+    { day: "Season 25/26", name: "Ale De Tuglie" },
+    { day: "Season 25/26", name: "Jesse Calosso" },
+    { day: "Season 25/26", name: "Jean Pierre" },
+    { day: "Season 25/26", name: "ItaloBros" },
+    { day: "Season 25/26", name: "Marco Tropeano" },
   ],
   // Biglietti: le date con un nome, ognuna col suo link Eventbrite
   tickets: [
