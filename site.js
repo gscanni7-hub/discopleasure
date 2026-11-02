@@ -410,6 +410,79 @@ const ICONS = {
 const wIcon = (k) => `<svg class="w-ico w-${k}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[k]}</svg>`;
 const hhmm = (iso) => iso.slice(11, 16);
 const num = (v, d = 1) => v.toFixed(d).replace(".", ",");
+/* ---- MET Norway come riserva: converte i dati nella forma di Open-Meteo ---- */
+// Ora locale di Roccaraso in formato "AAAA-MM-GGTHH:MM"
+const romeISO = (d) => new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Rome", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hour12: false }).format(d).replace(" ", "T");
+// Alba e tramonto calcolati (algoritmo NOAA semplificato), restituiti come Date
+function sunTimes(day, lat, lon) {
+  const rad = Math.PI / 180, n = Math.floor((Date.UTC(day.getUTCFullYear(), day.getUTCMonth(), day.getUTCDate()) - Date.UTC(2000, 0, 1, 12)) / 864e5) + 1;
+  const J = n - lon / 360, M = (357.5291 + 0.98560028 * J) % 360;
+  const C = 1.9148 * Math.sin(M * rad) + 0.02 * Math.sin(2 * M * rad) + 0.0003 * Math.sin(3 * M * rad);
+  const L = (M + C + 180 + 102.9372) % 360, T = 2451545 + J + 0.0053 * Math.sin(M * rad) - 0.0069 * Math.sin(2 * L * rad);
+  const dec = Math.asin(Math.sin(L * rad) * Math.sin(23.44 * rad));
+  const w = Math.acos((Math.sin(-0.833 * rad) - Math.sin(lat * rad) * Math.sin(dec)) / (Math.cos(lat * rad) * Math.cos(dec))) / rad;
+  const toDate = (jd) => new Date((jd - 2440587.5) * 864e5);
+  return [toDate(T - w / 360), toDate(T + w / 360)];
+}
+const METNO_WMO = (sym = "") => {
+  const s = sym.replace(/_(day|night|polartwilight)$/, "");
+  if (/thunder/.test(s)) return 95;
+  if (s === "clearsky") return 0; if (s === "fair") return 1; if (s === "partlycloudy") return 2; if (s === "cloudy") return 3; if (s === "fog") return 45;
+  if (/snowshowers/.test(s)) return /heavy/.test(s) ? 86 : 85;
+  if (/snow/.test(s)) return /heavy/.test(s) ? 75 : /light/.test(s) ? 71 : 73;
+  if (/sleet/.test(s)) return 66;
+  if (/rainshowers/.test(s)) return /heavy/.test(s) ? 82 : /light/.test(s) ? 80 : 81;
+  if (/rain/.test(s)) return /heavy/.test(s) ? 65 : /light/.test(s) ? 61 : 63;
+  return 3;
+};
+function fromMetno(j) {
+  const ts = j.properties.timeseries, kmh = (v) => (v == null ? null : v * 3.6);
+  const isDay = (date) => { const [up, down] = sunTimes(date, METEO.lat, METEO.lon); return date >= up && date < down ? 1 : 0; };
+  // neve stimata: con temperatura sotto 1° ogni mm di pioggia è circa 1 cm di neve
+  const snowOf = (mm, t) => (mm > 0 && t <= 1 ? mm : 0);
+  const hourly = { time: [], temperature_2m: [], weather_code: [], precipitation_probability: [], precipitation: [], wind_speed_10m: [], snowfall: [], is_day: [] };
+  ts.filter((e) => e.data.next_1_hours).forEach((e) => {
+    const d = new Date(e.time), x = e.data.instant.details, n1 = e.data.next_1_hours;
+    hourly.time.push(romeISO(d)); hourly.temperature_2m.push(x.air_temperature); hourly.weather_code.push(METNO_WMO(n1.summary.symbol_code));
+    hourly.precipitation_probability.push(n1.details.probability_of_precipitation ?? null); hourly.precipitation.push(n1.details.precipitation_amount ?? 0);
+    hourly.wind_speed_10m.push(kmh(x.wind_speed)); hourly.snowfall.push(snowOf(n1.details.precipitation_amount, x.air_temperature)); hourly.is_day.push(isDay(d));
+  });
+  // giorni: raggruppa per data locale
+  const byDay = new Map();
+  ts.forEach((e) => {
+    const d = new Date(e.time), key = romeISO(d).slice(0, 10), x = e.data.instant.details;
+    const next = e.data.next_1_hours || e.data.next_6_hours, mm = next?.details?.precipitation_amount ?? 0;
+    const g = byDay.get(key) || { temps: [], codes: [], mm: 0, snow: 0, uv: 0, gust: null };
+    g.temps.push(x.air_temperature);
+    if (next?.summary) g.codes.push([+romeISO(d).slice(11, 13), METNO_WMO(next.summary.symbol_code)]);
+    // conta i millimetri una sola volta: ora per ora finché ci sono, poi a blocchi di 6 ore
+    if (e.data.next_1_hours || !ts.some((o) => o.data.next_1_hours && new Date(o.time) > d)) { g.mm += mm; g.snow += snowOf(mm, x.air_temperature); }
+    g.uv = Math.max(g.uv, x.ultraviolet_index_clear_sky || 0);
+    byDay.set(key, g);
+  });
+  const days = [...byDay.entries()].slice(0, 9);
+  const daily = { time: [], weather_code: [], temperature_2m_max: [], temperature_2m_min: [], snowfall_sum: [], precipitation_probability_max: [], precipitation_sum: [], sunrise: [], sunset: [], uv_index_max: [], wind_gusts_10m_max: [] };
+  days.forEach(([key, g]) => {
+    const [up, down] = sunTimes(new Date(key + "T12:00:00Z"), METEO.lat, METEO.lon);
+    // icona del giorno: decidono le ore di luce (9-17); se piove o nevica vince la precipitazione,
+    // altrimenti il tempo più frequente
+    const day = g.codes.filter(([h]) => h >= 9 && h <= 17).map(([, c]) => c), all = g.codes.map(([, c]) => c);
+    const pool = day.length ? day : all, wet = pool.filter((c) => c >= 51);
+    const freq = pool.reduce((m, c) => m.set(c, (m.get(c) || 0) + 1), new Map());
+    daily.time.push(key); daily.weather_code.push(wet.length ? Math.max(...wet) : pool.length ? [...freq].sort((a, b) => b[1] - a[1])[0][0] : 3);
+    daily.temperature_2m_max.push(Math.max(...g.temps)); daily.temperature_2m_min.push(Math.min(...g.temps));
+    daily.snowfall_sum.push(g.snow); daily.precipitation_probability_max.push(null); daily.precipitation_sum.push(g.mm);
+    daily.sunrise.push(romeISO(up)); daily.sunset.push(romeISO(down)); daily.uv_index_max.push(g.uv); daily.wind_gusts_10m_max.push(null);
+  });
+  const e0 = ts[0], x0 = e0.data.instant.details, d0 = new Date(e0.time);
+  const current = {
+    time: romeISO(d0), temperature_2m: x0.air_temperature, apparent_temperature: x0.apparent_air_temperature ?? x0.air_temperature,
+    weather_code: METNO_WMO((e0.data.next_1_hours || e0.data.next_6_hours).summary.symbol_code), wind_speed_10m: kmh(x0.wind_speed),
+    wind_gusts_10m: kmh(x0.wind_speed_of_gust), snow_depth: null, relative_humidity_2m: Math.round(x0.relative_humidity), freezing_level_height: null, is_day: isDay(d0),
+  };
+  return { _src: "metno", elevation: METEO.alt, current, hourly, daily };
+}
+
 let meteoCache = null;
 function getMeteo() {
   if (meteoCache) return meteoCache;
@@ -418,15 +491,17 @@ function getMeteo() {
     "&hourly=temperature_2m,weather_code,precipitation_probability,wind_speed_10m,snowfall,is_day" +
     "&daily=weather_code,temperature_2m_max,temperature_2m_min,snowfall_sum,precipitation_probability_max,sunrise,sunset,uv_index_max,wind_gusts_10m_max" +
     "&timezone=Europe%2FRome&forecast_days=16";
-  // Open-Meteo a volte è sovraccarico (risponde 503): tempo massimo 10 s, un secondo tentativo,
-  // poi le ultime previsioni salvate in questo browser (al massimo di 2 giorni prima).
+  // Open-Meteo a volte è sovraccarico (risponde 503). Ordine dei tentativi:
+  // Open-Meteo (max 8 s) -> MET Norway, servizio meteo norvegese (max 10 s) -> ultime previsioni
+  // salvate in questo browser (al massimo di 2 giorni prima).
   const KEY = "dp_meteo";
-  const once = () => {
-    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), 10000);
-    return fetch(u, { signal: ctl.signal }).then((r) => (r.ok ? r.json() : Promise.reject(r.status))).finally(() => clearTimeout(t));
+  const get = (url, ms) => {
+    const ctl = new AbortController(), t = setTimeout(() => ctl.abort(), ms);
+    return fetch(url, { signal: ctl.signal }).then((r) => (r.ok ? r.json() : Promise.reject(r.status))).finally(() => clearTimeout(t));
   };
-  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-  meteoCache = once().catch(() => wait(3000).then(once))
+  const metno = `https://api.met.no/weatherapi/locationforecast/2.0/complete?lat=${METEO.lat}&lon=${METEO.lon}&altitude=${METEO.alt}`;
+  meteoCache = get(u, 8000)
+    .catch(() => get(metno, 10000).then(fromMetno))
     .then((d) => { try { localStorage.setItem(KEY, JSON.stringify({ at: Date.now(), d })); } catch (_) {} return d; })
     .catch((err) => {
       meteoCache = null; // la prossima richiesta riprova davvero
@@ -455,7 +530,7 @@ function mountMeteoCard(el) {
       return `<li class="w-hour" style="--i:${k}">
         <span class="w-hh">${k === 0 ? "Ora" : t.slice(11, 13)}</span>${wIcon(hi)}<span class="sr-only">${htxt}</span>
         <b>${Math.round(h.temperature_2m[i])}°</b>
-        <span class="w-pp">${h.snowfall[i] > 0 ? num(h.snowfall[i]) + " cm" : h.precipitation_probability[i] + "%"}</span>
+        <span class="w-pp">${h.snowfall[i] > 0 ? num(h.snowfall[i]) + " cm" : h.precipitation_probability[i] != null ? h.precipitation_probability[i] + "%" : num(h.precipitation[i] || 0) + " mm"}</span>
         <span class="w-wind">${Math.round(h.wind_speed_10m[i])} km/h</span>
       </li>`;
     }).join("");
@@ -465,13 +540,13 @@ function mountMeteoCard(el) {
         <span class="w-dname">${i === 0 ? "Oggi" : GIORNI_BREVI[dt.getDay()] + " " + dt.getDate()}</span>
         ${wIcon(dico)}<span class="sr-only">${dtxt}</span>
         <span class="w-mm"><b>${Math.round(dl.temperature_2m_max[i])}°</b> ${Math.round(dl.temperature_2m_min[i])}°</span>
-        <span class="w-snow">${snow > 0 ? `${num(snow)} cm neve` : `${dl.precipitation_probability_max[i]}%`}</span>
+        <span class="w-snow">${snow > 0 ? `${num(snow)} cm neve` : dl.precipitation_probability_max[i] != null ? `${dl.precipitation_probability_max[i]}%` : `${num(dl.precipitation_sum[i] || 0)} mm`}</span>
       </li>`;
     }).join("");
     const facts = [
       ["Alba", hhmm(dl.sunrise[0])], ["Tramonto", hhmm(dl.sunset[0])], ["Indice UV", num(dl.uv_index_max[0])],
-      ["Raffiche", `${Math.round(dl.wind_gusts_10m_max[0])} km/h`], ["Umidità", `${c.relative_humidity_2m}%`], ["Zero termico", `${Math.round(c.freezing_level_height)} m`],
-    ].map(([k, v], i) => `<div class="w-tile" style="--i:${i}"><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+      ["Raffiche", dl.wind_gusts_10m_max[0] != null && `${Math.round(dl.wind_gusts_10m_max[0])} km/h`], ["Umidità", `${c.relative_humidity_2m}%`], ["Zero termico", c.freezing_level_height != null && `${Math.round(c.freezing_level_height)} m`],
+    ].filter(([, v]) => v).map(([k, v], i) => `<div class="w-tile" style="--i:${i}"><dt>${k}</dt><dd>${v}</dd></div>`).join("");
 
     el.innerHTML = `
       <div class="w-now">
@@ -481,7 +556,7 @@ function mountMeteoCard(el) {
         <dl class="w-facts">
           <div><dt>Percepita</dt><dd>${Math.round(c.apparent_temperature)}°</dd></div>
           <div><dt>Vento</dt><dd>${Math.round(c.wind_speed_10m)} km/h</dd></div>
-          <div><dt>Neve al suolo</dt><dd>${Math.round((c.snow_depth || 0) * 100)} cm</dd></div>
+          ${c.snow_depth != null ? `<div><dt>Neve al suolo</dt><dd>${Math.round(c.snow_depth * 100)} cm</dd></div>` : `<div><dt>Umidità</dt><dd>${c.relative_humidity_2m}%</dd></div>`}
           <div><dt>Tramonto</dt><dd>${hhmm(dl.sunset[0])}</dd></div>
         </dl>
       </div>
@@ -493,7 +568,7 @@ function mountMeteoCard(el) {
         <ul class="w-panel w-days" data-p="giorni">${days}</ul>
         <dl class="w-panel w-tiles" data-p="dettagli">${facts}</dl>
       </div>
-      <p class="w-src">Previsioni Open-Meteo · ${d._stale ? `ultime disponibili, del ${+c.time.slice(8, 10)}/${+c.time.slice(5, 7)} alle ${hhmm(c.time)}` : `aggiornate alle ${hhmm(c.time)}`}</p>`;
+      <p class="w-src">Previsioni ${d._src === "metno" ? "MET Norway" : "Open-Meteo"} · ${d._stale ? `ultime disponibili, del ${+c.time.slice(8, 10)}/${+c.time.slice(5, 7)} alle ${hhmm(c.time)}` : `aggiornate alle ${hhmm(c.time)}`}</p>`;
 
     const panels = $$(".w-panel", el);
     initFilters($(".w-tabs", el), (v) => panels.forEach((p) => {
@@ -532,6 +607,6 @@ function mountMeteoDay(el, id) {
     if (i < 0) { el.innerHTML = `<p class="w-status">Le previsioni per questa data compaiono 16 giorni prima. Intanto guarda il <a href="/#meteo">meteo di oggi</a>.</p>`; return; }
     const dl = d.daily, [txt, ico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
     el.innerHTML = `<div class="w-inline">${wIcon(ico)}<div><strong>${txt} · ${Math.round(dl.temperature_2m_max[i])}° / ${Math.round(dl.temperature_2m_min[i])}°</strong>
-      <span>${snow > 0 ? `Neve prevista ${num(snow)} cm · ` : ""}Precipitazioni ${dl.precipitation_probability_max[i]}% · Alba ${hhmm(dl.sunrise[i])} · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;
+      <span>${snow > 0 ? `Neve prevista ${num(snow)} cm · ` : ""}${dl.precipitation_probability_max[i] != null ? `Precipitazioni ${dl.precipitation_probability_max[i]}%` : `Precipitazioni ${num(dl.precipitation_sum[i] || 0)} mm`} · Alba ${hhmm(dl.sunrise[i])} · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;
   }).catch(() => { el.innerHTML = `<p class="w-status">Il servizio meteo in questo momento non risponde. Riprova tra qualche minuto.</p>`; });
 }

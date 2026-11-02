@@ -289,4 +289,4 @@ const MENU_RAIL = [
 
 /* ---------- Meteo (Open-Meteo, gratuito, senza chiave) ---------- */
 // Punto delle previsioni: Roccaraso, zona Gravare. Sposta lat/lon sul punto esatto dello chalet se serve.
-const METEO = { lat: 41.835, lon: 14.055, place: "Roccaraso · Gravare" };
+const METEO = { lat: 41.835, lon: 14.055, alt: 1567, place: "Roccaraso · Gravare" };
