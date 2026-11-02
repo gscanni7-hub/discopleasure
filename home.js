@@ -23,14 +23,26 @@ function renderHome() {
       </div>
     </div>`).join("");
 
+  // Line-up come i resident di Hï: ritratto in bianco e nero, nome grande
   $("#residentsRail").innerHTML = HOME.residents.map((a) => `
-    <a class="tile dark" href="/artisti">
+    <a class="tile portrait dark" href="/artisti">
       <div class="tile-img">${art(a.img)}</div>
       <div class="tile-body">
         <span class="badge">${esc(a.day)}</span>
         <h3 class="tile-title">${esc(a.name)}</h3>
       </div>
     </a>`).join("");
+
+  // Biglietti come le card "Music" di Hï: scure, bottone blu a tutta larghezza
+  $("#ticketsRail").innerHTML = HOME.tickets.map((t) => `
+    <div class="tile dark">
+      <a class="tile-img" href="${t.href}">${art(t.img)}</a>
+      <div class="tile-body">
+        <span class="badge">${esc(t.day)}</span>
+        <h3 class="tile-title">${esc(t.title)}</h3>
+        <a class="btn" href="${t.tickets}" target="_blank" rel="noopener">Biglietti</a>
+      </div>
+    </div>`).join("");
 
   $("#newsRail").innerHTML = NEWS.slice(0, 5).map((n) => `
     <a class="poster dark" href="/news/${n.id}">
@@ -43,55 +55,12 @@ function renderHome() {
     </a>`).join("");
 }
 
-/* ============ BARRA "TROVA LE DATE" ============ */
-function fmt(v) {
-  if (!v) return "";
-  const [y, m, d] = v.split("-");
-  return `${d}/${m}/${y.slice(2)}`;
-}
-function initFinder() {
-  const finder = $("#finder"), slot = $("#finderSlot");
-  const from = $("#fromDate"), to = $("#toDate");
-  const first = EVENTS[0].id, last = EVENTS[EVENTS.length - 1].id;
-  from.min = to.min = first; from.max = to.max = last;
-  [from, to].forEach((inp) => {
-    const label = inp.previousElementSibling;
-    inp.addEventListener("click", () => { try { inp.showPicker(); } catch (_) {} });
-    inp.addEventListener("change", () => {
-      label.textContent = fmt(inp.value) || label.dataset.ph;
-      if (inp === from) { to.min = from.value || first; if (to.value && to.value < from.value) { to.value = from.value; to.dispatchEvent(new Event("change")); } }
-    });
-  });
-  $("#finderGo").addEventListener("click", () => {
-    const p = new URLSearchParams();
-    if (from.value) p.set("dal", from.value);
-    if (to.value) p.set("al", to.value);
-    location.href = "/apres-ski" + (p.toString() ? "?" + p : "");
-  });
-  // si aggancia in basso dopo l'hero, sparisce sul footer, diventa scura sopra le card
-  // Dopo l'apertura la barra resta nascosta scorrendo in giù e ricompare risalendo,
-  // mai sopra il modulo d'iscrizione o il footer
-  let lastY = scrollY, goingUp = false;
-  const subscribe = $("#subscribe"), footer = $("#footer"), hero = $("#heroWords"), cal = $("#calendar");
+/* ============ HERO: la parola sfuma mentre sale ============ */
+function initHeroFade() {
+  const hero = $("#heroWords"); if (!hero) return;
   scrollHooks.push(() => {
-    const vh = innerHeight, y = scrollY;
-    if (y < lastY - 4) goingUp = true; else if (y > lastY + 4) goingUp = false;
-    lastY = y;
-    const docked = slot.getBoundingClientRect().top < 80;
-    if (docked !== finder.classList.contains("docked")) finder.classList.toggle("docked", docked);
-    const overForm = subscribe && (() => { const s = subscribe.querySelector(".nl-card") || subscribe; const r = s.getBoundingClientRect(); return r.top < vh && r.bottom > vh - 120; })();
-    const nearFooter = footer.getBoundingClientRect().top < vh - 40;
-    const show = docked && goingUp && !overForm && !nearFooter;
-    finder.classList.toggle("away", docked && !show);
-    document.body.classList.toggle("finder-on", docked && show);
-    const r = finder.getBoundingClientRect();
-    finder.classList.toggle("is-dark", darkAt(r.left + r.width / 2, r.bottom - 24, finder));
-    // il titolo dell'hero sparisce prima che la card del calendario lo raggiunga
-    if (hero && cal) {
-      const rg = document.createRange(); rg.selectNodeContents(hero);
-      const gap = cal.getBoundingClientRect().top - rg.getBoundingClientRect().bottom - 16;
-      hero.style.opacity = Math.min(1, Math.max(0, gap / (vh * 0.15))).toFixed(3);
-    }
+    const top = hero.getBoundingClientRect().top;
+    hero.style.opacity = Math.min(1, Math.max(0, (top - 60) / (innerHeight * 0.22))).toFixed(3);
   });
 }
 
@@ -196,7 +165,7 @@ function initTypewriter() {
 /* ============ AVVIO ============ */
 renderHome();
 bootSite();
-initFinder();
+initHeroFade();
 initSlider();
 initDeck();
 initTypewriter();

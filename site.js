@@ -73,14 +73,28 @@ function mountHeader() {
 
 function mountFooter() {
   const slot = $("#siteFooter"); if (!slot) return;
+  const social = [["instagram", "Instagram"], ["tiktok", "TikTok"]].filter(([k]) => CONTATTI[k] && CONTATTI[k] !== "#")
+    .map(([k, t]) => `<li><a href="${CONTATTI[k]}" target="_blank" rel="noopener">${t}</a></li>`).join("");
+  const col = (title, links) => `<div class="fcol"><p class="fcol-title">${title}</p><ul>${links}</ul></div>`;
+  const li = (h, t) => `<li><a href="${h}">${t}</a></li>`;
+  // Composizione del footer di Hï: iscrizione a sinistra, colonne di link a destra, firma in basso
   slot.outerHTML = `
 <footer class="footer" id="footer">
   <div class="footer-inner">
-    <a href="/" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
-    <nav class="footer-nav" aria-label="Link">
-      ${[["instagram", "Instagram"], ["tiktok", "TikTok"]].filter(([k]) => CONTATTI[k] && CONTATTI[k] !== "#").map(([k, t]) => `<a href="${CONTATTI[k]}" target="_blank" rel="noopener">${t}</a>`).join("")}<a href="/tavoli">Tavoli</a><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a><a href="/privacy">Privacy</a><a href="/cookie">Cookie</a>
-    </nav>
-    <p class="footer-meta">Chalet Valentino · a valle delle Gravare · Roccaraso · © 2023 - 2027 Disco Pleasure</p>
+    <div class="footer-sub">
+      <p>Iscriviti per sapere prima di tutti date, meteo del weekend e tavoli.</p>
+      <a class="btn btn-sm" href="/#subscribe">Iscriviti</a>
+    </div>
+    <div class="footer-cols">
+      ${col("Seguici", social + `<li><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a></li>`)}
+      ${col("Serate", li("/apres-ski", "Après-ski") + li("/apres-ski", "Biglietti") + li("/tavoli", "Tavoli") + li("/artisti", "Artisti"))}
+      ${col("Info", li("/come-arrivare", "Come arrivare") + li("/#meteo", "Meteo") + li("/chi-siamo", "Chi siamo") + li("/news", "News") + `<li><a href="${waLink("Ciao! Ho una domanda su Disco Pleasure.")}" target="_blank" rel="noopener">FAQ e contatti</a></li>`)}
+      ${col("Legale", li("/privacy", "Privacy policy") + li("/cookie", "Cookie policy"))}
+    </div>
+    <div class="footer-sign">
+      <a href="/" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
+      <p class="footer-meta">© 2023 - 2027 Disco Pleasure · Chalet Valentino, a valle delle Gravare, Roccaraso</p>
+    </div>
   </div>
 </footer>`;
 }

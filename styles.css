@@ -391,12 +391,21 @@ main { position: relative; }
 
 /* ================= FOOTER ================= */
 .footer { position: relative; z-index: 2; margin-top: 160px; padding: 48px var(--gutter) 40px; color: var(--heading); }
-.footer-inner { max-width: var(--container); margin: 0 auto; display: flex; flex-direction: column; align-items: center; gap: 20px; text-align: center; }
-.footer .footer-logo { padding: 0; height: auto; font-size: clamp(36px, 6vw, 72px); color: var(--heading); }
-.footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; font-size: 14px; font-weight: 500; }
-.footer-nav a { transition: color .15s; }
-.footer-nav a:hover { color: var(--blue); }
-.footer-meta { margin: 0; font-size: 12px; color: var(--muted); }
+.footer-inner { max-width: 1216px; margin: 0 auto; display: grid; gap: 40px; font-size: 12px; }
+.footer-sub { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; max-width: 220px; }
+.footer-sub p { margin: 0; line-height: 1.4; }
+.footer-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px 24px; }
+.fcol-title { margin: 0 0 8px; color: var(--muted); }
+.fcol ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.fcol a { transition: color .15s; }
+.fcol a:hover { color: var(--blue); }
+.footer-sign { display: flex; flex-direction: column; gap: 10px; }
+.footer .footer-logo { padding: 0; height: auto; font-size: 18px; color: var(--heading); }
+.footer-meta { margin: 0; font-size: 11px; color: var(--muted); }
+@media (min-width: 768px) {
+  .footer-inner { grid-template-columns: 1fr 1.3fr; grid-template-areas: "sub cols" "sign cols"; align-items: start; }
+  .footer-sub { grid-area: sub; } .footer-cols { grid-area: cols; } .footer-sign { grid-area: sign; align-self: end; }
+}
 
 /* ================= MOTION RIDOTTO ================= */
 @media (prefers-reduced-motion: reduce) {
@@ -817,3 +826,14 @@ html.bn .art.photo { filter: grayscale(1) contrast(1.15) brightness(.97); }
 .legal-date { margin-top: 32px !important; font-size: 12px; color: var(--muted); }
 .check a { color: inherit; text-decoration: underline; }
 @media (max-width: 560px) { .legal-table, .legal-table tbody, .legal-table tr, .legal-table td { display: block; } .legal-table thead { display: none; } .legal-table td { border: 0; padding: 2px 0; } .legal-table tr { border-bottom: 1px solid var(--line); padding: 10px 0; } }
+
+/* ================= LINE-UP: ritratti come i resident di Hï ================= */
+.tile.portrait .tile-img { aspect-ratio: 4 / 5; }
+.tile.portrait .art { filter: grayscale(1) contrast(1.15) brightness(.92); }
+.tile.portrait .tile-title { font-size: clamp(30px, 3.4vw, 40px); }
+
+/* ================= LO CHALET: card grande come "Art" di Hï ================= */
+.art-card { aspect-ratio: 4 / 5; max-width: 56rem; }
+@media (min-width: 768px) { .art-card { aspect-ratio: 16 / 10; } }
+.art-card .feature-label { margin-top: 0; position: absolute; inset: auto 0 0 0; top: auto; transform: none; padding-bottom: 40px; }
+.chapter-body > .art-card + .w-card { margin-top: 8px; }

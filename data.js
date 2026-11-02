@@ -244,15 +244,15 @@ const newsById = (id) => NEWS.find((n) => n.id === id) || NEWS[0];
 /* ---------- Home ---------- */
 const HOME = {
   special: [
-    { date: "Sab 5.12 · dalle 12", title: "Apriamo il 5", img: "/img/opening.jpg", href: evUrl("2026-12-05") },
-    { date: "5 · 6 · 7 · 8 dicembre", title: "Il ponte dell'Immacolata", img: "/img/ponte.jpg", href: evUrl("2026-12-06") },
-    { date: "Dal 26.12 al 10.01", title: "Tutti i giorni", img: "/img/feste.jpg", href: "/apres-ski?m=12" },
-    { date: "Fino al 14.03", title: "Ogni weekend", img: "/img/epifania.jpg", href: "/apres-ski?m=1" },
+    { date: "Sab 5.12 · dalle 12", title: "Apriamo il 5", img: "/img/recap-alto.jpg", href: evUrl("2026-12-05") },
+    { date: "5 · 6 · 7 · 8 dicembre", title: "Il ponte dell'Immacolata", img: "/img/stage-led.jpg", href: evUrl("2026-12-06") },
+    { date: "Dal 26.12 al 10.01", title: "Tutti i giorni", img: "/img/palla-travi.jpg", href: "/apres-ski?m=12" },
+    { date: "Fino al 14.03", title: "Ogni weekend", img: "/img/montagne-tramonto.jpg", href: "/apres-ski?m=1" },
   ],
   residencies: [
-    { day: "Sabato 5.12", title: "Si apre la stagione", img: "/img/ven-5.jpg", href: evUrl("2026-12-05") },
-    { day: "Domenica 6.12", title: "Il ponte entra nel vivo", img: "/img/sab-6.jpg", href: evUrl("2026-12-06") },
-    { day: "Lunedì 7.12", title: "Neve di giorno, pista al tramonto", img: "/img/dom-7.jpg", href: evUrl("2026-12-07") },
+    { day: "Sabato 5.12", title: "Si apre la stagione", img: "/img/opening.jpg", href: evUrl("2026-12-05") },
+    { day: "Domenica 6.12", title: "Il ponte entra nel vivo", img: "/img/ponte.jpg", href: evUrl("2026-12-06") },
+    { day: "Lunedì 7.12", title: "Neve di giorno, pista al tramonto", img: "/img/feste.jpg", href: evUrl("2026-12-07") },
     { day: "Martedì 8.12", title: "L'ora blu, alle 19", img: "/img/lun-8.jpg", href: evUrl("2026-12-08") },
   ],
   residents: [
@@ -264,6 +264,16 @@ const HOME = {
     { day: "Sabato 26.12", name: "Resident", img: "/img/recap-terrazza.jpg" },
     { day: "Giovedì 31.12", name: "Resident", img: "/img/recap-brindisi.jpg" },
   ],
+  // Biglietti: le date con un nome, ognuna col suo link Eventbrite
+  tickets: [
+    ["2026-12-05", "/img/recap-flash.jpg"],
+    ["2026-12-08", "/img/lun-8.jpg"],
+    ["2026-12-26", "/img/palla.jpg"],
+    ["2026-12-31", "/img/interno.jpg"],
+    ["2027-01-01", "/img/recap-orablu.jpg"],
+    ["2027-01-06", "/img/stage.jpg"],
+    ["2027-03-14", "/img/ven-5.jpg"],
+  ].map(([id, img]) => { const e = EVENTS.find((x) => x.id === id); return { day: e.short, title: e.title, img, href: e.url, tickets: e.tickets }; }),
 };
 
 /* ---------- Menu: prossime date ---------- */
