@@ -82,8 +82,8 @@ function mountFooter() {
 <footer class="footer" id="footer">
   <div class="footer-inner">
     <div class="footer-sub">
-      <p>Iscriviti per sapere prima di tutti date, meteo del weekend e tavoli.</p>
-      <a class="btn btn-sm" href="/#subscribe">Iscriviti</a>
+      <p>Tavoli, info e domande: scrivici su WhatsApp, ti rispondiamo noi.</p>
+      <a class="btn btn-sm" href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">Scrivici</a>
     </div>
     <div class="footer-cols">
       ${col("Seguici", social + `<li><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a></li>`)}
