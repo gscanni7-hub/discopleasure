@@ -9,26 +9,25 @@
     {
       "source": "/news/:articolo",
       "destination": "/articolo"
+    },
+    {
+      "source": "/artisti/:artista",
+      "destination": "/artista"
+    },
+    {
+      "source": "/en/events/:year/:day",
+      "destination": "/en/event"
+    },
+    {
+      "source": "/en/news/:article",
+      "destination": "/en/article"
+    },
+    {
+      "source": "/en/artists/:artist",
+      "destination": "/en/artist"
     }
   ],
   "redirects": [
-    {
-      "source": "/((?!in-costruzione|entra-lplf2xg945|img/|.*\\.(?:js|css|png|jpg|jpeg|svg|webmanifest|ico)$).*)",
-      "missing": [
-        {
-          "type": "cookie",
-          "key": "dp_anteprima",
-          "value": "1"
-        },
-        {
-          "type": "query",
-          "key": "anteprima",
-          "value": "lplf2xg945"
-        }
-      ],
-      "destination": "/in-costruzione",
-      "permanent": false
-    },
     {
       "source": "/calendario",
       "destination": "/apres-ski",
@@ -53,51 +52,19 @@
       "source": "/news/come-arrivare",
       "destination": "/come-arrivare",
       "permanent": true
-    }
-  ],
-  "headers": [
+    },
     {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Robots-Tag",
-          "value": "noindex"
-        }
-      ]
+      "source": "/in-costruzione",
+      "destination": "/",
+      "permanent": true
     },
     {
       "source": "/entra-lplf2xg945",
-      "headers": [
-        {
-          "key": "Set-Cookie",
-          "value": "dp_anteprima=1; Path=/; Max-Age=31536000; SameSite=Lax; Secure"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "has": [
-        {
-          "type": "query",
-          "key": "anteprima",
-          "value": "lplf2xg945"
-        }
-      ],
-      "headers": [
-        {
-          "key": "Set-Cookie",
-          "value": "dp_anteprima=1; Path=/; Max-Age=31536000; SameSite=Lax; Secure"
-        },
-        {
-          "key": "Cache-Control",
-          "value": "no-store"
-        }
-      ]
-    },
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "headers": [
     {
       "source": "/img/(.*)",
       "headers": [

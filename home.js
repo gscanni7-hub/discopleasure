@@ -1,110 +1,81 @@
 /* =========================================================
-   SOLO HOME
+   SOLO HOME: struttura e animazioni alla UNVRS
+   - titolo fisso al centro, parole che salgono una alla volta, poi sfuma scorrendo
+   - titoli di sezione che entrano parola per parola, card che scivolano dentro
+   - frecce con barretta di avanzamento e percentuale che "si mescola"
    ========================================================= */
 
+const pad = (n) => String(n).padStart(2, "0");
+
+// Card verticale (3:4): immagine, etichetta in mono e titolo in basso a sinistra.
+// Il contenitore .u-slide fa l'entrata, la .u-card fa il restringimento al passaggio del mouse.
+// Con "foot": card con la scritta sotto e, a parte, il link ai tickets (o "in arrivo" se manca).
+const uCard = ({ href, media, label, title, foot, tickets }, i) => `
+  <div class="u-slide" style="--i:${i}">
+    <a class="u-card${foot ? " u-card-foot" : ""}" href="${href}">
+      <div class="u-card-media">${media}</div>
+      <div class="u-card-text">
+        <span class="u-mono u-card-label">${esc(label)}</span>
+        <h3 class="u-card-title">${esc(title)}</h3>
+      </div>
+    </a>
+    ${foot ? (tickets ? `<a class="u-mono u-card-foot-link" href="${tickets}" target="_blank" rel="noopener">Tickets ↗</a>` : `<span class="u-mono u-card-foot-link u-soon">${T("Tickets in arrivo", "Tickets coming soon")}</span>`) : ""}
+  </div>`;
+
 function renderHome() {
-  $("#residencyDeck").innerHTML = HOME.residencies.map((r) => `
-    <div class="deck-card dark">
-      ${art(r.img)}
-      <div class="deck-body">
-        <span class="res-day">${esc(r.day)}</span>
-        <h3 class="res-title">${esc(r.title)}</h3>
-        <a class="btn btn-white btn-sm" href="${r.href}">Scopri di più</a>
-      </div>
-    </div>`).join("");
+  // Season 26-27: i quattro momenti della stagione
+  $("#seasonRail").innerHTML = HOME.residencies.map((r, i) =>
+    uCard({ href: r.href, media: art(r.img), label: r.day, title: r.title }, i)).join("");
 
-  // "Been here" come i resident di Hï: ritratto in bianco e nero, nome grande.
-  // Senza foto si vede una sagoma scura.
-  $("#residentsRail").innerHTML = HOME.residents.map((a) => `
-    <div class="tile portrait dark">
-      <div class="tile-img">${a.img ? art(a.img) : `<div class="art silhouette" role="img" aria-label="Foto di ${esc(a.name)} in arrivo"></div>`}</div>
-      <div class="tile-body">
-        <span class="badge">${esc(a.day)}</span>
-        <h3 class="tile-title">${esc(a.name)}</h3>
-      </div>
-    </div>`).join("");
+  // Played here: i DJ passati da Disco Pleasure (sagoma finché non c'è la foto)
+  $("#lineupRail").innerHTML = HOME.residents.map((a, i) =>
+    uCard({ href: L(`/artisti/${a.slug}`), media: a.img ? art(a.img) : `<div class="art silhouette" role="img" aria-label="${T("Foto di", "Photo of")} ${esc(a.name)} ${T("in arrivo", "coming soon")}"></div>`, label: a.day, title: a.name }, i)).join("");
 
-  // Biglietti come le card "Music" di Hï: scure, bottone blu a tutta larghezza.
-  // Al posto della foto il sigillo con la palla, nei colori del marchio a rotazione.
-  const INK = "#050507", HEAT = "#FF5A1F", SNOW = "#EEECE5", ICE = "#3FC6F5";
-  const COMBO = [[HEAT, INK], [INK, HEAT], [SNOW, INK], [ICE, INK], [INK, ICE], [HEAT, SNOW], [INK, SNOW]];
-  $("#ticketsRail").innerHTML = HOME.tickets.map((t, i) => ({ ...t, bg: COMBO[i % COMBO.length][0], fg: COMBO[i % COMBO.length][1], speed: (0.8 + (i % 3) * 0.2).toFixed(1) })).map((t) => `
-    <div class="tile dark">
-      <a class="tile-img" href="${t.href}" aria-label="${esc(t.title)}"><span class="seal-card" style="--sb:${t.bg};--sf:${t.fg}"><svg class="seal" data-ball="seal" data-speed="${t.speed}" aria-hidden="true"></svg></span></a>
-      <div class="tile-body">
-        <span class="badge">${esc(t.day)}</span>
-        <h3 class="tile-title">${esc(t.title)}</h3>
-        <a class="btn" href="${t.tickets}" target="_blank" rel="noopener">Biglietti</a>
-      </div>
-    </div>`).join("");
+  // Prossime date: sigillo nei colori del marchio, scritta sotto, link Eventbrite
+  $("#ticketsRail").innerHTML = HOME.tickets.map((t, i) => {
+    const [bg, fg] = ["#050507", "#ffffff"]; // tutte le card: fondo nero, mappamondo bianco
+    const media = `<span class="seal-card" style="--sb:${bg};--sf:${fg}"><svg class="seal" data-ball="seal" data-speed="${(0.8 + (i % 3) * 0.2).toFixed(1)}" aria-hidden="true"></svg></span>`;
+    return uCard({ href: t.href, media, label: t.day, title: t.title, foot: true, tickets: t.tickets }, i);
+  }).join("");
 
-  $("#newsRail").innerHTML = NEWS.slice(0, 5).map((n) => `
-    <a class="poster dark" href="/news/${n.id}">
-      ${art(n.img)}
-      <div class="poster-body">
-        <span class="badge">${esc(n.tag)}</span>
-        <h3 class="poster-title">${esc(n.title)}</h3>
-        <span class="btn btn-white btn-sm">Leggi</span>
-      </div>
-    </a>`).join("");
+  // Numerini in apice, come "Residents 2026 ⁰⁹"
+  $("#seasonCount").textContent = pad(HOME.residencies.length);
+  $("#lineupCount").textContent = pad(HOME.residents.length);
+  $("#ticketsCount").textContent = pad(HOME.tickets.length);
+
 }
 
-/* ============ HERO: la parola sfuma mentre sale ============ */
-function initHeroFade() {
-  const hero = $("#heroWords"); if (!hero) return;
-  scrollHooks.push(() => {
-    const top = hero.getBoundingClientRect().top;
-    hero.style.opacity = Math.min(1, Math.max(0, (top - 60) / (innerHeight * 0.22))).toFixed(3);
+/* ============ FRECCE + BARRETTA + PERCENTUALE ============ */
+function initRails() {
+  const ARROW = (dir) => `<svg viewBox="0 0 16 16" aria-hidden="true"><path d="${dir < 0 ? "M10 3 5 8l5 5M5 8h9" : "M6 3l5 5-5 5M11 8H2"}"/></svg>`;
+  $$(".u-nav").forEach((nav) => {
+    const rail = document.getElementById(nav.dataset.for); if (!rail) return;
+    nav.innerHTML = `<div class="u-meter"><span class="u-pct">0%</span><span class="u-progress"><span class="u-progress-fill"></span></span></div>
+      <button class="u-arrow" type="button" aria-label="Indietro">${ARROW(-1)}</button><button class="u-arrow" type="button" aria-label="Avanti">${ARROW(1)}</button>`;
+    const fill = $(".u-progress-fill", nav), pct = $(".u-pct", nav), [prev, next] = $$(".u-arrow", nav);
+    const mobPct = rail.parentElement.querySelector(".u-pct-mobile");
+    const step = () => { const c = rail.firstElementChild; return c ? c.getBoundingClientRect().width + 20 : rail.clientWidth; };
+    const update = () => {
+      const max = rail.scrollWidth - rail.clientWidth;
+      const p = max <= 2 ? 1 : Math.min(1, rail.scrollLeft / max);
+      const seen = max <= 2 ? 1 : Math.min(1, (rail.clientWidth + rail.scrollLeft) / rail.scrollWidth);
+      fill.style.width = (seen * 100).toFixed(1) + "%";
+      const txt = Math.round(p * 100) + "%";
+      scrambleTo(pct, txt); if (mobPct) scrambleTo(mobPct, txt);
+      prev.disabled = rail.scrollLeft <= 2; next.disabled = rail.scrollLeft >= max - 2;
+      nav.classList.toggle("u-nav-off", max <= 2);
+    };
+    prev.addEventListener("click", () => rail.scrollBy({ left: -step(), behavior: "smooth" }));
+    next.addEventListener("click", () => rail.scrollBy({ left: step(), behavior: "smooth" }));
+    rail.addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+    update();
   });
 }
 
-/* ============ IL PONTE: mazzo di card da trascinare ============ */
-function initDeck() {
-  const deck = $("#residencyDeck");
-  let order = $$(".deck-card", deck);
-  let inView = false;
-  const layout = () => {
-    order.forEach((c, k) => {
-      c.classList.toggle("front", k === 0);
-      c.style.zIndex = order.length - k;
-      c.style.opacity = k > 2 ? 0 : 1;
-      c.style.transform = `translateY(${-20 * Math.min(k, 3)}px) scale(${1 - 0.1 * Math.min(k, 3)})`;
-      c.style.pointerEvents = k === 0 ? "auto" : "none";
-    });
-    if (inView) requestAnimationFrame(() => order[0].classList.add("show"));
-  };
-  new IntersectionObserver(([en]) => {
-    inView = en.isIntersecting;
-    order[0].classList.toggle("show", inView);
-  }, { threshold: 0.45 }).observe(deck);
-
-  let x0 = null, dx = 0, moved = false, card = null;
-  deck.addEventListener("pointerdown", (e) => {
-    card = e.target.closest(".deck-card.front"); if (!card) return;
-    x0 = e.clientX; dx = 0; moved = false; card.classList.add("dragging");
-  });
-  addEventListener("pointermove", (e) => {
-    if (x0 === null) return;
-    dx = e.clientX - x0; if (Math.abs(dx) > 6) moved = true;
-    card.style.transform = `translateX(${dx}px) rotateZ(${dx / 20}deg)`;
-  });
-  addEventListener("pointerup", () => {
-    if (x0 === null) return;
-    const c = card; x0 = null; c.classList.remove("dragging");
-    if (Math.abs(dx) > 100) {
-      c.style.transform = `translateX(${Math.sign(dx) * innerWidth}px) rotateZ(${Math.sign(dx) * 30}deg)`;
-      c.style.opacity = 0; c.classList.remove("show");
-      setTimeout(() => { order = [...order.slice(1), c]; layout(); }, 300);
-    } else layout();
-  });
-  deck.addEventListener("click", (e) => { if (moved) e.preventDefault(); }, true);
-  $$("a", deck).forEach((a) => a.setAttribute("draggable", "false"));
-  layout();
-}
-
-/* ============ HERO: macchina da scrivere ============ */
+/* ============ APERTURA: macchina da scrivere (come prima) ============ */
 function initTypewriter() {
-  const el = $("#heroWords");
+  const el = $("#heroWords"); if (!el) return;
   const words = el.dataset.words.split("|");
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) { el.textContent = words[words.length - 1]; return; }
   const TYPE = 60, ERASE = 45, HOLD = 650;
@@ -115,22 +86,39 @@ function initTypewriter() {
   (async () => {
     let w = 0;
     el.textContent = words[0];
+    await sleep(500); // lascia finire l'entrata dal basso
     for (;;) {
       await sleep(HOLD);
       await waitVisible();
       const cur = words[w], next = words[(w + 1) % words.length];
-      for (let n = cur.length - 1; n >= 0; n--) { el.textContent = cur.slice(0, n) || " "; await sleep(ERASE); }
+      for (let n = cur.length - 1; n >= 0; n--) { el.textContent = cur.slice(0, n) || " "; await sleep(ERASE); }
       for (let n = 1; n <= next.length; n++) { el.textContent = next.slice(0, n); await sleep(TYPE); }
       w = (w + 1) % words.length;
     }
   })();
 }
 
+/* ============ APERTURA: titolo fisso che sfuma e scende scorrendo (come UNVRS) ============ */
+function initHeroScroll() {
+  const inner = $("#heroInner"), wrap = $("#heroFixed"), subBox = $("#heroSubBox"), ticks = $$(".u-tick"); if (!inner) return;
+  scrollHooks.push(() => {
+    const y = scrollY, vh = innerHeight;
+    // come UNVRS: a 300px di scroll (su 900) il titolo è a opacità 0,41 e scala 0,91
+    const p = Math.min(1, Math.max(0, y / (vh * 0.56)));
+    inner.style.opacity = (1 - p).toFixed(3);
+    inner.style.transform = `translateY(${(y * 0.09).toFixed(1)}px) scale(${(1 - 0.15 * p).toFixed(3)})`;
+    wrap.style.visibility = p >= 1 ? "hidden" : "visible";
+    // sottotitolo e trattini restano fermi, spariscono quando arriva la prima sezione
+    const q = Math.min(1, Math.max(0, (y - vh * 0.45) / (vh * 0.2)));
+    const o = (1 - q).toFixed(3);
+    if (subBox) { subBox.style.opacity = o; subBox.style.visibility = q >= 1 ? "hidden" : "visible"; }
+    ticks.forEach((t) => { t.style.opacity = (0.5 * (1 - q)).toFixed(3); t.style.visibility = q >= 1 ? "hidden" : "visible"; });
+  });
+}
+
 /* ============ AVVIO ============ */
 renderHome();
 bootSite();
-initHeroFade();
-$("#waHome").href = waLink("Ciao! Vorrei informazioni su Disco Pleasure.");
-initDeck();
+initRails();
 initTypewriter();
-mountMeteoCard($("#meteoCard"));
+initHeroScroll();

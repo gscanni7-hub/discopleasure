@@ -22,46 +22,37 @@
 <!-- /anteprima -->
 <meta name="description" content="Aggiornamenti di Disco Pleasure.">
 <meta name="theme-color" content="#ffffff">
+<link rel="alternate" hreflang="it" href="https://discopleasure.com/articolo">
+<link rel="alternate" hreflang="en" href="https://discopleasure.com/en/articolo">
+<link rel="alternate" hreflang="x-default" href="https://discopleasure.com/articolo">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=202611021755">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=1793705821">
 </head>
-<body data-page="articolo">
+<body data-page="articolo" class="u-white">
 
 <div id="siteHeader"></div>
 
-<main class="page">
-<div class="page-top">
-<section class="page-hero">
-  <span class="badge badge-gray" id="arTag"></span>
-  <h1 class="page-title" id="arTitle"></h1>
-  <p class="page-sub" id="arDate"></p>
-</section>
-<div class="media-card dark"><div class="art" id="arImg"></div></div>
+<main class="u-art">
+<!-- Come un articolo di "Updates" di UNVRS: titolo centrato tra due trattini, data, foto a tutta larghezza,
+     poi blocchi foto quadrata + testo alternati, blocchi di solo testo a destra, chiusura con bottoni -->
+<div class="u-art-head">
+  <div class="u-art-ticks" aria-hidden="true"><i></i><i></i></div>
+  <h1 class="u-art-title" id="arTitle"></h1>
+  <p class="u-mono u-art-date" id="arDate"></p>
 </div>
-<article class="prose" id="arBody"></article>
-<div class="ar-body" id="arSections"></div>
-<section class="chapter">
-  <h2 class="giant">Altri aggiornamenti</h2>
-  <div class="sentinel" aria-hidden="true"></div>
-  <div class="chapter-body">
-    <div class="carousel" data-carousel>
-      <div class="rail" id="moreRail"></div>
-      <div class="dots"></div>
-    </div>
-    <a href="/news" class="btn btn-gray btn-sm show-all">Mostra tutti</a>
-  </div>
-</section>
+<div class="u-art-cover"><div class="art" id="arImg"></div></div>
+<div class="u-art-blocks" id="arBlocks"></div>
 </main>
 
 <div id="siteFooter"></div>
 
-<script src="/data.js?v=202611021755"></script>
-<script src="/site.js?v=202611021755"></script>
-<script src="/pages.js?v=202611021755"></script>
+<script src="/data.js?v=1793705821"></script>
+<script src="/site.js?v=1793705821"></script>
+<script src="/pages.js?v=1793705821"></script>
 </body>
 </html>

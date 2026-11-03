@@ -29,15 +29,6 @@ const lazyIO = "IntersectionObserver" in window
 const paintAll = (root = document) => $$(".art[data-img]:not([data-painted])", root).forEach((el) => (lazyIO ? lazyIO.observe(el) : paintArt(el)));
 
 /* ============ HEADER + MENU ============ */
-const MENU_LINKS = [
-  ["/apres-ski", "Après-ski"],
-  ["/tavoli", "Tavoli"],
-  ["/artisti", "Artisti"],
-  ["/#meteo", "Meteo"],
-  ["/come-arrivare", "Come arrivare"],
-  ["/news", "News"],
-  ["/chi-siamo", "Chi siamo"],
-];
 function mountHeader() {
   const slot = $("#siteHeader"); if (!slot) return;
   slot.outerHTML = `
@@ -45,133 +36,99 @@ function mountHeader() {
 <div class="load-bar" id="loadBar" aria-hidden="true"></div>
 <header class="topbar">
   <div class="pill" id="pill">
+    <!-- barra a tutta larghezza come UNVRS: link a sinistra, logo al centro, Tickets e Menu a destra -->
     <div class="pill-bar">
-      <a href="/" class="logo" aria-label="Disco Pleasure home">${WM}</a>
-      <button class="pill-btn" id="menuBtn" aria-expanded="false" aria-controls="pillMenu">Menu</button>
+      <nav class="bar-side bar-left" aria-label="${T("Scorciatoie", "Shortcuts")}">
+        ${[["/apres-ski", T("Date", "Dates"), "desk-only"], ["/tavoli", T("Tavoli", "Tables"), "desk-only"], ["/news", "News", "desk-only"], ["/apres-ski", "Tickets", "mob-only"]].map(([h, t, c]) => { const cur = PATH === h || PATH.startsWith(h + "/"); return `<a class="${c}${cur ? " cur" : ""}" href="${L(h)}" ${cur ? 'aria-current="page" ' : ""}><span class="at" data-text="${t}"><span>${t}</span></span></a>`; }).join("")}
+      </nav>
+      <a href="${L("/")}" class="logo" aria-label="Disco Pleasure home">${WM}</a>
+      <div class="bar-side bar-right">
+        <a class="desk-only" href="${L("/apres-ski")}"><span class="at" data-text="Tickets"><span>Tickets</span></span></a>
+        <button class="pill-btn" id="menuBtn" aria-expanded="false" aria-controls="pillMenu"><span class="at" data-text="Menu"><span>Menu</span></span><i class="burger" aria-hidden="true"></i></button>
+      </div>
     </div>
-    <nav class="pill-menu" id="pillMenu" aria-label="Menu principale">
-      <div class="menu-body">
-      <ul class="menu-links">${MENU_LINKS.map(([h, t]) => `<li><a href="${h}">${t}</a></li>`).join("")}</ul>
-      <div class="menu-top">
-      <div class="menu-rail">${MENU_RAIL.map((m) => `
-        <a class="mini" href="${m.href}">${art(m.img)}<span class="mini-top"><span class="mini-tape">${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;${esc(m.title)}&nbsp;&nbsp;·&nbsp;&nbsp;</span></span><span class="mini-day">${esc(m.day)}</span></a>`).join("")}
-      </div>
-      <div class="menu-dots">${MENU_RAIL.map((_, i) => `<button aria-label="Vai alla data ${i + 1}"></button>`).join("")}</div>
-      ${CONTATTI.instagram !== "#" || CONTATTI.tiktok !== "#" ? `<div class="menu-more">
-        <span class="menu-more-title">Seguici</span>
-        ${[["instagram", "Instagram"], ["tiktok", "TikTok"]].filter(([k]) => CONTATTI[k] && CONTATTI[k] !== "#").map(([k, t]) => `<a href="${CONTATTI[k]}" target="_blank" rel="noopener">${t}</a>`).join("")}
-      </div>` : ""}
-      </div>
-      </div>
-      <div class="menu-bottom">
-        <div class="menu-meta"><span class="menu-lang">IT</span><a href="${waLink("Ciao! Ho una domanda su Disco Pleasure.")}" target="_blank" rel="noopener">FAQ &amp; Contatti</a></div>
-        <p class="menu-copy">© 2023 - 2027 Disco Pleasure · Chalet Valentino, Roccaraso</p>
-      </div>
-    </nav>
+  </div>
+  <!-- Pannello del menu come UNVRS: scheda fissa in alto a destra (desktop), che sale dal basso (telefono) -->
+  <div class="u-menu" id="pillMenu" role="dialog" aria-label="${T("Menu principale", "Main menu")}" aria-hidden="true">
+    <div class="u-menu-lang" aria-label="${T("Lingua", "Language")}"><a class="u-menu-tab${EN ? "" : " on"}" href="${LANG_URL("it")}" hreflang="it" lang="it"${EN ? "" : ' aria-current="true"'}>IT</a><a class="u-menu-tab${EN ? " on" : ""}" href="${LANG_URL("en")}" hreflang="en" lang="en"${EN ? ' aria-current="true"' : ""}>EN</a></div>
+    <ol class="u-menu-list">
+      ${[["/", "Home"], ["/apres-ski", T("Date", "Dates")], ["/artisti", T("Artisti", "Artists")], ["/tavoli", T("Tavoli", "Tables")], ["/news", "News"], ["/chi-siamo", T("Chi siamo", "About")], ["/come-arrivare", T("Come arrivare", "Getting here")]]
+        .map(([h, t, ext], i) => `<li><a href="${L(h)}"${ext ? ' target="_blank" rel="noopener"' : ""}><span class="u-menu-n">${String(i + 1).padStart(2, "0")}</span><span class="u-menu-t">${t}</span></a></li>`).join("")}
+      <li><span class="u-menu-head"><span class="u-menu-n">08</span><span class="u-menu-t">${T("Lo chalet", "The chalet")}</span></span>
+        <ul class="u-menu-sub">
+          <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Chalet+Valentino+Viale+delle+Gravare+Roccaraso" target="_blank" rel="noopener"><span class="u-menu-n">–</span><span class="u-menu-t">Google Maps</span></a></li>
+        </ul>
+      </li>
+    </ol>
+    <div class="u-menu-foot" aria-hidden="true">
+      <div><span>${T("Posizione", "Position")}</span><span id="menuPos">X0 Y0</span></div>
+      <div class="u-menu-foot-mid"><span>${T("Quota", "Altitude")}</span><span>1567 m</span></div>
+      <div><span>${T("Ora locale", "Local time")}</span><span><span id="menuClock">--:--:--</span></span></div>
+    </div>
   </div>
 </header>`;
 }
 
-function mountFooter() {
-  const slot = $("#siteFooter"); if (!slot) return;
-  const social = [["instagram", "Instagram"], ["tiktok", "TikTok"]].filter(([k]) => CONTATTI[k] && CONTATTI[k] !== "#")
-    .map(([k, t]) => `<li><a href="${CONTATTI[k]}" target="_blank" rel="noopener">${t}</a></li>`).join("");
-  const col = (title, links) => `<div class="fcol"><p class="fcol-title">${title}</p><ul>${links}</ul></div>`;
-  const li = (h, t) => `<li><a href="${h}">${t}</a></li>`;
-  // Composizione del footer di Hï: iscrizione a sinistra, colonne di link a destra, firma in basso
-  slot.outerHTML = `
-<footer class="footer" id="footer">
+// Orologio del pannello (ora di Roccaraso), come la "frequency" che cambia nel menu di UNVRS
+function initMenuPos() {
+  // Come UNVRS: con il menu aperto, "Posizione" segue il puntatore (coordinate X e Y nello schermo)
+  const el = $("#menuPos"), panel = $("#pillMenu"); if (!el || !panel) return;
+  addEventListener("pointermove", (e) => { if (!panel.classList.contains("open")) return; el.textContent = `X${Math.round(e.clientX)} Y${Math.round(e.clientY)}`; }, { passive: true });
+}
+function initMenuClock() {
+  const el = $("#menuClock"); if (!el) return;
+  const f = new Intl.DateTimeFormat(T("it-IT", "en-GB"), { timeZone: "Europe/Rome", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  const tick = () => { el.textContent = f.format(new Date()); };
+  tick(); setInterval(tick, 1000);
+}
+
+function footerHTML(id = "footer") {
+    const col = (title, links) => `<div class="fcol"><p class="fcol-title">${title}</p><ul>${links}</ul></div>`;
+  const li = (h, t) => `<li><a href="${L(h)}">${t}</a></li>`;
+  // Composizione del footer di Hï: WhatsApp a sinistra, colonne di link a destra, firma in basso
+  return `
+<footer class="footer"${id ? ` id="${id}"` : ""}>
   <div class="footer-inner">
     <div class="footer-sub">
-      <p>Tavoli, info e domande: scrivici su WhatsApp, ti rispondiamo noi.</p>
-      <a class="btn btn-sm" href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">Scrivici</a>
+      <p>${T("Tavoli, info e domande: scrivici su WhatsApp, ti rispondiamo noi.", "Tables, info and questions: message us on WhatsApp, we\'ll get back to you personally.")}</p>
+      <a class="btn btn-sm" href="${waLink(T("Ciao! Vorrei informazioni su Disco Pleasure.", "Hi! I\'d like some information about Disco Pleasure."))}" target="_blank" rel="noopener">${T("Scrivici", "Message us")}</a>
     </div>
     <div class="footer-cols">
-      ${col("Seguici", social + `<li><a href="${waLink("Ciao! Vorrei informazioni su Disco Pleasure.")}" target="_blank" rel="noopener">WhatsApp</a></li>`)}
-      ${col("Serate", li("/apres-ski", "Après-ski") + li("/apres-ski", "Biglietti") + li("/tavoli", "Tavoli") + li("/artisti", "Artisti"))}
-      ${col("Info", li("/come-arrivare", "Come arrivare") + li("/#meteo", "Meteo") + li("/chi-siamo", "Chi siamo") + li("/news", "News") + `<li><a href="${waLink("Ciao! Ho una domanda su Disco Pleasure.")}" target="_blank" rel="noopener">FAQ e contatti</a></li>`)}
-      ${col("Legale", li("/privacy", "Privacy policy") + li("/cookie", "Cookie policy"))}
+      ${col("Disco Pleasure", li("/", "Home") + li("/apres-ski", T("Date", "Dates")) + li("/artisti", T("Artisti", "Artists")) + li("/tavoli", T("Tavoli", "Tables")) + li("/news", "News"))}
+      ${col("Info", li("/chi-siamo", T("Chi siamo", "About")) + li("/come-arrivare", T("Come arrivare", "Getting here")) + `<li><a href="https://www.google.com/maps/search/?api=1&amp;query=Chalet+Valentino+Viale+delle+Gravare+Roccaraso" target="_blank" rel="noopener">${T("Lo chalet su Google Maps", "The chalet on Google Maps")}</a></li>`)}
+      ${col(T("Legale", "Legal"), li("/privacy", "Privacy policy") + li("/cookie", "Cookie policy"))}
     </div>
     <div class="footer-sign">
-      <a href="/" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
-      <p class="footer-meta">© 2023 - 2027 Disco Pleasure · Chalet Valentino, a valle delle Gravare, Roccaraso</p>
+      <a href="${L("/")}" class="logo footer-logo" aria-label="Disco Pleasure, home">${WM}</a>
+      <p class="footer-meta">© 2023 - 2027 Disco Pleasure · Chalet Valentino, ${T("a valle delle Gravare", "Valle delle Gravare")}, Roccaraso</p>
     </div>
   </div>
 </footer>`;
 }
+function mountFooter() {
+  const slot = $("#siteFooter"); if (!slot) return;
+  slot.outerHTML = footerHTML();
+}
 
 function initMenu() {
-  const pill = $("#pill"), btn = $("#menuBtn"); if (!pill) return;
-  let t;
+  const pill = $("#pill"), btn = $("#menuBtn"), panel = $("#pillMenu"); if (!pill || !panel) return;
   const set = (open) => {
     if (open === pill.classList.contains("open")) return;
-    pill.classList.add("animating");
     pill.classList.toggle("open", open);
-    if (open) pill.classList.remove("is-dark");
+    panel.classList.toggle("open", open);
+    panel.setAttribute("aria-hidden", !open);
     btn.setAttribute("aria-expanded", open);
-    btn.textContent = open ? "Chiudi" : "Menu";
-    if (open) menuRail?.reset();
-    clearTimeout(t);
-    t = setTimeout(() => pill.classList.remove("animating"), 1000);
   };
-  pill.addEventListener("transitionend", (e) => {
-    if (e.target === pill && e.propertyName === "height") { clearTimeout(t); pill.classList.remove("animating"); }
-  });
   btn.addEventListener("click", () => set(!pill.classList.contains("open")));
   $$("#pillMenu a").forEach((a) => a.addEventListener("click", () => set(false)));
   document.addEventListener("keydown", (e) => e.key === "Escape" && set(false));
-  // chiude con un clic fuori, ma solo se anche la pressione è iniziata fuori (non dopo un trascinamento)
+  // chiude con un clic fuori dalla barra e dal pannello
   let downInside = false;
-  document.addEventListener("pointerdown", (e) => { downInside = pill.contains(e.target); }, true);
-  document.addEventListener("click", (e) => { if (!pill.contains(e.target) && !downInside) set(false); });
+  document.addEventListener("pointerdown", (e) => { downInside = pill.contains(e.target) || panel.contains(e.target); }, true);
+  document.addEventListener("click", (e) => { if (!pill.contains(e.target) && !panel.contains(e.target) && !downInside) set(false); });
 }
 
 /* Fila di card del menu: carosello centrato, infinito, da trascinare, che scatta di una card */
-let menuRail = null;
-function initMenuRail() {
-  const rail = $(".menu-rail"); if (!rail) return;
-  const slides = [...rail.children]; const n = slides.length; if (!n) return;
-  let active = 0, drag = null, w = 0;
-  const wrap = (k) => ((k % n) + n) % n;
-  const place = (dx = 0, animate = true) => {
-    w = rail.clientWidth;
-    const sw = 0.4 * (w + 8);                 // larghezza di una card + spazio (come Hï)
-    const cx = (w - sw) / 2;                   // card attiva centrata
-    slides.forEach((el, k) => {
-      let off = wrap(k - active); if (off > n / 2) off -= n; // giro infinito: metà a destra, metà a sinistra
-      const x = cx + off * sw + dx;
-      const jump = el._off !== undefined && Math.abs(el._off - off) > 1; // passa dall'altra parte: niente animazione
-      el.style.transition = animate && !jump && !drag ? "transform .45s cubic-bezier(.22, 1, .36, 1)" : "none";
-      el.style.width = `${sw - 8}px`;
-      el.style.transform = `translateX(${x}px)`;
-      el._off = off;
-    });
-  };
-  const dots = $$(".menu-dots button");
-  const syncDots = () => dots.forEach((d, i) => d.classList.toggle("on", i === active));
-  const go = (k) => { active = wrap(k); place(); syncDots(); };
-  dots.forEach((d, i) => d.addEventListener("click", () => go(i)));
-  rail.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, dx: 0, moved: false, id: e.pointerId }; });
-  addEventListener("pointermove", (e) => {
-    if (!drag || e.pointerId !== drag.id) return;
-    drag.dx = e.clientX - drag.x; if (Math.abs(drag.dx) > 6) drag.moved = true;
-    if (drag.moved) place(drag.dx, false);
-  });
-  const end = () => {
-    if (!drag) return;
-    const steps = Math.abs(drag.dx) > 40 ? -Math.sign(drag.dx) : 0; // una card per gesto, come Hï
-    const moved = drag.moved; drag = null;
-    go(active + steps);
-    if (moved) rail.dataset.justDragged = "1", setTimeout(() => delete rail.dataset.justDragged, 50);
-  };
-  addEventListener("pointerup", end); addEventListener("pointercancel", end);
-  rail.addEventListener("click", (e) => { if (rail.dataset.justDragged) { e.preventDefault(); e.stopPropagation(); } }, true);
-  slides.forEach((el) => { el.setAttribute("draggable", "false"); });
-  addEventListener("resize", () => place(0, false));
-  menuRail = { reset: () => { active = 0; slides.forEach((el) => delete el._off); place(0, false); syncDots(); } };
-  place(0, false); syncDots();
-}
-
 /* Header (e barra date in home) scuri sopra le card scure */
 const darkAt = (x, y, self) => document.elementsFromPoint(x, y).some((el) => !self.contains(el) && el.closest(".dark"));
 const scrollHooks = [];
@@ -246,29 +203,6 @@ function initLoadBar() {
   addEventListener("pageshow", (e) => { if (e.persisted) { set(0); bar.classList.remove("on"); } });
 }
 
-/* ============ CAROSELLI CON PALLINI ============ */
-function initCarousels(root = document) {
-  $$("[data-carousel]", root).forEach((c) => {
-    const rail = $(".rail", c), dotsEl = $(".dots", c);
-    const cards = [...rail.children]; if (!cards.length) return;
-    dotsEl.innerHTML = cards.map((_, i) => `<button aria-label="Vai alla slide ${i + 1}"></button>`).join("");
-    const dots = [...dotsEl.children];
-    const pad = () => parseFloat(getComputedStyle(rail).paddingLeft);
-    const update = () => {
-      const x = rail.scrollLeft;
-      let idx = 0, best = Infinity;
-      cards.forEach((card, i) => { const d = Math.abs(card.offsetLeft - pad() - x); if (d < best) { best = d; idx = i; } });
-      if (x >= rail.scrollWidth - rail.clientWidth - 4) idx = cards.length - 1 - Math.max(0, Math.floor((rail.clientWidth - pad()) / (cards[0].offsetWidth + 8)) - 1);
-      if (x <= 4) idx = 0;
-      dots.forEach((d, i) => d.classList.toggle("on", i === idx));
-    };
-    dots.forEach((d, i) => d.addEventListener("click", () => rail.scrollTo({ left: cards[i].offsetLeft - pad(), behavior: "smooth" })));
-    rail.addEventListener("scroll", update, { passive: true });
-    addEventListener("resize", update);
-    update();
-  });
-}
-
 /* ============ FILTRI A PILLOLA ============ */
 // <div class="filters" data-filters> con <button data-f="..."> ; callback(valore)
 function initFilters(el, onChange, initial) {
@@ -314,7 +248,7 @@ const b2b = (name) => esc(name).split(/\s+b2b\s+/i).join(' <span class="badge ba
 function eventCard(e, { tickets = true } = {}) {
   return `
   <article class="ev-card">
-    <a class="ev-head" href="${e.url}">
+    <a class="ev-head" href="${L(e.url)}">
       <span class="ev-name">${esc(e.title === "Disco Pleasure" ? "Disco Pleasure · Après-ski" : e.title)}</span>
       <span class="ev-time">${esc(e.hours)}</span>
       <span class="ev-badges"><span class="badge badge-blue">Chalet Valentino</span><span class="badge badge-outline">${esc(e.phase)}</span></span>
@@ -328,65 +262,145 @@ function eventCard(e, { tickets = true } = {}) {
       </div>`).join("")}
       <div class="ev-entry">${e.entry.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
       <div class="ev-actions${tickets ? "" : " one"}">
-        ${tickets ? `<a class="btn btn-black" href="${esc(e.tickets)}" target="_blank" rel="noopener">Biglietti</a>` : ""}
-        <a class="btn btn-black" href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">${tickets ? "Tavoli" : "Prenota tavolo"}</a>
+        ${tickets ? `<a class="btn btn-black" href="${esc(e.tickets)}" target="_blank" rel="noopener">Tickets</a>` : ""}
+        <a class="btn btn-black" href="${waLink(tableMsg(e))}" target="_blank" rel="noopener">${tickets ? T("Tavoli", "Tables") : T("Prenota tavolo", "Book a table")}</a>
       </div>
     </div>
   </article>`;
 }
 
-// Filtri per mese + griglia di card della stagione
+// Scheda della data nello stile della home (pagina Date): panna, numero in mono, titolo grande, line-up, due bottoni
+function eventCardU(e, i, { tickets = true } = {}) {
+  const n = EVENTS.indexOf(e) + 1;
+  return `
+  <article class="u-slide u-ev" style="--i:${i % 12}">
+    <a class="u-ev-top" href="${L(e.url)}">
+      <span class="u-mono u-ev-n">${String(n).padStart(2, "0")}</span>
+      <span class="u-mono u-ev-day">${esc(e.card)}</span>
+      <h3 class="u-ev-title">${esc(e.title === "Disco Pleasure" ? "Après-ski" : e.title)}</h3>
+      <span class="u-mono u-ev-meta">${esc(e.hours)} · ${esc(e.phase)}</span>
+    </a>
+    <div class="u-ev-body">
+      ${e.lineup.map((l) => `<div class="u-ev-area"><span class="u-mono u-ev-label">${esc(l.area)}</span>${l.names.map((nm) => `<span class="u-ev-artist">${b2b(nm)}</span>`).join("")}</div>`).join("")}
+      <div class="u-mono u-ev-entry">${e.entry.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+    </div>
+    <div class="u-ev-actions${tickets ? "" : " one"}">
+      ${tickets ? (TICKETS[e.id] ? `<a class="u-btn u-btn-ink" href="${esc(TICKETS[e.id])}" target="_blank" rel="noopener">Tickets</a>` : `<span class="u-btn u-btn-ink u-soon">${T("Tickets in arrivo", "Tickets coming soon")}</span>`) : ""}
+      <a class="u-btn u-btn-ink" href="${L("/tavoli")}?d=${e.id}">${tickets ? T("Tavoli", "Tables") : T("Prenota tavolo", "Book a table")}</a>
+    </div>
+  </article>`;
+}
+
+// Filtri per mese + griglia di card della stagione (griglia .u-grid = stile della home)
 function mountEventGrid(filtersEl, gridEl, { tickets = true, events = EVENTS } = {}) {
   const months = [...new Set(events.map((e) => e.month))];
-  filtersEl.innerHTML = `<button data-f="all">Tutte</button>` + months.map((m) => `<button data-f="${m}">${MESI[m - 1][0].toUpperCase() + MESI[m - 1].slice(1)}</button>`).join("");
+  filtersEl.innerHTML = `<button data-f="all">${T("Tutte", "All")}</button>` + months.map((m) => `<button data-f="${m}">${MESI[m - 1][0].toUpperCase() + MESI[m - 1].slice(1)}</button>`).join("");
   const initial = qs("m") && months.includes(+qs("m")) ? qs("m") : "all";
+  const nuovo = gridEl.classList.contains("u-grid");
+  const count = $("#evCount");
   initFilters(filtersEl, (v) => {
     const list = v === "all" ? events : events.filter((e) => String(e.month) === v);
-    gridEl.innerHTML = list.map((e) => eventCard(e, { tickets })).join("");
+    if (nuovo) {
+      gridEl.classList.remove("in");
+      gridEl.innerHTML = list.map((e, i) => eventCardU(e, i, { tickets })).join("");
+      if (count) count.textContent = String(list.length).padStart(2, "0");
+      requestAnimationFrame(() => requestAnimationFrame(() => gridEl.classList.add("in")));
+    } else gridEl.innerHTML = list.map((e) => eventCard(e, { tickets })).join("");
   }, initial);
 }
 
-/* ============ AVVIO COMUNE ============ */
-/* ============ ADMIN: anteprima del sito in costruzione ============ */
-// ?anteprima=CODICE su qualsiasi pagina attiva l'accesso (anche in locale); l'etichetta in basso mostra lo stato
-const ADMIN_CODE = "lplf2xg945";
-function initAdmin() {
-  const sec = location.protocol === "https:" ? "; Secure" : "";
-  const setCk = (on) => { document.cookie = "dp_anteprima=" + (on ? "1" : "") + "; path=/; SameSite=Lax" + sec + "; max-age=" + (on ? 31536000 : 0); };
-  if (qs("anteprima") === ADMIN_CODE) {
-    setCk(true);
-    const u = new URL(location.href); u.searchParams.delete("anteprima");
-    history.replaceState(null, "", u.pathname + (u.search || "") + u.hash);
-  }
-  if (!/(^|; )dp_anteprima=1/.test(document.cookie)) return;
-  const bar = document.createElement("div");
-  bar.className = "admin-pill";
-  bar.innerHTML = `<span class="admin-dot"></span>Admin · anteprima<button type="button">Esci</button>`;
-  bar.querySelector("button").onclick = () => { setCk(false); location.href = "/"; };
-  document.body.appendChild(bar);
+/* ============ TESTO CHE SI MESCOLA (percentuali e numerini) ============ */
+const GLYPHS = "[]#*<>%0123456789";
+function scrambleTo(el, text, ms = 320) {
+  if (el.dataset.target === text) return;
+  el.dataset.target = text;
+  const t0 = performance.now();
+  const step = (t) => {
+    if (el.dataset.target !== text) return;
+    const k = Math.min(1, (t - t0) / ms), fixed = Math.round(k * text.length);
+    el.textContent = text.slice(0, fixed) + [...text.slice(fixed)].map(() => GLYPHS[Math.floor(Math.random() * GLYPHS.length)]).join("");
+    if (k < 1) requestAnimationFrame(step); else el.textContent = text;
+  };
+  requestAnimationFrame(step);
 }
 
+/* ============ ENTRATE ALLA UNVRS (condivise): titoli parola per parola, card che scivolano ============ */
+function splitWords(el) {
+  let i = 0;
+  [...el.childNodes].forEach((n) => {
+    if (n.nodeType !== 3 || !n.textContent.trim()) return;
+    const frag = document.createDocumentFragment();
+    n.textContent.split(/(\s+)/).forEach((part) => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) { frag.appendChild(document.createTextNode(" ")); return; }
+      const sp = document.createElement("span"); sp.className = "w"; sp.style.setProperty("--i", i++); sp.textContent = part; frag.appendChild(sp);
+    });
+    n.replaceWith(frag);
+  });
+}
+function initReveals() {
+  const targets = $$(".u-sec, .u-band, .u-page-head"); if (!targets.length) return;
+  $$(".u-title, .u-band-a, .u-band-b").forEach(splitWords);
+  const io = new IntersectionObserver((ens) => ens.forEach((en) => {
+    if (!en.isIntersecting) return;
+    en.target.classList.add("in");
+    const c = $(".u-count", en.target); if (c && typeof scrambleTo === "function") { const v = c.textContent; c.textContent = ""; setTimeout(() => scrambleTo(c, v, 500), 300); }
+    io.unobserve(en.target);
+  }), { threshold: 0.18 });
+  targets.forEach((t) => io.observe(t));
+}
+
+/* ============ AVVIO COMUNE ============ */
+
+// Pagine inglesi: ogni link interno rimasto senza /en viene portato nella versione inglese
+function localizeLinks(root = document) {
+  if (!EN) return;
+  $$('a[href^="/"]', root).forEach((a) => { const h = a.getAttribute("href"); const n = L(h); if (n !== h && !a.closest(".u-menu-lang")) a.setAttribute("href", n); });
+}
+// Il sito si apre sempre in italiano. Se il browser non è in italiano, in basso compare un invito
+// (in inglese) a passare alla versione inglese; sulle pagine inglesi, se il browser è in italiano, il contrario.
+// La scelta (passare o chiudere) viene ricordata e l'invito non ricompare.
+function initLangHint() {
+  let seen = null; try { seen = localStorage.getItem("dp_lang_hint"); } catch (e) {}
+  if (seen) return;
+  const first = String((navigator.languages && navigator.languages[0]) || navigator.language || "it").toLowerCase();
+  const browserIt = first.startsWith("it");
+  if (EN ? !browserIt : browserIt) return;
+  const box = document.createElement("div");
+  box.className = "u-lang-hint"; box.setAttribute("role", "dialog");
+  box.setAttribute("aria-label", EN ? "Lingua" : "Language");
+  box.innerHTML = EN
+    ? `<p>Questo sito è disponibile anche in italiano.</p><div><a class="u-lang-go" href="${LANG_URL("it")}" hreflang="it" lang="it">Italiano</a><button type="button" class="u-lang-x" aria-label="Chiudi">Resta in inglese</button></div>`
+    : `<p lang="en">This website is also available in English.</p><div><a class="u-lang-go" href="${LANG_URL("en")}" hreflang="en" lang="en">English</a><button type="button" class="u-lang-x" lang="en" aria-label="Close">Stay in Italian</button></div>`;
+  const remember = (v) => { try { localStorage.setItem("dp_lang_hint", v); } catch (e) {} };
+  box.querySelector(".u-lang-go").addEventListener("click", () => remember("switched"));
+  box.querySelector(".u-lang-x").addEventListener("click", () => { remember("dismissed"); box.classList.remove("on"); setTimeout(() => box.remove(), 400); });
+  document.body.appendChild(box);
+  setTimeout(() => box.classList.add("on"), 1200);
+}
 function bootSite() {
-  initAdmin();
+  initLangHint();
+  if (EN) { localizeLinks(); new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => n.nodeType === 1 && localizeLinks(n.parentElement || n)))).observe(document.body, { childList: true, subtree: true }); }
   mountHeader();
   mountFooter();
+  initMenuClock();
+  initMenuPos();
   initSpotlights();
   initLoadBar();
   paintAll();
   initBalls();
   initMenu();
-  initMenuRail();
   initScroll();
   initGiants();
-  initCarousels();
+  initReveals();
   requestAnimationFrame(() => $("#pageBg")?.classList.add("on"));
 }
 
 /* ============ METEO ROCCARASO ============ */
 const WMO = (c) =>
-  c === 0 ? ["Sereno", "sun"] : c === 1 ? ["Poco nuvoloso", "sunc"] : c === 2 ? ["Parz. nuvoloso", "sunc"] : c === 3 ? ["Coperto", "cloud"] :
-  c <= 48 ? ["Nebbia", "fog"] : c <= 57 ? ["Pioviggine", "rain"] : c <= 67 ? ["Pioggia", "rain"] : c <= 77 ? ["Neve", "snow"] :
-  c <= 82 ? ["Rovesci", "rain"] : c <= 86 ? ["Rovesci di neve", "snow"] : ["Temporale", "storm"];
+  c === 0 ? [T("Sereno", "Clear"), "sun"] : c === 1 ? [T("Poco nuvoloso", "Mostly clear"), "sunc"] : c === 2 ? [T("Parz. nuvoloso", "Partly cloudy"), "sunc"] : c === 3 ? [T("Coperto", "Overcast"), "cloud"] :
+  c <= 48 ? [T("Nebbia", "Fog"), "fog"] : c <= 57 ? [T("Pioviggine", "Drizzle"), "rain"] : c <= 67 ? [T("Pioggia", "Rain"), "rain"] : c <= 77 ? [T("Neve", "Snow"), "snow"] :
+  c <= 82 ? [T("Rovesci", "Showers"), "rain"] : c <= 86 ? [T("Rovesci di neve", "Snow showers"), "snow"] : [T("Temporale", "Thunderstorm"), "storm"];
 const CLOUD = (y) => `<path class="w-cloud" d="M7 ${y}h10.5a4 4 0 0 0 0-8 5.5 5.5 0 0 0-10.7 1.6A3.2 3.2 0 0 0 7 ${y}Z"/>`;
 const ICONS = {
   sun: '<g class="w-rays"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g><circle cx="12" cy="12" r="4.5"/>',
@@ -508,7 +522,7 @@ function getMeteo() {
 // Card grande (home): adesso + schede "Ora per ora" / "7 giorni" / "Dettagli"
 function mountMeteoCard(el) {
   if (!el) return;
-  el.innerHTML = `<p class="w-status">Carico il meteo di Roccaraso…</p>`;
+  el.innerHTML = `<p class="w-status">${T("Carico il meteo di Roccaraso…", "Loading the Roccaraso forecast…")}</p>`;
   getMeteo().then((d) => {
     const c = d.current, dl = d.daily, h = d.hourly;
     const [txt, ico] = WMO(c.weather_code);
@@ -519,7 +533,7 @@ function mountMeteoCard(el) {
       const i = start + k, [htxt, hico] = WMO(h.weather_code[i]);
       const hi = !h.is_day[i] && hico === "sun" ? "moon" : hico;
       return `<li class="w-hour" style="--i:${k}">
-        <span class="w-hh">${k === 0 ? "Ora" : t.slice(11, 13)}</span>${wIcon(hi)}<span class="sr-only">${htxt}</span>
+        <span class="w-hh">${k === 0 ? T("Ora", "Now") : t.slice(11, 13)}</span>${wIcon(hi)}<span class="sr-only">${htxt}</span>
         <b>${Math.round(h.temperature_2m[i])}°</b>
         <span class="w-pp">${h.snowfall[i] > 0 ? num(h.snowfall[i]) + " cm" : h.precipitation_probability[i] != null ? h.precipitation_probability[i] + "%" : num(h.precipitation[i] || 0) + " mm"}</span>
         <span class="w-wind">${Math.round(h.wind_speed_10m[i])} km/h</span>
@@ -528,15 +542,15 @@ function mountMeteoCard(el) {
     const days = dl.time.slice(0, 7).map((t, i) => {
       const dt = new Date(t + "T12:00"), [dtxt, dico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
       return `<li class="w-day" style="--i:${i}">
-        <span class="w-dname">${i === 0 ? "Oggi" : GIORNI_BREVI[dt.getDay()] + " " + dt.getDate()}</span>
+        <span class="w-dname">${i === 0 ? T("Oggi", "Today") : GIORNI_BREVI[dt.getDay()] + " " + dt.getDate()}</span>
         ${wIcon(dico)}<span class="sr-only">${dtxt}</span>
         <span class="w-mm"><b>${Math.round(dl.temperature_2m_max[i])}°</b> ${Math.round(dl.temperature_2m_min[i])}°</span>
-        <span class="w-snow">${snow > 0 ? `${num(snow)} cm neve` : dl.precipitation_probability_max[i] != null ? `${dl.precipitation_probability_max[i]}%` : `${num(dl.precipitation_sum[i] || 0)} mm`}</span>
+        <span class="w-snow">${snow > 0 ? `${num(snow)} cm ${T("neve", "snow")}` : dl.precipitation_probability_max[i] != null ? `${dl.precipitation_probability_max[i]}%` : `${num(dl.precipitation_sum[i] || 0)} mm`}</span>
       </li>`;
     }).join("");
     const facts = [
-      ["Alba", hhmm(dl.sunrise[0])], ["Tramonto", hhmm(dl.sunset[0])], ["Indice UV", num(dl.uv_index_max[0])],
-      ["Raffiche", dl.wind_gusts_10m_max[0] != null && `${Math.round(dl.wind_gusts_10m_max[0])} km/h`], ["Umidità", `${c.relative_humidity_2m}%`], ["Zero termico", c.freezing_level_height != null && `${Math.round(c.freezing_level_height)} m`],
+      [T("Alba", "Sunrise"), hhmm(dl.sunrise[0])], [T("Tramonto", "Sunset"), hhmm(dl.sunset[0])], [T("Indice UV", "UV index"), num(dl.uv_index_max[0])],
+      [T("Raffiche", "Gusts"), dl.wind_gusts_10m_max[0] != null && `${Math.round(dl.wind_gusts_10m_max[0])} km/h`], [T("Umidità", "Humidity"), `${c.relative_humidity_2m}%`], [T("Zero termico", "Freezing level"), c.freezing_level_height != null && `${Math.round(c.freezing_level_height)} m`],
     ].filter(([, v]) => v).map(([k, v], i) => `<div class="w-tile" style="--i:${i}"><dt>${k}</dt><dd>${v}</dd></div>`).join("");
 
     el.innerHTML = `
@@ -545,21 +559,21 @@ function mountMeteoCard(el) {
         <div class="w-temp">${wIcon(nowIco)}<span class="w-count" data-to="${Math.round(c.temperature_2m)}">0</span><span>°</span></div>
         <p class="w-cond">${txt}</p>
         <dl class="w-facts">
-          <div><dt>Percepita</dt><dd>${Math.round(c.apparent_temperature)}°</dd></div>
-          <div><dt>Vento</dt><dd>${Math.round(c.wind_speed_10m)} km/h</dd></div>
-          ${c.snow_depth != null ? `<div><dt>Neve al suolo</dt><dd>${Math.round(c.snow_depth * 100)} cm</dd></div>` : `<div><dt>Umidità</dt><dd>${c.relative_humidity_2m}%</dd></div>`}
-          <div><dt>Tramonto</dt><dd>${hhmm(dl.sunset[0])}</dd></div>
+          <div><dt>${T("Percepita", "Feels like")}</dt><dd>${Math.round(c.apparent_temperature)}°</dd></div>
+          <div><dt>${T("Vento", "Wind")}</dt><dd>${Math.round(c.wind_speed_10m)} km/h</dd></div>
+          ${c.snow_depth != null ? `<div><dt>${T("Neve al suolo", "Snow depth")}</dt><dd>${Math.round(c.snow_depth * 100)} cm</dd></div>` : `<div><dt>${T("Umidità", "Humidity")}</dt><dd>${c.relative_humidity_2m}%</dd></div>`}
+          <div><dt>${T("Tramonto", "Sunset")}</dt><dd>${hhmm(dl.sunset[0])}</dd></div>
         </dl>
       </div>
       <div class="w-side">
         <div class="filters w-tabs" role="tablist">
-          <button data-f="ore" role="tab">Ora per ora</button><button data-f="giorni" role="tab">7 giorni</button><button data-f="dettagli" role="tab">Dettagli</button>
+          <button data-f="ore" role="tab">${T("Ora per ora", "Hourly")}</button><button data-f="giorni" role="tab">${T("7 giorni", "7 days")}</button><button data-f="dettagli" role="tab">${T("Dettagli", "Details")}</button>
         </div>
         <ul class="w-panel w-hours" data-p="ore">${hours}</ul>
         <ul class="w-panel w-days" data-p="giorni">${days}</ul>
         <dl class="w-panel w-tiles" data-p="dettagli">${facts}</dl>
       </div>
-      <p class="w-src">Previsioni ${d._src === "metno" ? "MET Norway" : "Open-Meteo"} · ${d._stale ? `ultime disponibili, del ${+c.time.slice(8, 10)}/${+c.time.slice(5, 7)} alle ${hhmm(c.time)}` : `aggiornate alle ${hhmm(c.time)}`}</p>`;
+      <p class="w-src">${T("Previsioni", "Forecast")} ${d._src === "metno" ? "MET Norway" : "Open-Meteo"} · ${d._stale ? T(`ultime disponibili, del ${+c.time.slice(8, 10)}/${+c.time.slice(5, 7)} alle ${hhmm(c.time)}`, `latest available, from ${+c.time.slice(8, 10)}/${+c.time.slice(5, 7)} at ${hhmm(c.time)}`) : T(`aggiornate alle ${hhmm(c.time)}`, `updated at ${hhmm(c.time)}`)}</p>`;
 
     const panels = $$(".w-panel", el);
     initFilters($(".w-tabs", el), (v) => panels.forEach((p) => {
@@ -581,8 +595,8 @@ function mountMeteoCard(el) {
     // Servizio meteo giù e nessuna previsione salvata: messaggio chiaro, bottone per riprovare
     // e un nuovo tentativo automatico dopo un minuto
     el.innerHTML = `<div class="w-down">
-      <p><strong>Il servizio meteo non risponde.</strong> Capita quando è sovraccarico: di solito torna in pochi minuti.</p>
-      <button class="btn btn-sm" type="button">Riprova</button>
+      <p><strong>${T("Il servizio meteo non risponde.", "The weather service is not responding.")}</strong> ${T("Capita quando è sovraccarico: di solito torna in pochi minuti.", "It happens when it is overloaded: it is usually back within a few minutes.")}</p>
+      <button class="btn btn-sm" type="button">${T("Riprova", "Try again")}</button>
     </div>`;
     const retry = () => { clearTimeout(auto); mountMeteoCard(el); };
     const auto = setTimeout(retry, 60000);
@@ -595,9 +609,9 @@ function mountMeteoDay(el, id) {
   if (!el) return;
   getMeteo().then((d) => {
     const i = d.daily.time.indexOf(id);
-    if (i < 0) { el.innerHTML = `<p class="w-status">Le previsioni per questa data compaiono 16 giorni prima. Intanto guarda il <a href="/#meteo">meteo di oggi</a>.</p>`; return; }
+    if (i < 0) { el.innerHTML = `<p class="w-status">${T("Le previsioni per questa data compaiono 16 giorni prima. Intanto guarda il", "The forecast for this date appears 16 days ahead. Meanwhile, check")} <a href="${L("/come-arrivare")}#meteo">${T("meteo di oggi", "today\'s weather")}</a>.</p>`; return; }
     const dl = d.daily, [txt, ico] = WMO(dl.weather_code[i]), snow = dl.snowfall_sum[i];
     el.innerHTML = `<div class="w-inline">${wIcon(ico)}<div><strong>${txt} · ${Math.round(dl.temperature_2m_max[i])}° / ${Math.round(dl.temperature_2m_min[i])}°</strong>
-      <span>${snow > 0 ? `Neve prevista ${num(snow)} cm · ` : ""}${dl.precipitation_probability_max[i] != null ? `Precipitazioni ${dl.precipitation_probability_max[i]}%` : `Precipitazioni ${num(dl.precipitation_sum[i] || 0)} mm`} · Alba ${hhmm(dl.sunrise[i])} · Tramonto ${hhmm(dl.sunset[i])}</span></div></div>`;
-  }).catch(() => { el.innerHTML = `<p class="w-status">Il servizio meteo in questo momento non risponde. Riprova tra qualche minuto.</p>`; });
+      <span>${snow > 0 ? `${T("Neve prevista", "Snow expected")} ${num(snow)} cm · ` : ""}${dl.precipitation_probability_max[i] != null ? `${T("Precipitazioni", "Precipitation")} ${dl.precipitation_probability_max[i]}%` : `${T("Precipitazioni", "Precipitation")} ${num(dl.precipitation_sum[i] || 0)} mm`} · ${T("Alba", "Sunrise")} ${hhmm(dl.sunrise[i])} · ${T("Tramonto", "Sunset")} ${hhmm(dl.sunset[i])}</span></div></div>`;
+  }).catch(() => { el.innerHTML = `<p class="w-status">${T("Il servizio meteo in questo momento non risponde. Riprova tra qualche minuto.", "The weather service is not responding right now. Please try again in a few minutes.")}</p>`; });
 }

@@ -22,29 +22,38 @@
 <!-- /anteprima -->
 <meta name="description" content="Resident e guest di Disco Pleasure, stagione 2026/27.">
 <meta name="theme-color" content="#ffffff">
+<link rel="alternate" hreflang="it" href="https://discopleasure.com/artisti">
+<link rel="alternate" hreflang="en" href="https://discopleasure.com/en/artists">
+<link rel="alternate" hreflang="x-default" href="https://discopleasure.com/artisti">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=202611021755">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=1793705821">
 </head>
-<body data-page="artisti">
+<body data-page="artisti" class="u-white">
 
 <div id="siteHeader"></div>
 
-<main class="page">
-<h1 class="index-title">Artisti</h1>
-<div class="filter-bar"><label class="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input type="search" id="artistSearch" placeholder="Cerca artisti..." aria-label="Cerca artisti"></label></div>
-<div class="card-grid" id="artistGrid"></div>
-<div class="load-wrap"><button class="btn btn-black" id="loadMore" hidden>Carica altri</button></div>
+<main class="u-upd">
+<!-- Come "Artists" di UNVRS: testata appiccicosa con titolo e casella di ricerca, griglia di card 3:4 -->
+<div class="u-upd-head" id="updHead">
+  <div class="u-upd-head-in">
+    <h1 class="u-upd-title">Artisti</h1>
+    <div class="u-upd-side has-search">
+      <label class="u-search"><span class="u-search-ic" aria-hidden="true"><svg viewBox="0 0 32 32"><path fill="currentColor" d="m29 27.586l-7.552-7.552a11.018 11.018 0 1 0-1.414 1.414L27.586 29ZM4 13a9 9 0 1 1 9 9a9.01 9.01 0 0 1-9-9"/></svg></span><input type="search" id="artistSearch" placeholder="Cerca artisti..." aria-label="Cerca artisti" autocomplete="off"></label>
+    </div>
+  </div>
+</div>
+<div class="u-arts-grid" id="artistGrid"></div>
 </main>
 
 <div id="siteFooter"></div>
 
-<script src="/data.js?v=202611021755"></script>
-<script src="/site.js?v=202611021755"></script>
-<script src="/pages.js?v=202611021755"></script>
+<script src="/data.js?v=1793705821"></script>
+<script src="/site.js?v=1793705821"></script>
+<script src="/pages.js?v=1793705821"></script>
 </body>
 </html>

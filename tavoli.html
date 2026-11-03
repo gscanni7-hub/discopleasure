@@ -22,50 +22,73 @@
 <!-- /anteprima -->
 <meta name="description" content="Prenota il tuo tavolo a Disco Pleasure, Chalet Valentino, a valle delle Gravare, Roccaraso. Nel weekend finiscono presto.">
 <meta name="theme-color" content="#ffffff">
+<link rel="alternate" hreflang="it" href="https://discopleasure.com/tavoli">
+<link rel="alternate" hreflang="en" href="https://discopleasure.com/en/tables">
+<link rel="alternate" hreflang="x-default" href="https://discopleasure.com/tavoli">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=202611021755">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=1793705821">
 </head>
-<body data-page="tavoli">
+<body data-page="tavoli" class="u-white">
 
 <div id="siteHeader"></div>
 
-<main class="page">
-<section class="page-hero page-hero-xl">
-  <h1 class="page-title xl">Tavoli</h1>
-  <div class="mini-row" id="tableRow"></div>
-</section>
-<div class="filter-bar"><div class="filters" id="evFilters"></div></div>
-<div class="ev-grid" id="evGrid"></div>
-<section class="chapter">
-  <h2 class="giant">La location</h2>
-  <div class="sentinel" aria-hidden="true"></div>
-  <div class="chapter-body">
-    <div class="gallery-2">
-      <div class="g-item dark"><div class="art" data-img="/img/calendario.jpg"></div></div>
-      <div class="g-item dark"><div class="art" data-img="/img/stage.jpg"></div></div>
-      <div class="g-item dark"><div class="art" data-img="/img/ven-5.jpg"></div></div>
-      <div class="g-item dark"><div class="art" data-img="/img/dom-7.jpg"></div></div>
-      <div class="g-item dark"><div class="art" data-img="/img/chalet-piazzale.jpg"></div></div>
-      <div class="g-item dark"><div class="art" data-img="/img/interno.jpg"></div></div>
+<main class="u-page u-vip">
+<!-- Come "VIP Tables" di UNVRS: copertina a sinistra (2/3), scheda del modulo a destra (1/3), separate da 1px -->
+<div class="u-vip-grid">
+  <div class="u-vip-cover dark"><div class="art" data-img="/img/tavoli/copertina-montagna.jpg"></div></div>
+  <div class="u-vip-panel">
+    <div class="u-vip-head">
+      <span class="u-mono u-vip-eyebrow">Richiedi un tavolo per la stagione 26-27</span>
+      <h1 class="u-vip-title">Tavoli</h1>
     </div>
+    <div class="u-done" id="tableDone" hidden role="status" aria-live="polite"></div>
+    <form class="u-form" id="tableForm" novalidate>
+      <div class="u-row">
+        <label class="u-field"><input type="text" name="nome" placeholder="Nome" required autocomplete="given-name"><span>Nome</span></label>
+        <label class="u-field"><input type="text" name="cognome" placeholder="Cognome" required autocomplete="family-name"><span>Cognome</span></label>
+      </div>
+      <label class="u-field"><input type="email" name="email" placeholder="Email" required autocomplete="email"><span>Email</span></label>
+      <div class="u-phone">
+        <label class="u-mono" for="tablePhone">Telefono</label>
+        <div class="u-phone-row">
+          <select name="prefisso" class="u-prefix" aria-label="Prefisso"><option>+39</option><option>+34</option><option>+44</option><option>+33</option><option>+49</option><option>+41</option><option>+1</option></select>
+          <i class="u-sep" aria-hidden="true"></i>
+          <input id="tablePhone" type="tel" name="telefono" placeholder="Numero" required inputmode="tel" autocomplete="tel-national">
+        </div>
+      </div>
+      <label class="u-field u-field-select"><span class="u-static">Numero di persone</span><select name="persone" required><option value="" disabled selected>Scegli</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option></select></label>
+      <div class="u-cal-block">
+        <span class="u-mono u-cal-label">Data</span>
+        <div class="u-cal" id="tableCal"></div>
+        <p class="u-cal-pick" id="tableDatePick">Scegli una data dal calendario: si possono selezionare solo i giorni in cui si balla.</p>
+        <input type="hidden" name="data" id="tableDate">
+      </div>
+      <div class="u-comment">
+        <div class="u-comment-head"><label for="tableNote" class="u-mono">Note</label><span class="u-mono u-opt">Opzionale</span></div>
+        <textarea id="tableNote" name="note" rows="1"></textarea>
+      </div>
+      <div class="u-checks">
+        <label class="u-check"><input type="checkbox" name="novita"><span>Voglio ricevere novità su date, tavoli ed eventi di Disco Pleasure.</span></label>
+        <label class="u-check"><input type="checkbox" name="privacy" required><span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy policy</a>.</span></label>
+      </div>
+      <input type="text" name="_honey" class="u-honey" tabindex="-1" autocomplete="off" aria-hidden="true">
+      <button class="u-submit" type="submit">Invia</button>
+      <p class="u-mono u-form-msg" role="status" aria-live="polite"></p>
+    </form>
+    <p class="u-legal">Disco Pleasure userà i tuoi dati per gestire la richiesta del tavolo e risponderti. Se hai spuntato la casella, li userà anche per inviarti novità su date, tavoli ed eventi, via email o app di messaggistica: puoi dire di no in qualsiasi momento. La richiesta viene inviata via email al team dei tavoli tramite i servizi Resend o FormSubmit. Puoi chiedere la cancellazione dei tuoi dati scrivendoci. Tutti i dettagli nella <a href="/privacy">Privacy policy</a>.</p>
   </div>
-</section>
-<div class="contact-fab" aria-label="Contatti tavoli">
-  <a href="#" id="fabWa" target="_blank" rel="noopener" class="fab fab-wa" aria-label="WhatsApp"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 0 0-7.8 13.5L3 21l4.6-1.2A9 9 0 1 0 12 3Z"/><path d="M9 8.5c0 3.5 3 6.5 6.5 6.5l1-1.5-2-1-1 1c-1-.4-2.1-1.5-2.5-2.5l1-1-1-2L9 8.5Z"/></svg></a>
-  <a href="#" id="fabMail" class="fab" aria-label="Email"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></a>
-  <a href="#" id="fabTel" class="fab" aria-label="Telefono"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2Z"/></svg></a>
 </div>
 </main>
 
 <div id="siteFooter"></div>
 
-<script src="/data.js?v=202611021755"></script>
-<script src="/site.js?v=202611021755"></script>
-<script src="/pages.js?v=202611021755"></script>
+<script src="/data.js?v=1793705821"></script>
+<script src="/site.js?v=1793705821"></script>
+<script src="/pages.js?v=1793705821"></script>
 </body>
 </html>

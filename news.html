@@ -22,31 +22,41 @@
 <!-- /anteprima -->
 <meta name="description" content="Aggiornamenti e tips di Disco Pleasure: date, tavoli, meteo del weekend e cosa portare.">
 <meta name="theme-color" content="#ffffff">
+<link rel="alternate" hreflang="it" href="https://discopleasure.com/news">
+<link rel="alternate" hreflang="en" href="https://discopleasure.com/en/news">
+<link rel="alternate" hreflang="x-default" href="https://discopleasure.com/news">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/icon-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=202611021755">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/styles.css?v=1793705821">
 </head>
-<body data-page="aggiornamenti">
+<body data-page="aggiornamenti" class="u-white">
 
 <div id="siteHeader"></div>
 
-<main class="page">
-<h1 class="index-title">News</h1>
-<div class="filter-bar"><div class="filters" id="newsFilters">
-  <button data-f="all">Tutti</button><button data-f="Aggiornamento">Aggiornamenti</button><button data-f="Tips">Tips</button>
-</div></div>
-<div class="card-grid" id="newsGrid"></div>
-<div class="load-wrap"><button class="btn btn-black" id="loadMore" hidden>Carica altri</button></div>
+<main class="u-upd">
+<!-- Come "Updates" di UNVRS: testata appiccicosa con titolo, conteggio e filtri; griglia di card quadrate -->
+<div class="u-upd-head" id="updHead">
+  <div class="u-upd-head-in">
+    <h1 class="u-upd-title">News</h1>
+    <div class="u-upd-side">
+      <span class="u-mono u-upd-count" id="newsCount"></span>
+      <div class="u-upd-filters-wrap"><div class="u-upd-filters" id="newsFilters" role="tablist" aria-label="Filtra le news">
+        <button data-f="all">Tutte</button><button data-f="Aggiornamento">Aggiornamenti</button><button data-f="Tips">Tips</button>
+      </div></div>
+    </div>
+  </div>
+</div>
+<div class="u-upd-grid" id="newsGrid"></div>
 </main>
 
 <div id="siteFooter"></div>
 
-<script src="/data.js?v=202611021755"></script>
-<script src="/site.js?v=202611021755"></script>
-<script src="/pages.js?v=202611021755"></script>
+<script src="/data.js?v=1793705821"></script>
+<script src="/site.js?v=1793705821"></script>
+<script src="/pages.js?v=1793705821"></script>
 </body>
 </html>
