@@ -150,7 +150,7 @@ const PAGES = {
 
   /* ---------- TAVOLI ---------- */
   tavoli() {
-    const form = $("#tableForm"), msg = $(".u-form-msg", form), btn = $(".u-submit", form);
+    const form = $("#tableForm"), msg = $(".u-form-msg", form);
     // Calendario: si possono scegliere solo i giorni in cui si balla (gli EVENTS), un mese alla volta
     const cal = $("#tableCal"), pick = $("#tableDatePick"), hidden = $("#tableDate"), pickDefault = pick.textContent;
     const MONTHS = T(["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"], ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]);
@@ -172,60 +172,42 @@ const PAGES = {
     const pre = qs("d"); if (pre && days.has(pre)) { view = { y: +pre.slice(0, 4), m: +pre.slice(5, 7) - 1 }; choose(pre); } else draw();
     // il campo Note cresce con il testo, come il textarea di UNVRS
     const note = $("#tableNote"); note.addEventListener("input", () => { note.style.height = "auto"; note.style.height = note.scrollHeight + "px"; });
-    form.addEventListener("submit", async (ev) => {
+    // Invio: si apre WhatsApp verso il numero dei tavoli con la richiesta già scritta.
+    // Niente email e niente server: la richiesta arriva come messaggio, e si risponde da lì.
+    form.addEventListener("submit", (ev) => {
       ev.preventDefault();
       if (!form.checkValidity()) { form.reportValidity(); return; }
       if (!hidden.value) { msg.textContent = T("Scegli una data dal calendario.", "Choose a date from the calendar."); cal.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
       const fd = new FormData(form), e = EVENTS.find((x) => x.id === fd.get("data"));
-      const payload = {
-        nome: fd.get("nome"), cognome: fd.get("cognome"), email: fd.get("email"), prefisso: fd.get("prefisso"), telefono: fd.get("telefono"),
-        persone: fd.get("persone"), data: fd.get("data"), note: fd.get("note") || "", novita: !!fd.get("novita"), privacy: !!fd.get("privacy"), _honey: fd.get("_honey") || "",
-      };
-      btn.disabled = true; msg.textContent = T("Invio in corso…", "Sending…");
-      try {
-        // 1) la nostra funzione su Vercel (api/tavoli.js, email con Resend);
-        // 2) se non è ancora configurata (manca la chiave) o non risponde, si usa FormSubmit come prima
-        let sentOk = false;
-        try {
-          const r = await fetch("/api/tavoli", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-          const j = await r.json().catch(() => ({}));
-          if (r.ok && j.ok) sentOk = true;
-          else if (r.status === 400) throw Object.assign(new Error("dati"), { fatal: true });
-        } catch (e) { if (e.fatal) throw e; }
-        if (!sentOk) {
-          const fs = {
-            _subject: `Richiesta tavolo · ${e ? e.long : ""} · ${payload.nome} ${payload.cognome} · ${payload.persone} pers.`,
-            _template: "table", _captcha: "false", _honey: payload._honey,
-            Nome: payload.nome, Cognome: payload.cognome, Email: payload.email, _replyto: payload.email,
-            Telefono: `${payload.prefisso} ${payload.telefono}`, Persone: payload.persone, Data: e ? e.long : payload.data,
-            Note: payload.note || "-", Novità: payload.novita ? "sì" : "no", Inviato_da: location.href,
-          };
-          const r2 = await fetch(`https://formsubmit.co/ajax/${CONTATTI.richiesteTavoli}`, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" }, body: JSON.stringify(fs) });
-          const j2 = await r2.json().catch(() => ({}));
-          if (!r2.ok || String(j2.success) !== "true") throw new Error(j2.message || r2.status);
-        }
-        // Conferma di ricezione: al posto del modulo compare il riepilogo della richiesta
-        const name = String(fd.get("nome") || "").trim(), when = e ? e.long : "", n = fd.get("persone"), mail = fd.get("email"), tel = `${fd.get("prefisso")} ${fd.get("telefono")}`;
-        const done = $("#tableDone");
-        done.innerHTML = `
-          <span class="u-mono u-vip-eyebrow">${T("Richiesta ricevuta", "Request received")}</span>
-          <h2 class="u-done-title">${T("Grazie", "Thank you")}, ${esc(name)}.</h2>
-          <p class="u-done-lead">${T("Abbiamo ricevuto la tua richiesta. Il nostro team la verificherà e ti contatterà in privato, via WhatsApp o email, con la conferma e tutte le istruzioni per il tuo tavolo.", "We have received your request. Our team will review it and contact you privately, via WhatsApp or email, with the confirmation and all the details for your table.")}</p>
-          <dl class="u-done-list">
-            <div><dt class="u-mono">${T("Data", "Date")}</dt><dd>${esc(when)}</dd></div>
-            <div><dt class="u-mono">${T("Persone", "Guests")}</dt><dd>${esc(n)}</dd></div>
-            <div><dt class="u-mono">Email</dt><dd>${esc(mail)}</dd></div>
-            <div><dt class="u-mono">${T("Telefono", "Phone")}</dt><dd>${esc(tel)}</dd></div>
-          </dl>
-          <p class="u-done-note">${T("La richiesta non è ancora una prenotazione: il tavolo è confermato solo con il nostro messaggio. Se i tuoi piani cambiano, rispondi direttamente a quel messaggio.", "Your request is not a booking yet: the table is confirmed only by our message. If your plans change, simply reply to that message.")}</p>
-          <button class="u-submit" type="button" id="tableAgain">${T("Nuova richiesta", "New request")}</button>`;
-        form.hidden = true; $(".u-vip-head").hidden = true; done.hidden = false;
-        $(".u-vip-panel").scrollTo({ top: 0, behavior: "smooth" }); if (innerWidth < 1281) done.scrollIntoView({ block: "start", behavior: "smooth" });
-        $("#tableAgain").addEventListener("click", () => { done.hidden = true; form.hidden = false; $(".u-vip-head").hidden = false; msg.textContent = ""; });
-        form.reset(); note.style.height = ""; choose(""); msg.textContent = "";
-      } catch (err) {
-        msg.innerHTML = `${T("Non siamo riusciti a inviare la richiesta.", "We couldn't send your request.")} <a href="${waLink(T("Ciao! Vorrei prenotare un tavolo a Disco Pleasure.", "Hi! I'd like to book a table at Disco Pleasure."))}" target="_blank" rel="noopener">${T("Scrivici su WhatsApp", "Message us on WhatsApp")}</a>.`;
-      } finally { btn.disabled = false; }
+      const name = `${String(fd.get("nome") || "").trim()} ${String(fd.get("cognome") || "").trim()}`.trim();
+      const when = e ? e.long : fd.get("data"), n = fd.get("persone"), extra = String(fd.get("note") || "").trim();
+      const text = [
+        T("Ciao! Vorrei richiedere un tavolo a Disco Pleasure.", "Hi! I'd like to request a table at Disco Pleasure."),
+        "",
+        `${T("Nome", "Name")}: ${name}`,
+        `${T("Data", "Date")}: ${when}`,
+        `${T("Persone", "Guests")}: ${n}`,
+        extra ? `${T("Note", "Notes")}: ${extra}` : "",
+      ].filter((x, i) => x || i === 1).join("\n");
+      const wa = waLink(text);
+      // il nuovo tab va aperto subito, dentro il clic, altrimenti il browser lo blocca
+      const win = window.open(wa, "_blank"); if (win) win.opener = null;
+      const done = $("#tableDone");
+      done.innerHTML = `
+        <span class="u-mono u-vip-eyebrow">${T("Ultimo passo", "Last step")}</span>
+        <h2 class="u-done-title">${T("Manda il messaggio", "Send the message")}, ${esc(String(fd.get("nome") || "").trim())}.</h2>
+        <p class="u-done-lead">${T("Ti abbiamo aperto WhatsApp con la richiesta già scritta. Premi invia: il nostro team ti risponde lì con la conferma e tutte le istruzioni per il tuo tavolo.", "We opened WhatsApp with your request already written. Press send: our team will reply there with the confirmation and all the details for your table.")}</p>
+        <dl class="u-done-list">
+          <div><dt class="u-mono">${T("Data", "Date")}</dt><dd>${esc(when)}</dd></div>
+          <div><dt class="u-mono">${T("Persone", "Guests")}</dt><dd>${esc(n)}</dd></div>
+          <div><dt class="u-mono">WhatsApp</dt><dd>+39 340 369 2824</dd></div>
+        </dl>
+        <a class="u-submit u-done-wa" href="${wa}" target="_blank" rel="noopener">${win ? T("Riapri WhatsApp", "Open WhatsApp again") : T("Apri WhatsApp", "Open WhatsApp")}</a>
+        <p class="u-done-note">${T("La richiesta non è ancora una prenotazione: il tavolo è confermato solo con la nostra risposta.", "Your request is not a booking yet: the table is confirmed only by our reply.")}</p>
+        <button class="u-link-btn u-mono" type="button" id="tableAgain">${T("Nuova richiesta", "New request")}</button>`;
+      form.hidden = true; $(".u-vip-head").hidden = true; $(".u-legal").hidden = true; done.hidden = false;
+      $(".u-vip-panel").scrollTo({ top: 0, behavior: "smooth" }); if (innerWidth < 1281) done.scrollIntoView({ block: "start", behavior: "smooth" });
+      $("#tableAgain").addEventListener("click", () => { done.hidden = true; form.hidden = false; $(".u-vip-head").hidden = false; $(".u-legal").hidden = false; msg.textContent = ""; form.reset(); note.style.height = ""; choose(""); });
     });
   },
 

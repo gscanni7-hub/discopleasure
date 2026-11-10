@@ -138,17 +138,16 @@ PRIVACY_EN = '''<main class="page">
 <article class="prose legal">
   <p><strong>This notice explains how Disco Pleasure handles the personal data of people who visit the website and of those who contact us to book a table or ask for information. The Italian version is the legally binding one.</strong></p>
   <h3>1. Data controller</h3>
-  <p>The data controller is <mark class="todo">[to be completed]</mark> (company name), based in <mark class="todo">[to be completed]</mark>, VAT number <mark class="todo">[to be completed]</mark>. For any request about your data you can write to <mark class="todo">[to be completed]</mark> (email).</p>
+  <p>The data controller is <mark class="todo">[to be completed]</mark> (company name), based in <mark class="todo">[to be completed]</mark>, VAT number <mark class="todo">[to be completed]</mark>. For any request about your data you can message us on WhatsApp at <a href="https://wa.me/393403692824">+39 340 369 2824</a>.</p>
   <h3>2. What data we collect</h3>
   <ul>
-    <li><strong>Data you provide</strong>, when you fill in the Tables form (first name, last name, email, phone, number of guests, date and notes) or when you message us on WhatsApp to book or ask for information (name, phone number and whatever you choose to write).</li>
+    <li><strong>Data you provide</strong>, when you message us on WhatsApp to book a table or ask for information: the name and phone number of your WhatsApp profile and whatever you choose to write. The Tables form on the website sends nothing by itself: it prepares the message with first name, last name, date, number of guests and notes, and you are the one who sends it.</li>
     <li><strong>Browsing data</strong>: like every website, the servers hosting it automatically record some technical data (IP address, browser type, pages visited, date and time). They are needed to run the website and keep it secure.</li>
   </ul>
   <p>We do not use profiling tools or advertising cookies.</p>
   <h3>3. Why we process it and on what basis</h3>
   <ul>
     <li><strong>To reply to you and manage your table request</strong>: legal basis, your request (art. 6.1.b GDPR).</li>
-    <li><strong>To send you news about dates, tables and events</strong>, by email or messaging apps, only if you ticked the box in the form: legal basis, your consent (art. 6.1.a GDPR), which you can withdraw at any time.</li>
     <li><strong>To run and protect the website</strong>: legal basis, our legitimate interest (art. 6.1.f GDPR).</li>
   </ul>
   <h3>4. How long we keep it</h3>
@@ -156,9 +155,8 @@ PRIVACY_EN = '''<main class="page">
   <h3>5. Who can see the data</h3>
   <p>Data are never sold or transferred. They may be processed on our behalf, and only for the purposes above, by the providers who help us run the website:</p>
   <ul>
-    <li><strong>Vercel Inc.</strong>: website hosting; receives the Tables form data to forward it by email.</li>
-    <li><strong>Resend</strong> (resend.com): sends the Tables form emails, to our team and as a confirmation of receipt to the person making the request.</li>
-    <li><strong>FormSubmit</strong> (formsubmit.co): as an alternative to Resend, delivers the Tables form requests to our team by email.</li>
+    <li><strong>Vercel Inc.</strong>: website hosting.</li>
+    <li><strong>WhatsApp</strong> (Meta Platforms Ireland): the service we use to receive requests and reply to you.</li>
   </ul>
   <p>Some providers are based outside the European Union. In these cases data are transferred with the safeguards required by the GDPR, such as the European Commission's standard contractual clauses.</p>
   <h3>6. Linked external services</h3>
@@ -168,12 +166,12 @@ PRIVACY_EN = '''<main class="page">
     <li><strong>Eventbrite, WhatsApp and Google Maps</strong>: reached through links. When you open them you leave our website and their own privacy notices apply.</li>
   </ul>
   <h3>7. Your rights</h3>
-  <p>At any time you can ask us to access, correct or delete your data, restrict its use, receive it in a readable format, object to its processing or withdraw your consent, by writing to <mark class="todo">[to be completed]</mark>. If you believe your data are not being handled correctly, you can lodge a complaint with the Italian <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">Data Protection Authority (Garante)</a>.</p>
+  <p>At any time you can ask us to access, correct or delete your data, restrict its use, receive it in a readable format, object to its processing or withdraw your consent, by messaging us on WhatsApp at <a href="https://wa.me/393403692824">+39 340 369 2824</a>. If you believe your data are not being handled correctly, you can lodge a complaint with the Italian <a href="https://www.garanteprivacy.it" target="_blank" rel="noopener">Data Protection Authority (Garante)</a>.</p>
   <h3>8. Cookies</h3>
   <p>To find out which cookies the website uses, read the <a href="/en/cookie">Cookie policy</a>.</p>
   <h3>9. Changes</h3>
   <p>We may update this notice. The version in force is always the one published on this page, with the last update date below.</p>
-  <p class="legal-date">Last updated: <mark class="todo">[to be completed]</mark></p>
+  <p class="legal-date">Last updated: 10 November 2026</p>
 </article>
 </main>'''
 
@@ -202,8 +200,8 @@ COOKIE_EN = '''<main class="page">
   <h3>How to manage cookies</h3>
   <p>You can delete or block cookies from your browser settings (Safari, Chrome, Firefox, Arc and others). Blocking technical cookies does not prevent you from browsing the website.</p>
   <h3>Contact</h3>
-  <p>For questions about this policy write to <mark class="todo">[to be completed]</mark>.</p>
-  <p class="legal-date">Last updated: <mark class="todo">[to be completed]</mark></p>
+  <p>For questions about this policy message us on WhatsApp at <a href="https://wa.me/393403692824">+39 340 369 2824</a>.</p>
+  <p class="legal-date">Last updated: 10 November 2026</p>
 </article>
 </main>'''
 
@@ -249,19 +247,15 @@ PAGES = {
         ('<h1 class="u-vip-title">Tavoli</h1>', '<h1 class="u-vip-title">Tables</h1>'),
         ('placeholder="Nome" required autocomplete="given-name"><span>Nome</span>', 'placeholder="First name" required autocomplete="given-name"><span>First name</span>'),
         ('placeholder="Cognome" required autocomplete="family-name"><span>Cognome</span>', 'placeholder="Last name" required autocomplete="family-name"><span>Last name</span>'),
-        ('for="tablePhone">Telefono<', 'for="tablePhone">Phone<'),
-        ('aria-label="Prefisso"', 'aria-label="Country code"'),
-        ('placeholder="Numero" required', 'placeholder="Number" required'),
         ('>Numero di persone</span>', '>Number of guests</span>'),
         ('<option value="" disabled selected>Scegli</option>', '<option value="" disabled selected>Choose</option>'),
         ('<span class="u-mono u-cal-label">Data</span>', '<span class="u-mono u-cal-label">Date</span>'),
         (">Scegli una data dal calendario: si possono selezionare solo i giorni in cui si balla.<", ">Choose a date from the calendar: only the days we are open can be selected.<"),
         ('class="u-mono">Note</label><span class="u-mono u-opt">Opzionale</span>', 'class="u-mono">Notes</label><span class="u-mono u-opt">Optional</span>'),
-        ("<span>Voglio ricevere novità su date, tavoli ed eventi di Disco Pleasure.</span>", "<span>I'd like to receive news about Disco Pleasure dates, tables and events.</span>"),
         ('<span>Ho letto e accetto la <a href="/privacy" target="_blank">Privacy policy</a>.</span>', '<span>I have read and accept the <a href="/privacy" target="_blank">Privacy policy</a>.</span>'),
-        ('type="submit">Invia</button>', 'type="submit">Send</button>'),
-        ("Disco Pleasure userà i tuoi dati per gestire la richiesta del tavolo e risponderti. Se hai spuntato la casella, li userà anche per inviarti novità su date, tavoli ed eventi, via email o app di messaggistica: puoi dire di no in qualsiasi momento. La richiesta viene inviata via email al team dei tavoli tramite i servizi Resend o FormSubmit. Puoi chiedere la cancellazione dei tuoi dati scrivendoci. Tutti i dettagli nella",
-         "Disco Pleasure will use your data to manage your table request and reply to you. If you ticked the box, it will also use them to send you news about dates, tables and events, by email or messaging apps: you can opt out at any time. The request is emailed to the tables team through the Resend or FormSubmit services. You can ask for your data to be deleted by writing to us. All the details are in the"),
+        ('type="submit">Invia su WhatsApp</button>', 'type="submit">Send on WhatsApp</button>'),
+        ("Premendo Invia si apre WhatsApp con la tua richiesta già scritta: basta mandare il messaggio al numero dei tavoli, +39 340 369 2824. Useremo i tuoi dati solo per risponderti e gestire il tavolo. Tutti i dettagli nella",
+         "Pressing Send opens WhatsApp with your request already written: just send the message to the tables number, +39 340 369 2824. We will use your data only to reply to you and manage your table. All the details are in the"),
     ],
     "news.html": [
         ("Aggiornamenti e tips di Disco Pleasure: date, tavoli, meteo del weekend e cosa portare.", "Disco Pleasure updates and tips: dates, tables, weekend weather and what to wear."),
@@ -323,6 +317,7 @@ def build(fname, reps):
     h = add_alternates(src, slug)
     h = h.replace('<html lang="it">', '<html lang="en">', 1)
     h = h.replace('content="it_IT"', 'content="en_GB"')
+    h = h.replace("https://discopleasure.com/og-home.jpg", "https://discopleasure.com/og-home-en.jpg")
     h = re.sub(r'(property="og:url" content="https://discopleasure\.com)(/[^"]*)"', lambda m: m.group(1) + to_en(m.group(2)) + '"', h)
     head, body = h.split("<body", 1)
     if fname in MAIN_REPLACE:

@@ -378,7 +378,16 @@ function initLangHint() {
   document.body.appendChild(box);
   setTimeout(() => box.classList.add("on"), 1200);
 }
+// Indirizzo ufficiale della pagina per Google: sempre discopleasure.com, senza www e senza parametri
+function setCanonical() {
+  if (document.body.dataset.page === "notfound" || document.querySelector('link[rel="canonical"]')) return;
+  const l = document.createElement("link"); l.rel = "canonical";
+  l.href = "https://discopleasure.com" + (location.pathname.replace(/\/+$/, "") || "/");
+  document.head.appendChild(l);
+}
+
 function bootSite() {
+  setCanonical();
   initLangHint();
   if (EN) { localizeLinks(); new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => n.nodeType === 1 && localizeLinks(n.parentElement || n)))).observe(document.body, { childList: true, subtree: true }); }
   mountHeader();

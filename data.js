@@ -45,16 +45,10 @@ const LANG_URL = (lang) => (lang === "en" ? toEN(PATH) : PATH) + location.search
 
 /* ---------- Tickets e tavoli ---------- */
 const CONTATTI = {
-  // Numero WhatsApp per i tavoli: prefisso internazionale senza "+" e senza spazi (es. 393331234567)
+  // Numero WhatsApp: tavoli, richieste e domande arrivano tutte qui. Prefisso internazionale senza "+" e senza spazi
   whatsapp: "393403692824",
   // Link Eventbrite generale (se una data non ha il suo link, si usa questo)
-  eventbrite: "https://www.eventbrite.it/",
-  email: "eugeniocoppola7@gmail.com",
-  // Riferimento: le richieste del modulo Tavoli ora partono da api/tavoli.js (Resend); il destinatario si imposta su Vercel con TAVOLI_TO
-  richiesteTavoli: "eugeniocoppola7@gmail.com",
-  // Profili social (sostituisci con i link veri)
-  instagram: "#",
-  tiktok: "#",
+  eventbrite: "https://www.eventbrite.it/o/disco-pleasure-106803832821",
 };
 const waLink = (testo) => `https://wa.me/${CONTATTI.whatsapp}?text=${encodeURIComponent(testo)}`;
 
@@ -123,7 +117,8 @@ const EVENTS = SEASON_DATES.map(([y, m, d], i) => {
     entry: ["Info ingresso in arrivo", "Tavoli su prenotazione"],
   };
 });
-// Link Eventbrite per singola data: "2026-12-05": "https://www.eventbrite.it/e/...",
+// Link Eventbrite per singola data (ogni link verificato: la data dell'evento su Eventbrite coincide).
+// Le date senza link mandano alla pagina Disco Pleasure su Eventbrite, con tutti gli eventi.
 const TICKETS = {
   "2026-12-05": "https://www.eventbrite.com/e/2002311265897?aff=oddtdtcreator",
   "2026-12-06": "https://www.eventbrite.com/e/2002311501602?aff=oddtdtcreator",
@@ -144,7 +139,17 @@ const TICKETS = {
   "2027-01-07": "https://www.eventbrite.com/e/2002315247807?aff=oddtdtcreator",
   "2027-01-08": "https://www.eventbrite.com/e/2002315182612?aff=oddtdtcreator",
   "2027-01-09": "https://www.eventbrite.com/e/2002315406281?aff=oddtdtcreator",
-  "2027-01-10": "https://www.eventbrite.it/e/disco-pleasure-apres-ski-1001-chalet-valentino-tickets-2002316123426?aff=oddtdtcreator",
+  "2027-01-10": "https://www.eventbrite.com/e/2004292460704?aff=oddtdtcreator",
+  "2027-01-16": "https://www.eventbrite.com/e/2002316123426?aff=oddtdtcreator",
+  "2027-01-17": "https://www.eventbrite.com/e/2004292910048?aff=oddtdtcreator",
+  "2027-01-23": "https://www.eventbrite.com/e/2004297311212?aff=oddtdtcreator",
+  "2027-01-30": "https://www.eventbrite.com/e/2004304127600?aff=oddtdtcreator",
+  "2027-02-07": "https://www.eventbrite.com/e/2004310849706?aff=oddtdtcreator",
+  "2027-02-13": "https://www.eventbrite.com/e/2004310885814?aff=oddtdtcreator",
+  "2027-02-20": "https://www.eventbrite.com/e/2004311319110?aff=oddtdtcreator",
+  "2027-02-28": "https://www.eventbrite.com/e/2004311892826?aff=oddtdtcreator",
+  "2027-03-06": "https://www.eventbrite.com/e/2004312008171?aff=oddtdtcreator",
+  "2027-03-07": "https://www.eventbrite.com/e/2004312103456?aff=oddtdtcreator",
 };
 EVENTS.forEach((e) => { e.tickets = TICKETS[e.id] || CONTATTI.eventbrite; });
 // Locandine: una per data, in /img/locandine/AAAA-MM-GG.jpg (4:5, 1280x1600).

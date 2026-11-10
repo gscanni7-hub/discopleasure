@@ -29,6 +29,17 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.discopleasure.com"
+        }
+      ],
+      "destination": "https://discopleasure.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/calendario",
       "destination": "/apres-ski",
       "permanent": true

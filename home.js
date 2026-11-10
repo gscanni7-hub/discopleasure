@@ -101,17 +101,25 @@ function initTypewriter() {
 /* ============ APERTURA: titolo fisso che sfuma e scende scorrendo (come UNVRS) ============ */
 function initHeroScroll() {
   const inner = $("#heroInner"), wrap = $("#heroFixed"), subBox = $("#heroSubBox"), ticks = $$(".u-tick"); if (!inner) return;
+  // altezza dello schermo "ferma": sul telefono la barra dell'indirizzo che entra ed esce
+  // cambia innerHeight mentre si scorre, e il titolo saltava. Si aggiorna solo se cambia la larghezza (rotazione).
+  let vh = innerHeight, vw = innerWidth;
+  addEventListener("resize", () => { if (innerWidth !== vw) { vw = innerWidth; vh = innerHeight; } });
+  // se il CSS segue lo scorrimento da solo (animation-timeline), qui restano solo i trattini
+  const cssDriven = window.CSS && CSS.supports("animation-timeline: scroll()");
   scrollHooks.push(() => {
-    const y = scrollY, vh = innerHeight;
+    const y = scrollY;
     // come UNVRS: a 300px di scroll (su 900) il titolo è a opacità 0,41 e scala 0,91
     const p = Math.min(1, Math.max(0, y / (vh * 0.56)));
-    inner.style.opacity = (1 - p).toFixed(3);
-    inner.style.transform = `translateY(${(y * 0.09).toFixed(1)}px) scale(${(1 - 0.15 * p).toFixed(3)})`;
+    if (!cssDriven) {
+      inner.style.opacity = (1 - p).toFixed(3);
+      inner.style.transform = `translateY(${Math.round(y * 0.09)}px) scale(${(1 - 0.15 * p).toFixed(3)})`;
+    }
     wrap.style.visibility = p >= 1 ? "hidden" : "visible";
     // sottotitolo e trattini restano fermi, spariscono quando arriva la prima sezione
     const q = Math.min(1, Math.max(0, (y - vh * 0.45) / (vh * 0.2)));
     const o = (1 - q).toFixed(3);
-    if (subBox) { subBox.style.opacity = o; subBox.style.visibility = q >= 1 ? "hidden" : "visible"; }
+    if (subBox) { if (!cssDriven) subBox.style.opacity = o; subBox.style.visibility = q >= 1 ? "hidden" : "visible"; }
     ticks.forEach((t) => { t.style.opacity = (0.5 * (1 - q)).toFixed(3); t.style.visibility = q >= 1 ? "hidden" : "visible"; });
   });
 }
