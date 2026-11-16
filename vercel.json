@@ -3,6 +3,10 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/googlec902abc3686eb117.html",
+      "destination": "/google-verifica.html"
+    },
+    {
       "source": "/eventi/:anno/:giorno",
       "destination": "/evento"
     },
