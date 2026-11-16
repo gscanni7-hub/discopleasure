@@ -9,7 +9,7 @@ const T = (it, en) => (EN ? en : it);
 // Indirizzi delle due lingue: le pagine inglesi hanno indirizzi tradotti (/tavoli → /en/tables)
 const SLUG_EN = { "apres-ski": "dates", tavoli: "tables", artisti: "artists", "chi-siamo": "about", "come-arrivare": "getting-here", eventi: "events" };
 const SLUG_IT = Object.fromEntries(Object.entries(SLUG_EN).map(([k, v]) => [v, k]));
-const NEWS_SLUG_EN = { "apriamo-il-5": "the-return", tavoli: "tables-guide", "meteo-weekend": "weather", "cosa-portare": "what-to-wear", "dal-26": "sixteen-days" };
+const NEWS_SLUG_EN = { "dove-dormire": "where-to-stay", "apriamo-il-5": "the-return", tavoli: "tables-guide", "meteo-weekend": "weather", "cosa-portare": "what-to-wear", "dal-26": "sixteen-days" };
 const NEWS_SLUG_IT = Object.fromEntries(Object.entries(NEWS_SLUG_EN).map(([k, v]) => [v, k]));
 const MESE_IT = ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"];
 const MESE_EN = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
@@ -156,6 +156,16 @@ EVENTS.forEach((e) => { e.tickets = TICKETS[e.id] || CONTATTI.eventbrite; });
 // Per aggiungerne una basta mettere il file e la data in questa lista.
 const POSTERS = ["2026-12-05", "2026-12-06", "2026-12-07", "2026-12-08"];
 EVENTS.forEach((e) => { if (POSTERS.includes(e.id)) e.poster = `/img/locandine/${e.id}.jpg`; });
+// Line-up confermate, dalle locandine: [nome della serata, [artisti]]. Le altre date restano "Guest da annunciare".
+const LINEUPS = {
+  "2026-12-05": ["Club Tropicana", ["Mario Bianco b2b Gabriele Del Prete", "Castiglione", "Jessica"]],
+  "2026-12-06": ["Les Italiens", ["Carlo Martino", "Kiara", "Coolkid b2b Kosh", "Marco Morelli"]],
+  "2026-12-07": ["Brunch dell'Immacolata", ["Davide Piccolo", "Edo Baccari", "Rakk"]],
+  "2026-12-08": ["Moody · Nulife · Echo", ["Hoodia", "Enrico Merrone", "La Montagna", "Gargano", "Davide Messina b2b Lucio Belli"]],
+};
+EVENTS.forEach((e) => { const l = LINEUPS[e.id]; if (l) e.lineup = [{ area: l[0], names: l[1] }]; });
+// Nome della data per titoli e Google: nome speciale e/o nome della serata, altrimenti "Après-ski"
+const evName = (e) => [e.tag, e.lineup[0] && e.lineup[0].area !== "Line-up" ? e.lineup[0].area : ""].filter(Boolean).join(" · ") || "Après-ski";
 const eventById = (id) => EVENTS.find((e) => e.id === id) || EVENTS[0];
 const eventByPath = (path) => EVENTS.find((e) => e.url === toIT(path));
 const tableMsg = (e) => T(`Ciao! Vorrei prenotare un tavolo a Disco Pleasure per ${e.long.toLowerCase()}.`, `Hi! I'd like to book a table at Disco Pleasure for ${e.long}.`);
@@ -219,6 +229,45 @@ const ARTISTS = [
 */
 const NEWS = [
   {
+    id: "dove-dormire", tag: "Tips", date: "16 novembre 2026", title: "Dove dormire, a quanti minuti dalla festa", img: "/img/news/rivisondoli-inverno.jpg",
+    credits: [
+      { by: "Luca Margheriti", lic: "CC BY-SA 3.0", licUrl: "https://creativecommons.org/licenses/by-sa/3.0/", src: "https://commons.wikimedia.org/wiki/File:Rivisondoli,_Province_of_L%27Aquila,_Italy_-_panoramio.jpg" },
+      { by: "Luca Margheriti", lic: "CC BY-SA 3.0", licUrl: "https://creativecommons.org/licenses/by-sa/3.0/", src: "https://commons.wikimedia.org/wiki/File:Pista_di_AREMOGNA_-_panoramio.jpg" },
+      { by: "Pattiolivieri", lic: "CC BY-SA 4.0", licUrl: "https://creativecommons.org/licenses/by-sa/4.0/", src: "https://commons.wikimedia.org/wiki/File:Roccaraso_innevato.jpg" },
+      { by: "maury3001", lic: "CC BY 3.0", licUrl: "https://creativecommons.org/licenses/by/3.0/", src: "https://commons.wikimedia.org/wiki/File:Pescocostanzo_-_panoramio.jpg" },
+      { by: "Carmine Riccio", lic: "CC BY 2.5", licUrl: "https://creativecommons.org/licenses/by/2.5/", src: "https://commons.wikimedia.org/wiki/File:Castel-di-Sangro-sotto-neve.jpg" },
+    ],
+    lead: "Dalla camera alla piattaforma: gli indirizzi giusti intorno all'Aremogna, con i chilometri e i minuti di strada fino allo Chalet Valentino.",
+    intro: [
+      "Scegliere dove dormire, quassù, vuol dire scegliere che giornata fare. Sulle piste si passa dal letto agli sci. In paese si cena tra le vetrine e la mattina si sale in auto. Nei borghi intorno si dorme nel silenzio, a un quarto d'ora di curve.",
+      "Le distanze sono in auto fino al parcheggio delle Gravare, a settanta metri dallo chalet. I tempi valgono con la strada pulita: con la neve, contate qualche minuto in più. Dal 15 novembre al 15 aprile in Alto Sangro servono gomme invernali o catene a bordo.",
+    ],
+    sections: [
+      { h: "Sulle piste", img: "/img/news/pista-aremogna.jpg", label: "Aremogna e Pizzalto · fino a 3 km",
+        text: [
+          "Per chi vuole tutto a portata di scarpone. Il Principessa Giovanna Boutique Chalet sta sulle piste del Macchione, all'Aremogna, a meno di un chilometro dalla piattaforma.",
+          "Hotel Pizzalto, ai piedi dell'omonima seggiovia: 2,9 km, 8 minuti.",
+        ] },
+      { h: "Roccaraso, il paese", img: "/img/news/roccaraso-innevato.jpg", label: "9-11 km · 17-18 minuti",
+        text: [
+          "Il cuore della stagione: negozi, ristoranti, la passeggiata della sera. All'Aremogna si sale lungo via Aremogna.",
+          "Le Ortensie, quattro stelle: 10,9 km, 18 minuti. Hotel Suisse: 9,6 km, 18 minuti. Hotel Excelsior: 9,2 km, 17 minuti.",
+          "Albergo da Remo: 9 km, 17 minuti. Hotel Sporting: 9 km, 17 minuti.",
+        ] },
+      { h: "Rivisondoli e Pescocostanzo", img: "/img/news/pescocostanzo-borgo.jpg", label: "8-14 km · 15-21 minuti",
+        text: [
+          "Due borghi di pietra sull'altopiano, per chi la sera preferisce un camino a una piazza affollata. Pescocostanzo è tra i Borghi più belli d'Italia.",
+          "Dal centro di Rivisondoli: 8,2 km, 15 minuti. Qui c'è l'Aqua Montis Resort & Spa, quattro stelle con spa.",
+          "Dal centro di Pescocostanzo: 12,9 km, 21 minuti. Masseria Cerasella, in campagna appena fuori dal paese: 14,2 km, 20 minuti.",
+        ] },
+      { h: "Castel di Sangro", img: "/img/news/castel-di-sangro-neve.jpg", label: "Circa 20 km · 35 minuti",
+        text: [
+          "La cittadina più grande della valle, comoda per chi arriva tardi o cerca più posti letto. Dal centro: 19,4 km, 33 minuti.",
+          "Hotel Il Tiglio: 19,6 km, 34 minuti. Il Lavatoio, nato dal recupero del vecchio lavatoio comunale: 19,3 km, 34 minuti.",
+        ] },
+    ],
+  },
+  {
     id: "apriamo-il-5", tag: "Aggiornamento", date: "15 novembre 2026", title: "Il ritorno, a 1.500 metri", img: "/img/news/roccaraso-innevato.jpg",
     credits: [
       { by: "Pattiolivieri", lic: "CC BY-SA 4.0", licUrl: "https://creativecommons.org/licenses/by-sa/4.0/", src: "https://commons.wikimedia.org/wiki/File:Roccaraso_innevato.jpg" },
@@ -253,10 +302,10 @@ const NEWS = [
           "Sabati, ponte dell'Immacolata, Capodanno ed Epifania: sono le giornate in cui la piattaforma si riempie già nel primo pomeriggio. Per i gruppi numerosi la prenotazione è la differenza tra un pomeriggio comodo e uno passato con lo zaino in spalla.",
           "Nei giorni feriali di gennaio c'è più respiro, ma una richiesta prima di salire resta un gesto elegante.",
         ] },
-      { h: "Come si chiede", img: "/img/news/berretto-neve.jpg", label: "Il modulo",
+      { h: "Come si chiede", img: "/img/news/berretto-neve.jpg", label: "Su WhatsApp",
         text: [
-          "Dalla pagina Tavoli: nome, contatti, quante persone siete, fino a quindici, e la data scelta dal calendario, dove si accendono solo i giorni in cui si balla.",
-          "Rispondiamo noi con la disponibilità. Se la data che sognavi è al completo, ti proponiamo la più vicina.",
+          "Dalla pagina Tavoli: nome, quante persone siete, fino a quindici, e la data scelta dal calendario, dove si accendono solo i giorni in cui si balla. Premendo invia si apre WhatsApp con la richiesta già scritta.",
+          "Ti rispondiamo lì con la disponibilità. Se la data che sognavi è al completo, ti proponiamo la più vicina.",
         ] },
       { h: "Il giorno stesso", img: "/img/news/terranera-monte-rotondo.jpg", label: "All'arrivo",
         text: [
@@ -358,16 +407,18 @@ const HOME = {
     { day: "Fino al 14 marzo", title: "Weekend", img: "/img/season/weekend.jpg", href: "/apres-ski?dal=2027-01-16&al=2027-03-14" },
   ],
   residents: ARTISTS,
-  // Tickets: le date con un nome, ognuna col suo link Eventbrite (in home la card mostra il sigillo, non la foto)
+  // Tickets: le date con un nome, ognuna col suo link Eventbrite (in home la card mostra la locandina se c'è, altrimenti il mappamondo)
   tickets: [
     ["2026-12-05", "/img/recap-flash.jpg"],
+    ["2026-12-06", "/img/recap-flash.jpg"],
+    ["2026-12-07", "/img/recap-flash.jpg"],
     ["2026-12-08", "/img/lun-8.jpg"],
     ["2026-12-26", "/img/palla.jpg"],
     ["2026-12-31", "/img/interno.jpg"],
     ["2027-01-01", "/img/recap-orablu.jpg"],
     ["2027-01-06", "/img/stage.jpg"],
     ["2027-03-14", "/img/ven-5.jpg"],
-  ].map(([id, img]) => { const e = EVENTS.find((x) => x.id === id); return { day: e.short, title: e.title, img, href: e.url, tickets: TICKETS[id] || null }; }),
+  ].map(([id, img]) => { const e = EVENTS.find((x) => x.id === id); return { id, day: e.short, title: e.tag ? e.title : (LINEUPS[id] ? LINEUPS[id][0] : e.title), img, poster: e.poster || null, href: e.url, tickets: TICKETS[id] || null }; }),
 };
 
 

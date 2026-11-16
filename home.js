@@ -31,10 +31,13 @@ function renderHome() {
   $("#lineupRail").innerHTML = HOME.residents.map((a, i) =>
     uCard({ href: L(`/artisti/${a.slug}`), media: a.img ? art(a.img) : `<div class="art silhouette" role="img" aria-label="${T("Foto di", "Photo of")} ${esc(a.name)} ${T("in arrivo", "coming soon")}"></div>`, label: a.day, title: a.name }, i)).join("");
 
-  // Prossime date: sigillo nei colori del marchio, scritta sotto, link Eventbrite
+  // Prossime date: locandina (o mappamondo), scritta sotto, link Eventbrite
   $("#ticketsRail").innerHTML = HOME.tickets.map((t, i) => {
     const [bg, fg] = ["#050507", "#ffffff"]; // tutte le card: fondo nero, mappamondo bianco
-    const media = `<span class="seal-card" style="--sb:${bg};--sf:${fg}"><svg class="seal" data-ball="seal" data-speed="${(0.8 + (i % 3) * 0.2).toFixed(1)}" aria-hidden="true"></svg></span>`;
+    // con la locandina la card mostra quella; senza, il mappamondo bianco su fondo nero
+    const media = t.poster
+      ? `<img class="u-card-poster" src="${webp(SMALL ? t.poster.replace("/img/", "/img/m/") : t.poster)}" alt="${T("Locandina", "Poster")} ${esc(t.day)}" loading="lazy" decoding="async">`
+      : `<span class="seal-card" style="--sb:${bg};--sf:${fg}"><svg class="seal" data-ball="seal" data-speed="${(0.8 + (i % 3) * 0.2).toFixed(1)}" aria-hidden="true"></svg></span>`;
     return uCard({ href: t.href, media, label: t.day, title: t.title, foot: true, tickets: t.tickets }, i);
   }).join("");
 

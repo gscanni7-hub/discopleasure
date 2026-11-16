@@ -20,9 +20,9 @@ const PAGES = {
   evento() {
     const e = eventByPath(location.pathname) || eventById(qs("d"));
     if (location.pathname !== L(e.url)) history.replaceState(null, "", L(e.url) + location.hash); // vecchi link → indirizzo pulito
-    document.title = `${e.title} · ${e.short} | Disco Pleasure`;
+    document.title = `${evName(e)} · ${e.short} | Disco Pleasure`;
     $("#evPhase").textContent = e.phase;
-    $("#evTitle").textContent = e.title;
+    $("#evTitle").textContent = evName(e);
     $("#evDate").textContent = `${e.long} · ${e.hours}`;
     Object.assign($("#evTickets"), { href: e.tickets, target: "_blank", rel: "noopener" });
     Object.assign($("#evTables"), { href: `${L("/tavoli")}?d=${e.id}` });

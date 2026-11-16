@@ -28,7 +28,8 @@ EVENTS.forEach((e) => {
   e.short = `${GIORNI_BREVI[d.getDay()]} ${dd}.${m + 1}`;
   e.long = `${GIORNI[d.getDay()]} ${dd} ${MESI[m]} ${y}`;
   e.card = `${GIORNI_BREVI[d.getDay()]}, ${dd} ${MESI_BREVI[m]} ${y}`;
-  e.lineup = [{ area: "Line-up", names: ["Resident", "Guest TBA"] }];
+  if (!LINEUPS[e.id]) e.lineup = [{ area: "Line-up", names: ["Resident", "Guest TBA"] }];
+  else if (e.id === "2026-12-07") e.lineup[0].area = "Immacolata Brunch";
   e.entry = ["Entry info coming soon", "Tables on request"];
 });
 
@@ -37,7 +38,7 @@ Object.assign(HOME.residencies[0], { day: "December 5 – 8", title: "Opening" }
 Object.assign(HOME.residencies[1], { day: "December 26 – January 10", title: "The holidays" });
 Object.assign(HOME.residencies[2], { day: "December 31 · January 1", title: "New Year" });
 Object.assign(HOME.residencies[3], { day: "Until March 14", title: "Weekends" });
-HOME.tickets.forEach((t, i) => { const e = EVENTS.find((x) => x.url === t.href); if (e) Object.assign(t, { day: e.short, title: e.title }); });
+HOME.tickets.forEach((t, i) => { const e = EVENTS.find((x) => x.url === t.href); if (e) Object.assign(t, { day: e.short, title: e.tag ? e.title : (e.lineup[0].area !== "Line-up" ? e.lineup[0].area : e.title) }); });
 
 // Artisti
 const ARTISTS_EN = {
@@ -79,6 +80,26 @@ ARTISTS.forEach((a) => Object.assign(a, ARTISTS_EN[a.slug] || {}));
 
 // News
 const NEWS_EN = {
+  "dove-dormire": { tag: "Tips", date: "November 16, 2026", title: "Where to stay, minutes from the party",
+    lead: "From your room to the platform: the right addresses around Aremogna, with the kilometres and minutes of road to Chalet Valentino.",
+    intro: [
+      "Choosing where to sleep up here means choosing what kind of day to have. On the slopes you go from bed to skis. In town you dine among the shop windows and drive up in the morning. In the villages around you sleep in silence, a quarter of an hour of bends away.",
+      "Distances are by car to the Gravare car park, seventy metres from the chalet. Times assume a clear road: with snow, allow a few minutes more. From November 15 to April 15, winter tyres or snow chains on board are required in Alto Sangro."],
+    sections: [
+      { h: "On the slopes", label: "Aremogna and Pizzalto · up to 3 km", text: [
+        "For those who want everything within ski-boot reach. Principessa Giovanna Boutique Chalet sits on the Macchione slopes at Aremogna, less than a kilometre from the platform.",
+        "Hotel Pizzalto, at the foot of the chairlift of the same name: 2.9 km, 8 minutes."] },
+      { h: "Roccaraso, the town", label: "9-11 km · 17-18 minutes", text: [
+        "The heart of the season: shops, restaurants, the evening stroll. You drive up to Aremogna along Via Aremogna.",
+        "Le Ortensie, four stars: 10.9 km, 18 minutes. Hotel Suisse: 9.6 km, 18 minutes. Hotel Excelsior: 9.2 km, 17 minutes.",
+        "Albergo da Remo: 9 km, 17 minutes. Hotel Sporting: 9 km, 17 minutes."] },
+      { h: "Rivisondoli and Pescocostanzo", label: "8-14 km · 15-21 minutes", text: [
+        "Two stone villages on the plateau, for those who prefer a fireplace to a crowded square in the evening. Pescocostanzo is one of the Most Beautiful Villages in Italy.",
+        "From the centre of Rivisondoli: 8.2 km, 15 minutes. Here you'll find Aqua Montis Resort & Spa, four stars with a spa.",
+        "From the centre of Pescocostanzo: 12.9 km, 21 minutes. Masseria Cerasella, in the countryside just outside the village: 14.2 km, 20 minutes."] },
+      { h: "Castel di Sangro", label: "About 20 km · 35 minutes", text: [
+        "The largest town in the valley, handy if you arrive late or need more beds. From the centre: 19.4 km, 33 minutes.",
+        "Hotel Il Tiglio: 19.6 km, 34 minutes. Il Lavatoio, born from the restoration of the old town wash-house: 19.3 km, 34 minutes."] }] },
   "apriamo-il-5": { tag: "Update", date: "November 15, 2026", title: "The return, at 1,500 metres",
     lead: "On Saturday, December 5, Chalet Valentino opens the season. Four days of long weekend, from noon to 7 pm, with snow as the set and afternoon light as the only dress code.",
     intro: [
@@ -97,9 +118,9 @@ const NEWS_EN = {
       { h: "When to book", label: "Weekends and holidays", text: [
         "Saturdays, the Immaculate Conception weekend, New Year and Epiphany are the days when the platform fills up early in the afternoon. For large groups, booking makes the difference between a comfortable afternoon and one spent with a backpack on your shoulders.",
         "Weekdays in January are quieter, but a request before you come up is always an elegant gesture."] },
-      { h: "How to request one", label: "The form", text: [
-        "From the Tables page: name, contact details, how many you are, up to fifteen, and the date chosen from the calendar, where only the days we are open can be selected.",
-        "We reply with availability. If the date you had in mind is full, we suggest the closest one."] },
+      { h: "How to request one", label: "On WhatsApp", text: [
+        "From the Tables page: name, how many you are, up to fifteen, and the date chosen from the calendar, where only the days we are open can be selected. Pressing send opens WhatsApp with your request already written.",
+        "We reply there with availability. If the date you had in mind is full, we suggest the closest one."] },
       { h: "On the day", label: "On arrival", text: [
         "At the entrance just give the name on the booking and we will walk you to your table. If your plans change, let us know so we can give the spot to someone else.",
         "A regular's tip: the table is your base, but the party is on the dancefloor. Don't stay seated too long."] }] },

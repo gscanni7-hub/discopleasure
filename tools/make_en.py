@@ -16,7 +16,7 @@ GMAPS = "https://www.google.com/maps/search/?api=1&amp;query=Chalet+Valentino+Vi
 
 
 SLUG_EN = {"apres-ski": "dates", "tavoli": "tables", "artisti": "artists", "chi-siamo": "about", "come-arrivare": "getting-here", "eventi": "events"}
-NEWS_SLUG_EN = {"apriamo-il-5": "the-return", "tavoli": "tables-guide", "meteo-weekend": "weather", "cosa-portare": "what-to-wear", "dal-26": "sixteen-days"}
+NEWS_SLUG_EN = {"dove-dormire": "where-to-stay", "apriamo-il-5": "the-return", "tavoli": "tables-guide", "meteo-weekend": "weather", "cosa-portare": "what-to-wear", "dal-26": "sixteen-days"}
 MESE_IT = ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre"]
 MESE_EN = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
 # file delle pagine inglesi (nome tradotto = indirizzo tradotto, con cleanUrls di Vercel)
@@ -206,14 +206,13 @@ COOKIE_EN = '''<main class="page">
 </main>'''
 
 OG_ALT = [("Disco Pleasure, la notte sale in quota. Chalet Valentino, Roccaraso.", "Disco Pleasure, where the night goes higher. Chalet Valentino, Roccaraso.")]
-DESC_HOME_IT = "Disco Pleasure · Après-ski all&#x27;aperto allo Chalet Valentino, a valle delle Gravare, Roccaraso. 5-8 dicembre, tutti i giorni dal 26 dicembre al 10 gennaio, poi ogni weekend fino al 14 marzo. Dalle 12 alle 19."
-DESC_HOME_EN = "Disco Pleasure · Outdoor après-ski at Chalet Valentino, Valle delle Gravare, Roccaraso. December 5-8, every day from December 26 to January 10, then every weekend until March 14. Noon to 7 pm."
+DESC_HOME_IT = "Après-ski all'aperto allo Chalet Valentino, Roccaraso. Dal 5 dicembre al 14 marzo, dalle 12 alle 19: date, tickets e tavoli."
+DESC_HOME_EN = "Outdoor après-ski at Chalet Valentino, Roccaraso. December 5 to March 14, noon to 7 pm: dates, tickets and tables."
 
 PAGES = {
     "index.html": [
         (f"Disco Pleasure | {TAG_IT}", f"Disco Pleasure | {TAG_EN}"),
         (DESC_HOME_IT, DESC_HOME_EN),
-        (DESC_HOME_IT.replace("&#x27;", "'"), DESC_HOME_EN),
         (f'aria-label="{TAG_IT}"', f'aria-label="{TAG_EN}"'),
         ('data-words="La|Notte|Sale|In quota">La<', 'data-words="The|Night|Goes|Higher">The<'),
         (f'<h1 class="sr-only">{TAG_IT}</h1>', f'<h1 class="sr-only">{TAG_EN}</h1>'),
@@ -225,8 +224,8 @@ PAGES = {
         (">Tutte le date →<", ">All dates →<"),
     ],
     "apres-ski.html": [
-        ("Tutte le date di Disco Pleasure allo Chalet Valentino, a valle delle Gravare (Roccaraso): 5-8 dicembre, dal 26 dicembre al 10 gennaio, poi ogni weekend fino al 14 marzo.",
-         "All Disco Pleasure dates at Chalet Valentino, Valle delle Gravare (Roccaraso): December 5-8, from December 26 to January 10, then every weekend until March 14."),
+        ("Le date di Disco Pleasure allo Chalet Valentino, Roccaraso: 5-8 dicembre, ogni giorno dal 26 dicembre al 10 gennaio, poi i weekend fino al 14 marzo.",
+         "Disco Pleasure dates at Chalet Valentino, Roccaraso: December 5-8, every day from December 26 to January 10, then weekends until March 14."),
         (">Stagione 26-27<", ">Season 26-27<"),
         (">Dal 5 dicembre al 14 marzo · 12:00 – 19:00<", ">December 5 to March 14 · 12:00 – 19:00<"),
         ('aria-label="Filtra per mese"', 'aria-label="Filter by month"'),
@@ -275,21 +274,23 @@ PAGES = {
     "artista.html": [
         ("Artisti 2026/27 | Disco Pleasure", "Artists 2026/27 | Disco Pleasure"),
         ("Resident e guest di Disco Pleasure, stagione 2026/27.", "Disco Pleasure residents and guests, 2026/27 season."),
-        ('<h1 class="u-upd-title">Artisti</h1>', '<h1 class="u-upd-title">Artists</h1>'),
+        ('<h2 class="u-upd-title">Artisti</h2>', '<h2 class="u-upd-title">Artists</h2>'),
         ('placeholder="Cerca artisti..." aria-label="Cerca artisti"', 'placeholder="Search artists..." aria-label="Search artists"'),
     ],
     "chi-siamo.html": [
+        ("Disco Pleasure è l'après-ski all'aperto dello Chalet Valentino, a valle delle Gravare, Roccaraso: la festa sulla neve, il piazzale, l'ora blu.", "Disco Pleasure is the outdoor après-ski of Chalet Valentino, Valle delle Gravare, Roccaraso: the party on the snow, the square, the blue hour."),
         ("Chi siamo | Disco Pleasure", "About | Disco Pleasure"),
-        ("Chi siamo: Disco Pleasure è l&#x27;après-ski all&#x27;aperto dello Chalet Valentino, a valle delle Gravare, a Roccaraso. La festa all&#x27;aperto, il piazzale, Roccaraso, l&#x27;ora blu.", "About Disco Pleasure, the outdoor après-ski of Chalet Valentino, Valle delle Gravare, Roccaraso. The party outdoors, the square, Roccaraso, the blue hour."),
-        ("Chi siamo: Disco Pleasure è l'après-ski all'aperto dello Chalet Valentino, a valle delle Gravare, a Roccaraso. La festa all'aperto, il piazzale, Roccaraso, l'ora blu.", "About Disco Pleasure, the outdoor après-ski of Chalet Valentino, Valle delle Gravare, Roccaraso. The party outdoors, the square, Roccaraso, the blue hour."),
     ],
     "come-arrivare.html": [
+        ("Come arrivare allo Chalet Valentino, Roccaraso: con gli sci dalla pista Valle delle Gravare, in auto fino all'Aremogna, parcheggio e rientro.", "How to get to Chalet Valentino, Roccaraso: on skis from the Valle delle Gravare slope, by car up to Aremogna, parking and the way back."),
         ("Come arrivare | Disco Pleasure", "Getting here | Disco Pleasure"),
-        ("Come arrivare allo Chalet Valentino, Viale delle Gravare, Roccaraso: con gli sci dalla pista Valle delle Gravare, in auto fino all&#x27;Aremogna, parcheggio e rientro.", "How to get to Chalet Valentino, Viale delle Gravare, Roccaraso: on skis from the Valle delle Gravare slope, by car up to Aremogna, parking and the way back."),
-        ("Come arrivare allo Chalet Valentino, Viale delle Gravare, Roccaraso: con gli sci dalla pista Valle delle Gravare, in auto fino all'Aremogna, parcheggio e rientro.", "How to get to Chalet Valentino, Viale delle Gravare, Roccaraso: on skis from the Valle delle Gravare slope, by car up to Aremogna, parking and the way back."),
     ],
-    "privacy.html": [],
-    "cookie.html": [],
+    "privacy.html": [
+        ("Informativa privacy di Disco Pleasure: quali dati raccogliamo, perché, per quanto tempo e quali sono i tuoi diritti.", "Disco Pleasure privacy policy: what data we collect, why, for how long and what your rights are."),
+    ],
+    "cookie.html": [
+        ("Cookie policy di Disco Pleasure: nessun cookie di profilazione o pubblicità, solo due piccole memorie tecniche del browser.", "Disco Pleasure cookie policy: no profiling or advertising cookies, only two small technical items stored in your browser."),
+    ],
 }
 MAIN_REPLACE = {"chi-siamo.html": CHI_EN, "come-arrivare.html": FAQ_EN, "privacy.html": PRIVACY_EN, "cookie.html": COOKIE_EN}
 
