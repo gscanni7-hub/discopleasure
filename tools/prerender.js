@@ -63,7 +63,22 @@ function fill(html, id, inner) {
 const outFile = (url) => path.join(ROOT, url.replace(/^\//, '') + '.html');
 const write = (file, html) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, html); };
 
+// Pagine fisse: l'indirizzo ufficiale scritto nell'HTML (Bing legge poco il JavaScript)
+const STATIC_PAGES = [['/tavoli', 'tavoli.html', '/en/tables', 'en/tables.html'], ['/chi-siamo', 'chi-siamo.html', '/en/about', 'en/about.html'],
+  ['/come-arrivare', 'come-arrivare.html', '/en/getting-here', 'en/getting-here.html'], ['/privacy', 'privacy.html', '/en/privacy', 'en/privacy.html'],
+  ['/cookie', 'cookie.html', '/en/cookie', 'en/cookie.html']];
+function staticCanonicals() {
+  for (const [itU, itF, enU, enF] of STATIC_PAGES) for (const [u, f] of [[itU, itF], [enU, enF]]) {
+    const file = path.join(ROOT, f);
+    let html = fs.readFileSync(file, 'utf8').replace(/<link rel="canonical"[^>]*>\n?/g, '');
+    html = html.replace('<link rel="icon"', `<link rel="canonical" href="${SITE + u}">\n<link rel="icon"`);
+    fs.writeFileSync(file, html);
+  }
+}
+
 (async () => {
+  staticCanonicals();
+  if (process.env.ONLY_CANONICAL) return;
   const b = await puppeteer.launch({ executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', headless: 'new' });
   let page;
   const newTab = async () => {
