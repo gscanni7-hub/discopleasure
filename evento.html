@@ -32,40 +32,40 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=1795095468">
+<link rel="stylesheet" href="/styles.css?v=1795097186">
 </head>
 <body data-page="evento">
 
 <div id="siteHeader"></div>
 
-<main class="page">
-<div class="page-top">
-<section class="page-hero">
-  <span class="badge badge-gray" id="evPhase"></span>
-  <h1 class="page-title" id="evTitle"></h1>
-  <p class="page-sub" id="evDate"></p>
-  <div class="hero-actions">
-    <a class="btn btn-black" id="evTickets" href="#">Tickets</a>
-    <a class="btn btn-black" id="evTables" href="/tavoli">Tavoli</a>
+<main class="u-page u-evp">
+<!-- Pagina della data, nello stile del resto del sito: testata, locandina a sinistra, riquadri in vetro a destra, poi le altre date -->
+<header class="u-evp-head">
+  <p class="u-mono u-eyebrow"><span id="evPhase"></span> · Chalet Valentino · Roccaraso</p>
+  <h1 class="u-title u-evp-title" id="evTitle"></h1>
+  <p class="u-mono u-page-sub" id="evDate"></p>
+  <div class="u-evp-actions">
+    <a class="u-btn u-btn-ink" id="evTickets" href="#">Tickets</a>
+    <a class="u-btn u-evp-ghost" id="evTables" href="/tavoli">Tavoli</a>
   </div>
-</section>
-<div class="media-card dark"><div class="art" id="evImg"></div></div>
+</header>
+<div class="u-evp-grid">
+  <div class="u-evp-media"><div class="art" id="evImg"></div></div>
+  <article class="u-evp-body" id="evBody"></article>
 </div>
-<article class="prose" id="evBody"></article>
-<section class="chapter">
-  <h2 class="giant">Date</h2>
-  <div class="sentinel" aria-hidden="true"></div>
-  <div class="chapter-body">
-    <div class="filter-bar"><div class="filters" id="evFilters"></div></div>
-    <div class="ev-grid" id="evGrid"></div>
-  </div>
+<section class="u-evp-more">
+  <header class="u-head u-page-head">
+    <h2 class="u-title">Altre date</h2>
+    <div class="u-filters" id="evFilters" aria-label="Filtra per mese"></div>
+  </header>
+  <div class="u-grid" id="evGrid"></div>
 </section>
 </main>
 
 <div id="siteFooter"></div>
 
-<script src="/data.js?v=1795095468"></script>
-<script src="/site.js?v=1795095468"></script>
-<script src="/pages.js?v=1795095468"></script>
+<script src="/data.js?v=1795097186"></script>
+<script src="/site.js?v=1795097186"></script>
+<script src="/pages.js?v=1795097186"></script>
 </body>
 </html>

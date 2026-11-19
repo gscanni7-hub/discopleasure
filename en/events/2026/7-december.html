@@ -32,64 +32,73 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/styles.css?v=1795095468">
+<link rel="stylesheet" href="/styles.css?v=1795097186">
 </head>
 <body data-page="evento">
 
 <div id="siteHeader"></div>
 
-<main class="page">
-<div class="page-top">
-<section class="page-hero">
-  <span class="badge badge-gray" id="evPhase">Opening weekend</span>
-  <h1 class="page-title" id="evTitle">Immacolata Brunch</h1>
-  <p class="page-sub" id="evDate">Monday 7 December 2026 · 12:00 - 19:00</p>
-  <div class="hero-actions">
-    <a class="btn btn-black" id="evTickets" href="#">Tickets</a>
-    <a class="btn btn-black" id="evTables" href="/en/tables">Tables</a>
+<main class="u-page u-evp">
+<!-- Pagina della data, nello stile del resto del sito: testata, locandina a sinistra, riquadri in vetro a destra, poi le altre date -->
+<header class="u-evp-head">
+  <p class="u-mono u-eyebrow"><span id="evPhase">Opening weekend</span> · Chalet Valentino · Roccaraso</p>
+  <h1 class="u-title u-evp-title" id="evTitle">Immacolata Brunch</h1>
+  <p class="u-mono u-page-sub" id="evDate">Monday 7 December 2026 · 12:00 - 19:00</p>
+  <div class="u-evp-actions">
+    <a class="u-btn u-btn-ink" id="evTickets" href="#">Tickets</a>
+    <a class="u-btn u-evp-ghost" id="evTables" href="/en/tables">Tables</a>
   </div>
-</section>
-<div class="media-card dark"><div class="art" id="evImg"></div></div>
+</header>
+<div class="u-evp-grid">
+  <div class="u-evp-media"><div class="art" id="evImg"></div></div>
+  <article class="u-evp-body" id="evBody">
+      <div class="u-evp-intro">
+        <p>The Immaculate Conception long weekend opens the season: four afternoons in a row in front of Chalet Valentino, with the Gravare slopes behind.</p>
+        <p>Around 4:40 pm the sun drops behind the ridge, the lights come on and the best part of the day begins.</p>
+      </div>
+      <section class="u-glass u-evp-panel">
+        <h2 class="u-mono u-evp-h">Line-up</h2>
+        <div class="u-evp-area"><span class="u-mono u-evp-label">Immacolata Brunch</span><ul class="u-evp-names"><li>Davide Piccolo</li><li>Edo Baccari</li><li>Rakk</li></ul></div>
+      </section>
+      <section class="u-glass u-evp-panel" id="tickets">
+        <h2 class="u-mono u-evp-h">Information</h2>
+        <dl class="u-evp-dl">
+          <div><dt class="u-mono">Where</dt><dd>Chalet Valentino, Viale delle Gravare, Roccaraso · <a href="/en/getting-here">getting here</a></dd></div>
+          <div><dt class="u-mono">When</dt><dd>Monday 7 December 2026</dd></div>
+          <div><dt class="u-mono">Hours</dt><dd>12:00 - 19:00</dd></div>
+          <div><dt class="u-mono">Tickets</dt><dd><a href="https://www.eventbrite.com/e/2002311677127?aff=oddtdtcreator" target="_blank" rel="noopener">on Eventbrite ↗</a></dd></div>
+          <div><dt class="u-mono">Tables</dt><dd><a href="/en/tables?d=2026-12-07">request a table</a></dd></div>
+          <div><dt class="u-mono">Entry</dt><dd>Entry info coming soon · Tables on request</dd></div>
+          <div><dt class="u-mono">What to wear</dt><dd>snow gear: we dance outdoors</dd></div>
+          <div><dt class="u-mono">Poster</dt><dd><a href="/img/locandine/2026-12-07.jpg" target="_blank" rel="noopener">open ↗</a></dd></div>
+        </dl>
+      </section>
+      <section class="u-glass u-evp-panel">
+        <h2 class="u-mono u-evp-h">Weather in Roccaraso</h2>
+        <div class="w-day-box" id="evMeteo"><p class="w-status">The forecast for this date appears 16 days ahead. Meanwhile, check <a href="/en/getting-here#meteo">today's weather</a>.</p></div>
+      </section>
+      <section class="u-glass u-evp-panel u-evp-faq">
+        <h2 class="u-mono u-evp-h">FAQ</h2>
+        <details><summary>How do I book a table?</summary><p>Through the <a href="/en/tables?d=2026-12-07">table request form</a>: tell us the date and how many you are. WhatsApp opens with your request already written and we reply there.</p></details>
+        <details><summary>When is the best time to arrive?</summary><p>Doors open at noon. For a good spot at sunset, come up by 3 pm.</p></details>
+        <details><summary>How do I get there?</summary><p>On skis from the Valle delle Gravare slope, or by car up to Aremogna. All the details on the <a href="/en/getting-here">Getting here</a> page.</p></details>
+        <details><summary>What if it snows?</summary><p>The day's forecast is above. Any change of hours is posted in the <a href="/en/news">News</a> and on social media the same morning.</p></details>
+      </section></article>
 </div>
-<article class="prose" id="evBody">
-      <p><strong>Disco Pleasure · Monday 7 December 2026</strong></p>
-      <p>The Immaculate Conception long weekend opens the season: four afternoons in a row in front of Chalet Valentino, with the Gravare slopes behind.</p>
-      <p>Around 4:40 pm the sun drops behind the ridge, the lights come on and the best part of the day begins.</p>
-      <h3>Line-up</h3>
-      <ul><li><strong>Immacolata Brunch:</strong> Davide Piccolo, Edo Baccari, Rakk</li></ul>
-      <h3>Weather in Roccaraso</h3>
-      <div class="w-day-box" id="evMeteo"><p class="w-status">The forecast for this date appears 16 days ahead. Meanwhile, check <a href="/en/getting-here#meteo">today's weather</a>.</p></div>
-      <h3 id="tickets">Information</h3>
-      <ul>
-        <li><strong>Where:</strong> Chalet Valentino, Viale delle Gravare, Roccaraso · <a href="/en/getting-here">getting here</a></li>
-        <li><strong>When:</strong> Monday 7 December 2026</li>
-        <li><strong>Hours:</strong> 12:00 - 19:00</li>
-        <li><strong>Poster:</strong> <a href="/img/locandine/2026-12-07.jpg" download="">download</a></li>
-        <li><strong>Tickets:</strong> <a href="https://www.eventbrite.com/e/2002311677127?aff=oddtdtcreator" target="_blank" rel="noopener">on Eventbrite</a></li>
-        <li><strong>Tables:</strong> <a href="/en/tables?d=2026-12-07">request a table</a></li>
-        <li><strong>Entry:</strong> Entry info coming soon · Tables on request</li>
-        <li><strong>What to wear:</strong> snow gear: we dance outdoors</li>
-      </ul>
-      <h3>FAQ</h3>
-      <details><summary>How do I book a table?</summary><p>Through the <a href="/en/tables?d=2026-12-07">table request form</a>: tell us the date and how many you are. We will get back to you privately with the confirmation.</p></details>
-      <details><summary>When is the best time to arrive?</summary><p>Doors open at noon. For a good spot at sunset, come up by 3 pm.</p></details>
-      <details><summary>How do I get there?</summary><p>On skis from the Valle delle Gravare slope, or by car up to Aremogna. All the details on the <a href="/en/getting-here">Getting here</a> page.</p></details>
-      <details><summary>What if it snows?</summary><p>The day's forecast is above. Any change of hours is posted in the <a href="/en/news">News</a> and on social media the same morning.</p></details></article>
-<section class="chapter">
-  <h2 class="giant">Dates</h2>
-  <div class="sentinel" aria-hidden="true"></div>
-  <div class="chapter-body">
-    <div class="filter-bar"><div class="filters" id="evFilters"></div></div>
-    <div class="ev-grid" id="evGrid"></div>
-  </div>
+<section class="u-evp-more">
+  <header class="u-head u-page-head">
+    <h2 class="u-title">Other dates</h2>
+    <div class="u-filters" id="evFilters" aria-label="Filter by month"></div>
+  </header>
+  <div class="u-grid" id="evGrid"></div>
 </section>
 </main>
 
 <div id="siteFooter"></div>
 
-<script src="/data.js?v=1795095468"></script>
-<script src="/data-en.js?v=1795095468"></script>
-<script src="/site.js?v=1795095468"></script>
-<script src="/pages.js?v=1795095468"></script>
+<script src="/data.js?v=1795097186"></script>
+<script src="/data-en.js?v=1795097186"></script>
+<script src="/site.js?v=1795097186"></script>
+<script src="/pages.js?v=1795097186"></script>
 </body>
 </html>

@@ -165,7 +165,8 @@ const LINEUPS = {
 };
 EVENTS.forEach((e) => { const l = LINEUPS[e.id]; if (l) e.lineup = [{ area: l[0], names: l[1] }]; });
 // Nome della data per titoli e Google: nome speciale e/o nome della serata, altrimenti "Après-ski"
-const evName = (e) => [e.tag, e.lineup[0] && e.lineup[0].area !== "Line-up" ? e.lineup[0].area : ""].filter(Boolean).join(" · ") || "Après-ski";
+const evParts = (e) => { const p = [e.tag, e.lineup[0] && e.lineup[0].area !== "Line-up" ? e.lineup[0].area : ""].filter(Boolean); return p.length ? p : ["Après-ski"]; };
+const evName = (e) => evParts(e).join(" · ");
 const eventById = (id) => EVENTS.find((e) => e.id === id) || EVENTS[0];
 const eventByPath = (path) => EVENTS.find((e) => e.url === toIT(path));
 const tableMsg = (e) => T(`Ciao! Vorrei prenotare un tavolo a Disco Pleasure per ${e.long.toLowerCase()}.`, `Hi! I'd like to book a table at Disco Pleasure for ${e.long}.`);

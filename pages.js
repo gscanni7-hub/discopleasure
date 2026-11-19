@@ -22,7 +22,7 @@ const PAGES = {
     if (location.pathname !== L(e.url)) history.replaceState(null, "", L(e.url) + location.hash); // vecchi link → indirizzo pulito
     document.title = `${evName(e)} · ${e.short} | Disco Pleasure`;
     $("#evPhase").textContent = e.phase;
-    $("#evTitle").textContent = evName(e);
+    $("#evTitle").innerHTML = evParts(e).map(esc).join("<br>"); // nome della serata a capo, sotto il titolo
     $("#evDate").textContent = `${e.long} · ${e.hours}`;
     Object.assign($("#evTickets"), { href: e.tickets, target: "_blank", rel: "noopener" });
     Object.assign($("#evTables"), { href: `${L("/tavoli")}?d=${e.id}` });
@@ -30,7 +30,7 @@ const PAGES = {
     if (e.poster) {
       // Locandina intera, senza tagli, al posto della foto
       const src = webp(SMALL ? e.poster.replace("/img/", "/img/m/") : e.poster);
-      img.outerHTML = `<a class="ev-poster" href="${e.poster}" target="_blank" rel="noopener" title="${T("Apri la locandina", "Open the poster")}"><img src="${src}" alt="${T("Locandina", "Poster")} Disco Pleasure · ${esc(e.long)}" width="1280" height="1600"></a>`;
+      img.outerHTML = `<a class="ev-poster u-evp-poster" href="${e.poster}" target="_blank" rel="noopener" title="${T("Apri la locandina", "Open the poster")}"><img src="${src}" alt="${T("Locandina", "Poster")} Disco Pleasure · ${esc(e.long)}" width="1280" height="1600"></a>`;
     } else { img.dataset.img = e.img; paintArt(img); }
     const intro = T({
       ponte: "Il ponte dell'Immacolata apre la stagione: quattro pomeriggi di fila davanti allo Chalet Valentino, con le Gravare alle spalle.",
@@ -42,53 +42,43 @@ const PAGES = {
       weekend: "Saturdays and Sundays, until mid-March. From the last run you ski straight onto the dancefloor.",
     })[e.phaseKey];
     const tavoliUrl = `${L("/tavoli")}?d=${e.id}`;
-    $("#evBody").innerHTML = T(`
-      <p><strong>${esc(e.title)} · ${esc(e.long)}</strong></p>
-      <p>${esc(intro)}</p>
-      <p>Verso le 16:40 il sole passa dietro la cresta, si accendono le luci e comincia la parte migliore della giornata.</p>
-      <h3>Line-up</h3>
-      <ul>${e.lineup.map((l) => `<li><strong>${esc(l.area)}:</strong> ${l.names.map(esc).join(", ")}</li>`).join("")}</ul>
-      <h3>Meteo a Roccaraso</h3>
-      <div class="w-day-box" id="evMeteo"><p class="w-status">Carico le previsioni…</p></div>
-      <h3 id="tickets">Informazioni</h3>
-      <ul>
-        <li><strong>Dove:</strong> Chalet Valentino, Viale delle Gravare, Roccaraso · <a href="/come-arrivare">come arrivare</a></li>
-        <li><strong>Quando:</strong> ${esc(e.long)}</li>
-        <li><strong>Orari:</strong> ${esc(e.hours)}</li>
-        ${e.poster ? `<li><strong>Locandina:</strong> <a href="${e.poster}" download>scarica</a></li>` : ""}
-        <li><strong>Tickets:</strong> <a href="${esc(e.tickets)}" target="_blank" rel="noopener">su Eventbrite</a></li>
-        <li><strong>Tavoli:</strong> <a href="${tavoliUrl}">richiedi un tavolo</a></li>
-        <li><strong>Ingresso:</strong> ${e.entry.map(esc).join(" · ")}</li>
-        <li><strong>Abbigliamento:</strong> da neve: si balla all'aperto</li>
-      </ul>
-      <h3>Domande frequenti</h3>
-      <details><summary>Come prenoto un tavolo?</summary><p>Dal <a href="${tavoliUrl}">modulo Tavoli</a>: indica la data e quante persone siete. Ti contattiamo noi in privato con la conferma.</p></details>
-      <details><summary>A che ora conviene arrivare?</summary><p>Si apre alle 12. Se vuoi un buon posto per il tramonto, sali entro le 15.</p></details>
-      <details><summary>Come ci arrivo?</summary><p>Con gli sci dalla pista Valle delle Gravare, oppure in auto fino all'Aremogna. Tutti i dettagli nella pagina <a href="/come-arrivare">Come arrivare</a>.</p></details>
-      <details><summary>E se nevica?</summary><p>Il meteo del giorno è qui sopra. Eventuali cambi di orario li scriviamo nelle <a href="/news">News</a> e sui social la mattina stessa.</p></details>`, `
-      <p><strong>${esc(e.title)} · ${esc(e.long)}</strong></p>
-      <p>${esc(intro)}</p>
-      <p>Around 4:40 pm the sun drops behind the ridge, the lights come on and the best part of the day begins.</p>
-      <h3>Line-up</h3>
-      <ul>${e.lineup.map((l) => `<li><strong>${esc(l.area)}:</strong> ${l.names.map(esc).join(", ")}</li>`).join("")}</ul>
-      <h3>Weather in Roccaraso</h3>
-      <div class="w-day-box" id="evMeteo"><p class="w-status">Loading the forecast…</p></div>
-      <h3 id="tickets">Information</h3>
-      <ul>
-        <li><strong>Where:</strong> Chalet Valentino, Viale delle Gravare, Roccaraso · <a href="/come-arrivare">getting here</a></li>
-        <li><strong>When:</strong> ${esc(e.long)}</li>
-        <li><strong>Hours:</strong> ${esc(e.hours)}</li>
-        ${e.poster ? `<li><strong>Poster:</strong> <a href="${e.poster}" download>download</a></li>` : ""}
-        <li><strong>Tickets:</strong> <a href="${esc(e.tickets)}" target="_blank" rel="noopener">on Eventbrite</a></li>
-        <li><strong>Tables:</strong> <a href="${tavoliUrl}">request a table</a></li>
-        <li><strong>Entry:</strong> ${e.entry.map(esc).join(" · ")}</li>
-        <li><strong>What to wear:</strong> snow gear: we dance outdoors</li>
-      </ul>
-      <h3>FAQ</h3>
-      <details><summary>How do I book a table?</summary><p>Through the <a href="${tavoliUrl}">table request form</a>: tell us the date and how many you are. We will get back to you privately with the confirmation.</p></details>
-      <details><summary>When is the best time to arrive?</summary><p>Doors open at noon. For a good spot at sunset, come up by 3 pm.</p></details>
-      <details><summary>How do I get there?</summary><p>On skis from the Valle delle Gravare slope, or by car up to Aremogna. All the details on the <a href="/come-arrivare">Getting here</a> page.</p></details>
-      <details><summary>What if it snows?</summary><p>The day's forecast is above. Any change of hours is posted in the <a href="/news">News</a> and on social media the same morning.</p></details>`);
+    // Riquadri in vetro: line-up, informazioni, meteo, domande
+    const row = (k, v) => `<div><dt class="u-mono">${k}</dt><dd>${v}</dd></div>`;
+    const faq = (q, a) => `<details><summary>${q}</summary><p>${a}</p></details>`;
+    const named = e.lineup[0] && e.lineup[0].area !== "Line-up";
+    $("#evBody").innerHTML = `
+      <div class="u-evp-intro">
+        <p>${esc(intro)}</p>
+        <p>${T("Verso le 16:40 il sole passa dietro la cresta, si accendono le luci e comincia la parte migliore della giornata.", "Around 4:40 pm the sun drops behind the ridge, the lights come on and the best part of the day begins.")}</p>
+      </div>
+      <section class="u-glass u-evp-panel">
+        <h2 class="u-mono u-evp-h">Line-up</h2>
+        ${e.lineup.map((l) => `<div class="u-evp-area">${named ? `<span class="u-mono u-evp-label">${esc(l.area)}</span>` : ""}<ul class="u-evp-names">${l.names.map((nm) => `<li>${b2b(nm)}</li>`).join("")}</ul></div>`).join("")}
+      </section>
+      <section class="u-glass u-evp-panel" id="tickets">
+        <h2 class="u-mono u-evp-h">${T("Informazioni", "Information")}</h2>
+        <dl class="u-evp-dl">
+          ${row(T("Dove", "Where"), `Chalet Valentino, Viale delle Gravare, Roccaraso · <a href="${L("/come-arrivare")}">${T("come arrivare", "getting here")}</a>`)}
+          ${row(T("Quando", "When"), esc(e.long))}
+          ${row(T("Orari", "Hours"), esc(e.hours))}
+          ${row("Tickets", `<a href="${esc(e.tickets)}" target="_blank" rel="noopener">${T("su Eventbrite", "on Eventbrite")} ↗</a>`)}
+          ${row(T("Tavoli", "Tables"), `<a href="${tavoliUrl}">${T("richiedi un tavolo", "request a table")}</a>`)}
+          ${row(T("Ingresso", "Entry"), e.entry.map(esc).join(" · "))}
+          ${row(T("Abbigliamento", "What to wear"), T("da neve: si balla all'aperto", "snow gear: we dance outdoors"))}
+          ${e.poster ? row(T("Locandina", "Poster"), `<a href="${e.poster}" target="_blank" rel="noopener">${T("apri", "open")} ↗</a>`) : ""}
+        </dl>
+      </section>
+      <section class="u-glass u-evp-panel">
+        <h2 class="u-mono u-evp-h">${T("Meteo a Roccaraso", "Weather in Roccaraso")}</h2>
+        <div class="w-day-box" id="evMeteo"><p class="w-status">${T("Carico le previsioni…", "Loading the forecast…")}</p></div>
+      </section>
+      <section class="u-glass u-evp-panel u-evp-faq">
+        <h2 class="u-mono u-evp-h">${T("Domande frequenti", "FAQ")}</h2>
+        ${faq(T("Come prenoto un tavolo?", "How do I book a table?"), T(`Dal <a href="${tavoliUrl}">modulo Tavoli</a>: indica la data e quante persone siete. Si apre WhatsApp con la richiesta già scritta e ti rispondiamo lì.`, `Through the <a href="${tavoliUrl}">table request form</a>: tell us the date and how many you are. WhatsApp opens with your request already written and we reply there.`))}
+        ${faq(T("A che ora conviene arrivare?", "When is the best time to arrive?"), T("Si apre alle 12. Se vuoi un buon posto per il tramonto, sali entro le 15.", "Doors open at noon. For a good spot at sunset, come up by 3 pm."))}
+        ${faq(T("Come ci arrivo?", "How do I get there?"), T(`Con gli sci dalla pista Valle delle Gravare, oppure in auto fino all'Aremogna. Tutti i dettagli nella pagina <a href="/come-arrivare">Come arrivare</a>.`, `On skis from the Valle delle Gravare slope, or by car up to Aremogna. All the details on the <a href="/en/getting-here">Getting here</a> page.`))}
+        ${faq(T("E se nevica?", "What if it snows?"), T(`Il meteo del giorno è qui sopra. Eventuali cambi di orario li scriviamo nelle <a href="/news">News</a> e sui social la mattina stessa.`, `The day's forecast is above. Any change of hours is posted in the <a href="/en/news">News</a> and on social media the same morning.`))}
+      </section>`;
     mountEventGrid($("#evFilters"), $("#evGrid"), { events: EVENTS.filter((x) => x.phaseKey === e.phaseKey) });
     mountMeteoDay($("#evMeteo"), e.id);
   },

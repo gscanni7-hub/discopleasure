@@ -236,7 +236,8 @@ PAGES = {
         ("Disco Pleasure · Chalet Valentino, a valle delle Gravare · Roccaraso · après-ski all&#x27;aperto dalle 12 alle 19.", "Disco Pleasure · Chalet Valentino, Valle delle Gravare · Roccaraso · outdoor après-ski from noon to 7 pm."),
         ("Disco Pleasure · Chalet Valentino, a valle delle Gravare · Roccaraso · après-ski all'aperto dalle 12 alle 19.", "Disco Pleasure · Chalet Valentino, Valle delle Gravare · Roccaraso · outdoor après-ski from noon to 7 pm."),
         ('id="evTables" href="/tavoli">Tavoli<', 'id="evTables" href="/tavoli">Tables<'),
-        ('<h2 class="giant">Date</h2>', '<h2 class="giant">Dates</h2>'),
+        ('<h2 class="u-title">Altre date</h2>', '<h2 class="u-title">Other dates</h2>'),
+        ('aria-label="Filtra per mese"', 'aria-label="Filter by month"'),
     ],
     "tavoli.html": [
         ("<title>Tavoli | Disco Pleasure</title>", "<title>Tables | Disco Pleasure</title>"),

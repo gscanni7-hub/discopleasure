@@ -155,12 +155,12 @@ function staticCanonicals() {
 
     // --- date ---
     await open(T('/apres-ski', '/en/dates'));
-    const events = await page.evaluate(() => EVENTS.map((e) => ({ name: evName(e), id: e.id, url: L(e.url), it: e.url, en: toEN(e.url), title: e.title, short: e.short, long: e.long, hours: e.hours, phase: e.phase, poster: e.poster || null, tickets: e.tickets, lineup: e.lineup })));
+    const events = await page.evaluate(() => EVENTS.map((e) => ({ name: evName(e), parts: evParts(e), id: e.id, url: L(e.url), it: e.url, en: toEN(e.url), title: e.title, short: e.short, long: e.long, hours: e.hours, phase: e.phase, poster: e.poster || null, tickets: e.tickets, lineup: e.lineup })));
     for (const e of events) {
       await open(e.url);
       let html = tpl('evento.html', 'en/event.html');
       html = fill(html, 'evPhase', await page.$eval('#evPhase', (x) => x.innerHTML));
-      html = fill(html, 'evTitle', await page.$eval('#evTitle', (x) => x.innerHTML));
+      html = fill(html, 'evTitle', e.parts.map(esc).join('<br>'));
       html = fill(html, 'evDate', await page.$eval('#evDate', (x) => x.innerHTML));
       html = fill(html, 'evBody', await grab('#evBody'));
       const names = e.lineup.flatMap((l) => l.names).filter((x) => !/^(Resident|Guest)/.test(x));

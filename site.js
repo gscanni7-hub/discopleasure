@@ -341,7 +341,7 @@ function splitWords(el) {
   });
 }
 function initReveals() {
-  const targets = $$(".u-sec, .u-band, .u-page-head"); if (!targets.length) return;
+  const targets = $$(".u-sec, .u-band, .u-page-head, .u-evp-head"); if (!targets.length) return;
   $$(".u-title, .u-band-a, .u-band-b").forEach(splitWords);
   const io = new IntersectionObserver((ens) => ens.forEach((en) => {
     if (!en.isIntersecting) return;
