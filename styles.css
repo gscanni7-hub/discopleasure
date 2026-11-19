@@ -1268,3 +1268,14 @@ html:not(.js) :is(#seasonRail, #lineupRail, #ticketsRail, #evGrid, #artistGrid, 
   .u-evp-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 40px; align-items: start; }
   .u-evp-media { position: sticky; top: calc(var(--u-bar-h) + 24px); max-width: 560px; }
 }
+
+/* Tavoli: scheda del modulo in vetro (al posto del grigio), con le luci di sfondo come nel resto del sito */
+body[data-page="tavoli"] .page-bg { display: block; }
+body[data-page="tavoli"] .u-vip-grid { gap: 20px; background: transparent; }
+body[data-page="tavoli"] .u-vip-cover { border-radius: var(--rc); }
+body[data-page="tavoli"] .u-vip-panel { border-radius: var(--rc); background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.5));
+  -webkit-backdrop-filter: blur(18px) saturate(160%); backdrop-filter: blur(18px) saturate(160%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 1px rgba(255,255,255,.55), 0 0 0 1px rgba(5,5,7,.05), 0 14px 34px -22px rgba(20,20,40,.3); }
+body[data-page="tavoli"] .u-submit { background: var(--heading); color: #fff; }
+body[data-page="tavoli"] .u-submit:hover { background: #2a2a2e; }
+body[data-page="tavoli"] .u-cal-nav { background: rgba(5,5,7,.07); }
