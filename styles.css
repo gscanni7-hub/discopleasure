@@ -766,7 +766,7 @@ a:hover .at::after, button:hover .at::after { opacity: 1; transform: none; }
 .u-menu-foot { margin-top: auto; padding-top: 32px; display: flex; justify-content: space-between; gap: 16px; font-family: var(--mono); font-size: 10px; line-height: 10px; text-transform: uppercase; opacity: .6; }
 .u-menu-foot div { display: grid; gap: 0; }
 .u-menu-foot div:last-child { text-align: right; }
-@media (max-width: 767px) { .u-menu-foot .u-menu-foot-mid { display: none; } }
+@media (max-width: 767px) { .u-menu-foot .u-menu-foot-pos { display: none; } }
 
 /* =========================================================
    PAGINA DATE NELLO STILE DELLA HOME
@@ -1146,7 +1146,7 @@ body.u-ov-open .bar-side a, body.u-ov-open .pill-btn, body.u-ov-open .pill .logo
 .u-form[hidden], .u-vip-head[hidden] { display: none; }
 .u-done { scroll-margin-top: 100px; }
 /* fascia tavoli: sul telefono la versione verticale della foto */
-@media (max-width: 640px) { #tavoli > .art.photo { background-image: url("/img/tavoli/copertina-montagna.webp") !important; background-position: center 60%; } }
+@media (max-width: 640px) { #tavoli > .art.photo { background-image: url("/img/m/tavoli/copertina-montagna.webp") !important; background-position: center 60%; } }
 
 /* Chi siamo minimal: i fatti in righe sottili */
 
@@ -1181,3 +1181,17 @@ body.u-ov-open .bar-side a, body.u-ov-open .pill-btn, body.u-ov-open .pill .logo
 
 /* Home: l'ultima sezione ha già il suo spazio sotto, il fondo pagina non ne aggiunge altro */
 main:has(> #tickets:last-child) ~ .footer { margin-top: 40px; }
+
+/* Menu: azioni in fondo (Tickets, WhatsApp, mappa) */
+.u-menu-acts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 32px; }
+.u-menu-act { display: flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 16px; border-radius: 4px; font-family: var(--mono); font-size: 12px; text-transform: uppercase; color: var(--heading); box-shadow: inset 0 0 0 1px rgba(5,5,7,.3); }
+.u-menu-act-ink { background: var(--heading); color: #fff; box-shadow: none; }
+.u-menu-map { grid-column: 1 / -1; padding: 12px 0 0; font-family: var(--mono); font-size: 11px; text-transform: uppercase; color: var(--heading); opacity: .7; }
+.u-menu { overscroll-behavior: contain; }
+/* Menu aperto: sul telefono la pagina sotto non scorre; le scritte fisse della home non passano sopra */
+@media (max-width: 767px) { html.menu-open, html.menu-open body { overflow: hidden; } }
+html.menu-open .u-hero-sub-box, html.menu-open .u-tick { visibility: hidden; }
+/* Contenuti già scritti nell'HTML per Google: nascosti finché il JavaScript non li ridisegna (dopo 2,5 s compaiono comunque) */
+html:not(.js) :is(#seasonRail, #lineupRail, #ticketsRail, #evGrid, #artistGrid, #newsGrid, #artistOverlay) { animation: preShow 0s linear 2.5s both; }
+@keyframes preShow { from { visibility: hidden; } to { visibility: visible; } }
+@media (max-width: 767px) { html.menu-open .u-hero-fixed { visibility: hidden !important; } }

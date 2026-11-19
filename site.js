@@ -16,7 +16,7 @@ if (qs("bn") === "1") document.documentElement.classList.add("bn");
    e ogni foto si scarica solo quando sta per entrare nello schermo. */
 const SMALL = matchMedia("(max-width: 800px)").matches;
 const webp = (src) => (/^\/img\/.+\.jpg$/.test(src) ? src.replace(/\.jpg$/, ".webp") : src);
-const srcFor = (src) => webp(SMALL && /^\/img\/[^/]+\.jpg$/.test(src) ? src.replace("/img/", "/img/m/") : src);
+const srcFor = (src) => webp(SMALL && /^\/img\/(?!m\/).+\.jpg$/.test(src) ? src.replace("/img/", "/img/m/") : src);
 function paintArt(el) {
   if (!el.dataset.img || el.dataset.painted) return;
   el.dataset.painted = "1";
@@ -54,14 +54,14 @@ function mountHeader() {
     <ol class="u-menu-list">
       ${[["/", "Home"], ["/apres-ski", T("Date", "Dates")], ["/artisti", T("Artisti", "Artists")], ["/tavoli", T("Tavoli", "Tables")], ["/news", "News"], ["/chi-siamo", T("Chi siamo", "About")], ["/come-arrivare", T("Come arrivare", "Getting here")]]
         .map(([h, t, ext], i) => `<li><a href="${L(h)}"${ext ? ' target="_blank" rel="noopener"' : ""}><span class="u-menu-n">${String(i + 1).padStart(2, "0")}</span><span class="u-menu-t">${t}</span></a></li>`).join("")}
-      <li><span class="u-menu-head"><span class="u-menu-n">08</span><span class="u-menu-t">${T("Lo chalet", "The chalet")}</span></span>
-        <ul class="u-menu-sub">
-          <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Chalet+Valentino+Viale+delle+Gravare+Roccaraso" target="_blank" rel="noopener"><span class="u-menu-n">–</span><span class="u-menu-t">Google Maps</span></a></li>
-        </ul>
-      </li>
     </ol>
+    <div class="u-menu-acts">
+      <a class="u-menu-act u-menu-act-ink" href="${L("/apres-ski")}">Tickets</a>
+      <a class="u-menu-act" href="${waLink(T("Ciao! Vorrei informazioni su Disco Pleasure.", "Hi! I'd like some information about Disco Pleasure."))}" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="u-menu-map" href="https://www.google.com/maps/search/?api=1&amp;query=Chalet+Valentino+Viale+delle+Gravare+Roccaraso" target="_blank" rel="noopener">${T("Lo chalet su Google Maps", "The chalet on Google Maps")} ↗</a>
+    </div>
     <div class="u-menu-foot" aria-hidden="true">
-      <div><span>${T("Posizione", "Position")}</span><span id="menuPos">X0 Y0</span></div>
+      <div class="u-menu-foot-pos"><span>${T("Posizione", "Position")}</span><span id="menuPos">X0 Y0</span></div>
       <div class="u-menu-foot-mid"><span>${T("Quota", "Altitude")}</span><span>1567 m</span></div>
       <div><span>${T("Ora locale", "Local time")}</span><span><span id="menuClock">--:--:--</span></span></div>
     </div>
@@ -118,6 +118,7 @@ function initMenu() {
     panel.classList.toggle("open", open);
     panel.setAttribute("aria-hidden", !open);
     btn.setAttribute("aria-expanded", open);
+    document.documentElement.classList.toggle("menu-open", open);
   };
   btn.addEventListener("click", () => set(!pill.classList.contains("open")));
   $$("#pillMenu a").forEach((a) => a.addEventListener("click", () => set(false)));
@@ -178,7 +179,7 @@ function initGiants() {
 /* ============ SFONDO: luci che fluttuano ============ */
 function initSpotlights() {
   const bg = $("#pageBg"); if (!bg) return;
-  const colors = ["#b9e2ff", "#ffd0dc", "#dcd2ff", "#cff5d4", "#c6ecff", "#ffe0c9", "#e4d6ff", "#d3f7da"];
+  const colors = ["#b9e2ff", "#ffd0dc", "#dcd2ff", "#cff5d4", "#c6ecff", "#ffe0c9", "#e4d6ff", "#d3f7da"].slice(0, SMALL ? 4 : 8); // sul telefono metà luci: meno lavoro per la grafica
   const r = Math.random;
   bg.innerHTML = colors.map((c) => `<i style="--c:${c};--s:${(40 + r() * 26).toFixed(1)}vmax;--x:${(r() * 100).toFixed(1)}%;--y:${(r() * 100).toFixed(1)}%;--o:${(0.45 + r() * 0.15).toFixed(2)};--d:${(30 + r() * 13).toFixed(1)}s;--delay:${(-r() * 40).toFixed(1)}s"></i>`).join("");
 }
@@ -196,8 +197,9 @@ function initLoadBar() {
     if (!a || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || a.target === "_blank") return;
     const href = a.getAttribute("href");
     if (!href || href.startsWith("#") || /^(mailto:|tel:|https?:)/.test(href)) return;
-    e.preventDefault();
     bar.classList.add("on"); set(0.15);
+    if (matchMedia("(pointer: coarse)").matches) { requestAnimationFrame(() => set(0.6)); return; } // sul telefono nessuna attesa: il link parte subito
+    e.preventDefault();
     requestAnimationFrame(() => { set(0.6); setTimeout(() => (location.href = a.href), 180); });
   });
   addEventListener("pageshow", (e) => { if (e.persisted) { set(0); bar.classList.remove("on"); } });
@@ -387,6 +389,7 @@ function setCanonical() {
 }
 
 function bootSite() {
+  document.documentElement.classList.add("js"); // i contenuti già scritti nell'HTML restano nascosti finché non li ridisegna il JavaScript (niente sfarfallio)
   setCanonical();
   initLangHint();
   if (EN) { localizeLinks(); new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => n.nodeType === 1 && localizeLinks(n.parentElement || n)))).observe(document.body, { childList: true, subtree: true }); }

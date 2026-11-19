@@ -107,6 +107,9 @@ function staticCanonicals() {
     const el = document.querySelector(sel); if (!el) return null;
     const c = el.cloneNode(true);
     c.querySelectorAll('[data-scramble]').forEach((n) => n.removeAttribute('data-scramble'));
+    // le foto non restano "già caricate" nell'HTML: le sceglie il JavaScript (leggere sul telefono, grandi sul computer)
+    [c, ...c.querySelectorAll('.art')].forEach((n) => { if (!n.classList || !n.classList.contains('art')) return; n.removeAttribute('data-painted'); n.classList.remove('photo'); n.style.removeProperty('--img'); if (!n.getAttribute('style')) n.removeAttribute('style'); });
+    c.querySelectorAll('img.u-card-poster, .ev-poster img').forEach((i) => { const s = i.getAttribute('src') || ''; if (/^\/img\/(?!m\/)/.test(s)) i.setAttribute('src', s.replace('/img/', '/img/m/')); });
     return outer ? c.outerHTML : c.innerHTML;
   }, sel, outer);
 
