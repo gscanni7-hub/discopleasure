@@ -1195,3 +1195,30 @@ html.menu-open .u-hero-sub-box, html.menu-open .u-tick { visibility: hidden; }
 html:not(.js) :is(#seasonRail, #lineupRail, #ticketsRail, #evGrid, #artistGrid, #newsGrid, #artistOverlay) { animation: preShow 0s linear 2.5s both; }
 @keyframes preShow { from { visibility: hidden; } to { visibility: visible; } }
 @media (max-width: 767px) { html.menu-open .u-hero-fixed { visibility: hidden !important; } }
+
+/* ================= ASPETTO 2026-11: bottoni a pillola, schede morbide, menu in vetro ================= */
+:root { --rb: 999px; --rc: 14px; --rs: 10px; }
+/* bottoni e controlli: pillola o cerchio */
+.u-btn, .u-band-end .u-btn, .u-submit, .u-art-btn, .footer-sub .btn, .u-menu-act, .u-lang-go, .u-lang-x, .u-done-wa { border-radius: var(--rb); }
+.u-arrow, .u-ov-close, .u-cal-nav, .u-faq-ic { border-radius: 50%; }
+.u-arrow { width: 36px; height: 36px; }
+.u-arrow svg, .u-cal-nav svg, .u-ov-close svg { display: block; margin: auto; }
+/* etichette, filtri e linguette: pillola */
+.u-menu-lang, .u-menu-tab, .u-filters, .u-filters button, .u-upd-filters, .u-upd-filters button, .u-news-tag, .u-artist-tag, .u-ov-tag, .u-art-date, .u-search { border-radius: var(--rb); }
+.u-filters button, .u-upd-filters button { padding-left: 14px; padding-right: 14px; }
+.u-search { padding-left: 10px; padding-right: 10px; }
+/* schede, foto e locandine: angolo morbido (non taglia scritte e loghi) */
+.u-card, .u-card-foot .u-card-media, .u-ev, .u-news-img, .u-artist, .u-ov-card, .u-lang-hint { border-radius: var(--rc); }
+.u-cal-d { border-radius: var(--rs); }
+/* menu in vetro: più trasparente, sfocatura leggera (meno lavoro per il telefono), bordo di luce */
+.u-menu { border-radius: 28px 28px 0 0; background: linear-gradient(180deg, rgba(255,255,255,.74), rgba(255,255,255,.56));
+  -webkit-backdrop-filter: blur(22px) saturate(170%); backdrop-filter: blur(22px) saturate(170%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 1px rgba(255,255,255,.5), 0 -14px 44px -20px rgba(20,20,40,.35); }
+@media (min-width: 768px) { .u-menu { border-radius: 24px; box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 0 0 1px rgba(255,255,255,.5), 0 24px 60px -28px rgba(20,20,40,.4); } }
+.u-menu-act:not(.u-menu-act-ink) { background: rgba(255,255,255,.6); box-shadow: inset 0 0 0 1px rgba(5,5,7,.26); }
+/* Telefono: niente sfocature ripetute su decine di schede, e caroselli che non "catturano" lo scorrimento verticale */
+@media (pointer: coarse) {
+  .u-ev { -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(240,238,232,.94); }
+  .u-arrow, .u-upd-filters, .u-search { -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .u-rail, .rail, .w-hours { scroll-snap-type: x proximity; }
+}
